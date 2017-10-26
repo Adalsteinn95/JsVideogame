@@ -122,6 +122,10 @@ fillBox: function (ctx, x, y, w, h, style) {
     //console.log(angle1-angle2);
     return angle1-angle2;
     //return 2;
+},
+
+ toDegrees: function (angle) {
+  return angle * (180 / Math.PI);
 }
 
 };

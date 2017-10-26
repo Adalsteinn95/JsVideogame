@@ -16,13 +16,13 @@ var consts = {
 //test function
 function makeYarray(){
   var tmp = [];
-  var a = 300;
+  var a = 0;
   for(var i = 0; i< 600; i++){
     a += 10;
     tmp.push(a);
-    if(a=== 5000){
+    /*if(a=== 500){
       a= 300;
-    }
+    }*/
   }
   console.log(tmp);
   return tmp;

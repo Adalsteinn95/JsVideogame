@@ -28,6 +28,7 @@ Sprite.prototype.drawAt = function (ctx, x, y) {
 };
 
 Sprite.prototype.drawCentredAt = function (ctx, cx, cy, rotation) {
+    
     if (rotation === undefined) rotation = 0;
 
     var w = this.width,
@@ -35,10 +36,10 @@ Sprite.prototype.drawCentredAt = function (ctx, cx, cy, rotation) {
 
     ctx.save();
     ctx.translate(cx, cy+h/2);
-    var line1 = [cx,cy-h/2,cx,cy+h/2];
-    var line2 = [cx-w/2,consts.yArray[0], cx+w/2, consts.yArray[1]];
-    ctx.rotate(util.angleBetween2Lines(line1, line2));
-    //ctx.rotate(rotation);
+    //var line1 = [cx,cy-h/2,cx,cy+h/2];
+    //var line2 = [cx-w/2,consts.yArray[0], cx+w/2, consts.yArray[1]];
+    //ctx.rotate(util.angleBetween2Lines(line1, line2));
+    ctx.rotate(rotation);
     ctx.scale(this.scale, this.scale);
 
     // drawImage expects "top-left" coords, so we offset our destination

@@ -168,10 +168,10 @@ Ship.prototype.computeSubStep = function (du) {
     var thrust = this.computeThrustMag();
 
     // Apply thrust directionally, based on our rotation
-    var accelX = +Math.sin(this.rotation) * thrust;
-    var accelY = -Math.cos(this.rotation) * thrust;
+    var accelX = /*+Math.sin(this.rotation) */ thrust;
+    var accelY = /*-Math.cos(this.rotation) */ thrust;
 
-    accelY += this.computeGravity();
+    //accelY += this.computeGravity();
 
     this.applyAccel(accelX, accelY, du);
 
@@ -294,21 +294,29 @@ Ship.prototype.halt = function () {
 var NOMINAL_ROTATE_RATE = 0.1;
 
 Ship.prototype.updateRotation = function (du) {
-    if (keys[this.KEY_LEFT]) {
+    /*if (keys[this.KEY_LEFT]) {
         this.rotation -= NOMINAL_ROTATE_RATE * du;
     }
     if (keys[this.KEY_RIGHT]) {
         this.rotation += NOMINAL_ROTATE_RATE * du;
-    }
-    //var Xindex1 = Math.floor(this.cx-);
-    //var Xindex2 = Math.floor(this.cx+);
-    /*var w = this.width,
-        h = this.height;
-    var Xindex1 = Math.floor(this.cx-w/2);
-    var Xindex2 = Math.floor(this.cx+w/2);
+    }*/
+    //skítamix
+    var w = 64,
+        h = 64;
+    var xIndex1 = Math.floor(this.cx-w/2);
+    var xIndex2 = Math.floor(this.cx+w/2);
+    //console.log(xIndex1);
+    console.log(xIndex2);
+    //console.log(consts.yArray[xIndex1]);
+    console.log(consts.yArray[xIndex2]);
     var line1 = [this.cx,this.cy-h/2,this.cx,this.cy+h/2];
-    var line2 = [this.cx-w/2,consts.yArray[0], this.cx+w/2, consts.yArray[1]];
-    this.rotation = util.angleBetween2Lines(line1, line2);*/
+    var line2 = [xIndex1,consts.yArray[xIndex1], xIndex2, consts.yArray[xIndex2]];
+    //console.log(line1);
+    //console.log(line2);
+    //console.log(util.toDegrees(Math.atan2(90,0)));
+    this.rotation = util.toDegrees(Math.atan2(consts.yArray[xIndex2],w));
+    //this.rotation = util.toDegrees(util.angleBetween2Lines(line1, line2));
+    console.log(this.rotation);
 };
 
 Ship.prototype.render = function (ctx) {

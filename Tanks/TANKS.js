@@ -4,6 +4,30 @@
 var g_canvas = document.getElementById("myCanvas");
 var g_ctx = g_canvas.getContext("2d");
 
+// ====================
+// CREATE INITIAL SHIPS
+// ====================
+
+function createInitialShips() {
+
+    entityManager.generateShip({
+        cx : 200,
+        cy : 200
+    });
+
+}
+
+// =============
+// GATHER INPUTS
+// =============
+
+function gatherInputs() {
+    // Nothing to do here!
+    // The event handlers do everything we need for now.
+
+    //þurfum líklegast ekki
+}
+
 
 // GAME-SPECIFIC UPDATE LOGIC
 
@@ -87,7 +111,24 @@ function requestPreloads() {
         rock   : "https://notendur.hi.is/~pk/308G/images/rock.png"
     };
 
-    //imagesPreload(requiredImages, g_images, preloadDone);
+    imagesPreload(requiredImages, g_images, preloadDone);
+}
+
+var g_sprites = {};
+
+function preloadDone() {
+
+    g_sprites.ship  = new Sprite(g_images.ship);
+    g_sprites.ship2 = new Sprite(g_images.ship2);
+    //g_sprites.rock  = new Sprite(g_images.rock);
+
+    g_sprites.bullet = new Sprite(g_images.ship);
+    g_sprites.bullet.scale = 0.25;
+
+    entityManager.init();
+    createInitialShips();
+
+    main.init();
 }
 
 // Kick it off

@@ -58,7 +58,7 @@ Ship.prototype.warp = function () {
 
     this._isWarping = true;
     this._scaleDirn = -1;
-    this.warpSound.play();
+    //this.warpSound.play();
 
     // Unregister me from my old posistion
     // ...so that I can't be collided with while warping
@@ -209,23 +209,23 @@ Ship.prototype.applyAccel = function (accelX, accelY, du) {
 
     // u = original velocity
     var oldVelX = this.velX;
-    var oldVelY = this.velY;
+    //var oldVelY = this.velY;
 
     // v = u + at
     this.velX += accelX * du;
-    this.velY += accelY * du;
+    //this.velY += accelY * du;
 
     // v_ave = (u + v) / 2
     var aveVelX = (oldVelX + this.velX) / 2;
-    var aveVelY = (oldVelY + this.velY) / 2;
+    //var aveVelY = (oldVelY + this.velY) / 2;
 
     // Decide whether to use the average or not (average is best!)
     var intervalVelX = g_useAveVel ? aveVelX : this.velX;
-    var intervalVelY = g_useAveVel ? aveVelY : this.velY;
+    //var intervalVelY = g_useAveVel ? aveVelY : this.velY;
 
     // s = s + v_ave * t
     var nextX = this.cx + intervalVelX * du;
-    var nextY = this.cy + intervalVelY * du;
+    //var nextY = this.cy + intervalVelY * du;
 
     // bounce
     if (g_useGravity) {
@@ -244,8 +244,10 @@ Ship.prototype.applyAccel = function (accelX, accelY, du) {
     }
 
     // s = s + v_ave * t
+    //console.log(this.cx);
     this.cx += du * intervalVelX;
-    this.cy += du * intervalVelY;
+    var Xindex = Math.floor(this.cx);
+    //this.cy += yArray[Xindex];
 };
 
 Ship.prototype.maybeFireBullet = function () {
@@ -292,12 +294,20 @@ Ship.prototype.halt = function () {
 var NOMINAL_ROTATE_RATE = 0.1;
 
 Ship.prototype.updateRotation = function (du) {
-    if (keys[this.KEY_LEFT]) {
+    /*if (keys[this.KEY_LEFT]) {
         this.rotation -= NOMINAL_ROTATE_RATE * du;
     }
     if (keys[this.KEY_RIGHT]) {
         this.rotation += NOMINAL_ROTATE_RATE * du;
-    }
+    }*/
+    //var Xindex1 = Math.floor(this.cx-);
+    //var Xindex2 = Math.floor(this.cx+);
+    var w = this.width,
+        h = this.height;
+    var Xindex1 = Math.floor(this.cx-w/2);
+    var Xindex2 = Math.floor(this.cx+w/2);
+    var line1 = [this.cx,this.cy-h/2,this.cx,this.cy+h/2];
+    var line2 = [this.cx-w/2,consts.yArray[0], this.cx+w/2, consts.yArray[1]];
 };
 
 Ship.prototype.render = function (ctx) {

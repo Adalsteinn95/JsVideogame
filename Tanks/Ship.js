@@ -246,7 +246,7 @@ Ship.prototype.applyAccel = function (accelX, accelY, du) {
     // s = s + v_ave * t
     //console.log(this.cx);
     this.cx += du * intervalVelX;
-    var Xindex = Math.floor(this.cx);
+    //var Xindex = Math.floor(this.cx);
     //this.cy += yArray[Xindex];
 };
 
@@ -294,20 +294,21 @@ Ship.prototype.halt = function () {
 var NOMINAL_ROTATE_RATE = 0.1;
 
 Ship.prototype.updateRotation = function (du) {
-    /*if (keys[this.KEY_LEFT]) {
+    if (keys[this.KEY_LEFT]) {
         this.rotation -= NOMINAL_ROTATE_RATE * du;
     }
     if (keys[this.KEY_RIGHT]) {
         this.rotation += NOMINAL_ROTATE_RATE * du;
-    }*/
+    }
     //var Xindex1 = Math.floor(this.cx-);
     //var Xindex2 = Math.floor(this.cx+);
-    var w = this.width,
+    /*var w = this.width,
         h = this.height;
     var Xindex1 = Math.floor(this.cx-w/2);
     var Xindex2 = Math.floor(this.cx+w/2);
     var line1 = [this.cx,this.cy-h/2,this.cx,this.cy+h/2];
     var line2 = [this.cx-w/2,consts.yArray[0], this.cx+w/2, consts.yArray[1]];
+    this.rotation = util.angleBetween2Lines(line1, line2);*/
 };
 
 Ship.prototype.render = function (ctx) {

@@ -308,9 +308,9 @@ Ship.prototype.updateRotation = function (du) {
     var xIndex1 = Math.floor(this.cx-w/2);
     var xIndex2 = Math.floor(this.cx+w/2);
     //console.log(xIndex1);
-    console.log(xIndex2);
+    //console.log(xIndex2);
     //console.log(consts.yArray[xIndex1]);
-    console.log(consts.yArray[xIndex2]);
+    //console.log(consts.yArray[xIndex2]);
     var line1 = [this.cx,this.cy-h/2,this.cx,this.cy+h/2];
     var line2 = [xIndex1,consts.yArray[xIndex1], xIndex2, consts.yArray[xIndex2]];
     //console.log(line1);
@@ -318,7 +318,7 @@ Ship.prototype.updateRotation = function (du) {
     //console.log(util.toDegrees(Math.atan2(90,0)));
     this.rotation = util.toDegrees(Math.atan2(consts.yArray[xIndex2],w/2));
     //this.rotation = util.toDegrees(util.angleBetween2Lines(line1, line2));
-    console.log(this.rotation);
+    //console.log(this.rotation);
 };
 
 Ship.prototype.render = function (ctx) {

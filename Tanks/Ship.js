@@ -246,8 +246,8 @@ Ship.prototype.applyAccel = function (accelX, accelY, du) {
     // s = s + v_ave * t
     //console.log(this.cx);
     this.cx += du * intervalVelX;
-    //var Xindex = Math.floor(this.cx);
-    //this.cy += yArray[Xindex];
+    var Xindex = Math.floor(this.cx);
+    this.cy = consts.yArray[Xindex];
 };
 
 Ship.prototype.maybeFireBullet = function () {
@@ -303,6 +303,8 @@ Ship.prototype.updateRotation = function (du) {
     //skítamix
     var w = 64,
         h = 64;
+
+
     var xIndex1 = Math.floor(this.cx-w/2);
     var xIndex2 = Math.floor(this.cx+w/2);
     //console.log(xIndex1);
@@ -314,7 +316,7 @@ Ship.prototype.updateRotation = function (du) {
     //console.log(line1);
     //console.log(line2);
     //console.log(util.toDegrees(Math.atan2(90,0)));
-    this.rotation = util.toDegrees(Math.atan2(consts.yArray[xIndex2],w));
+    this.rotation = util.toDegrees(Math.atan2(consts.yArray[xIndex2],w/2));
     //this.rotation = util.toDegrees(util.angleBetween2Lines(line1, line2));
     console.log(this.rotation);
 };

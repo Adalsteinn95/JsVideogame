@@ -32,19 +32,22 @@ _entities : [],
 // PUBLIC METHODS
 
 getNewSpatialID : function() {
-
     // TODO: YOUR STUFF HERE!
-    this._nextSpatialID++;
-
+    var tmp = spatialManager._nextSpatialID;
+    spatialManager._nextSpatialID++;
+    return tmp;
 
 },
 
 register: function(entity) {
-    var pos = entity.getPos();
+    //var pos = entity.getPos();
+    var radius = entity.getRadius();
+
     var spatialID = entity.getSpatialID();
 
     // TODO: YOUR STUFF HERE!
-    this._entities.push(entity);
+    spatialManager._entities[spatialID] = entity;
+    //spatialManager._entities.splice(spatialID,0,entity);
 
 },
 
@@ -52,42 +55,54 @@ unregister: function(entity) {
     var spatialID = entity.getSpatialID();
 
     // TODO: YOUR STUFF HERE!
-    for (var i = 0; i < this._entities.length; i++) {
-      if(this._entities[i].getSpatialID() === spatialID){
-        this._entities.splice(i,1);
-      }
-    }
+    spatialManager._entities[spatialID] = false;
+    //spatialManager._entities.splice(spatialID,1);
 
 },
 
-findEntityInRange: function(posX, posY, radius, entity) {
+findEntityInRange: function(posX, posY, radius) {
 
-    var hit = false;
     // TODO: YOUR STUFF HERE!
-    for (var i = 0; i < this._entities.length; i++) {
-      var position = this._entities[i].getPos();
-      var distance = util.distSq(posX,posY,position.posX,position.posY);
-      if(Math.sqrt(distance) - this._entities[i].getRadius() - radius <= 0){
-        if(entity.reset_cx === 200 && this._entities[i].velRot > 0 || this._entities[i].velRot < 0 ){
+    var c1 = {xPos : posX , yPos : posY , radius : radius};
 
-        } else {
-          this._entities[i].takeBulletHit();
-        }
-        hit = true;
+    for(var i = 1; i<spatialManager._entities.length; i++){
+      //collison check
+      var thing = spatialManager._entities[i];
+
+      if(thing === false){
+        continue;
+      }
+      var c2 = {xPos : thing.cx, yPos : thing.cy, radius : thing.getRadius()};
+
+      if(spatialManager.collisioncheck(c1,c2)){
+        return thing;
       }
     }
+    return false;
 
-    return hit;
+},
+
+//detects collision between 2 circles
+//c1 and c2 must contain x and y coordinates and radius
+ collisioncheck: function(c1, c2){
+   var distance = util.wrappedDistSq(c1.xPos, c1.yPos, c2.xPos,c2.yPos, g_canvas.width, g_canvas.height);
+   var limit = c1.radius + c2.radius;
+   limit = util.square(limit);
+   if(distance < limit){
+     return true;
+   } else {return false;}
+
 },
 
 render: function(ctx) {
-
     var oldStyle = ctx.strokeStyle;
     ctx.strokeStyle = "red";
 
     for (var ID in this._entities) {
         var e = this._entities[ID];
-        util.strokeCircle(ctx, e.getPos().posX, e.getPos().posY, e.getRadius());
+        if(e !== false){
+        util.strokeCircle(ctx, e.cx, e.cy, e.getRadius());
+      }
     }
     ctx.strokeStyle = oldStyle;
 }

@@ -107,7 +107,8 @@ fireBullet: function(cx, cy, velX, velY, rotation) {
 },
 
 generateRock : function(descr) {
-    this._rocks.push(new Rock(descr));
+    //console.log("ping");
+    //this._rocks.push(new Rock(descr));
 },
 
 generateShip : function(descr) {

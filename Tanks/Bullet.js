@@ -19,7 +19,7 @@ function Bullet(descr) {
     this.setup(descr);
 
     // Make a noise when I am created (i.e. fired)
-    this.fireSound.play();
+    //this.fireSound.play();
 
 /*
     // Diagnostics to check inheritance stuff
@@ -82,7 +82,7 @@ Bullet.prototype.takeBulletHit = function () {
     this.kill();
 
     // Make a noise when I am zapped by another bullet
-    this.zappedSound.play();
+    //this.zappedSound.play();
 };
 
 Bullet.prototype.render = function (ctx) {

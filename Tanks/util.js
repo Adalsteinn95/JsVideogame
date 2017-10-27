@@ -101,6 +101,31 @@ fillBox: function (ctx, x, y, w, h, style) {
     ctx.fillStyle = style;
     ctx.fillRect(x, y, w, h);
     ctx.fillStyle = oldStyle;
+},
+
+//Line between 2 points
+// ====================
+/*  findLine: function (x1, y1, x2, y2 ){
+    //meh
+  },
+  //skítamix
+  slope: function (y1,y2){
+    return y2-y1;
+  },*/
+
+//line1 and line 2 are array of start and end points of lines x1,y1,x2,y2
+//this is how we get the rotation from the slopes
+ angleBetween2Lines: function (line1, line2){
+
+    var angle1 = Math.atan2((line1[1] - line1[3]),(line1[0] - line1[2]));
+    var angle2 = Math.atan2((line2[1] - line2[3]),(line2[0] - line2[2]));
+    //console.log(angle1-angle2);
+    return angle1-angle2;
+    //return 2;
+},
+
+ toDegrees: function (angle) {
+  return angle * (180 / Math.PI);
 }
 
 };

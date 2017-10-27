@@ -58,7 +58,7 @@ Ship.prototype.warp = function () {
 
     this._isWarping = true;
     this._scaleDirn = -1;
-    this.warpSound.play();
+    //this.warpSound.play();
 
     // Unregister me from my old posistion
     // ...so that I can't be collided with while warping
@@ -168,10 +168,10 @@ Ship.prototype.computeSubStep = function (du) {
     var thrust = this.computeThrustMag();
 
     // Apply thrust directionally, based on our rotation
-    var accelX = +Math.sin(this.rotation) * thrust;
-    var accelY = -Math.cos(this.rotation) * thrust;
+    var accelX = /*+Math.sin(this.rotation) */ thrust;
+    var accelY = /*-Math.cos(this.rotation) */ thrust;
 
-    accelY += this.computeGravity();
+    //accelY += this.computeGravity();
 
     this.applyAccel(accelX, accelY, du);
 
@@ -209,23 +209,23 @@ Ship.prototype.applyAccel = function (accelX, accelY, du) {
 
     // u = original velocity
     var oldVelX = this.velX;
-    var oldVelY = this.velY;
+    //var oldVelY = this.velY;
 
     // v = u + at
     this.velX += accelX * du;
-    this.velY += accelY * du;
+    //this.velY += accelY * du;
 
     // v_ave = (u + v) / 2
     var aveVelX = (oldVelX + this.velX) / 2;
-    var aveVelY = (oldVelY + this.velY) / 2;
+    //var aveVelY = (oldVelY + this.velY) / 2;
 
     // Decide whether to use the average or not (average is best!)
     var intervalVelX = g_useAveVel ? aveVelX : this.velX;
-    var intervalVelY = g_useAveVel ? aveVelY : this.velY;
+    //var intervalVelY = g_useAveVel ? aveVelY : this.velY;
 
     // s = s + v_ave * t
     var nextX = this.cx + intervalVelX * du;
-    var nextY = this.cy + intervalVelY * du;
+    //var nextY = this.cy + intervalVelY * du;
 
     // bounce
     if (g_useGravity) {
@@ -244,8 +244,10 @@ Ship.prototype.applyAccel = function (accelX, accelY, du) {
     }
 
     // s = s + v_ave * t
+    //console.log(this.cx);
     this.cx += du * intervalVelX;
-    this.cy += du * intervalVelY;
+    var Xindex = Math.floor(this.cx);
+    this.cy = consts.yArray[Xindex];
 };
 
 Ship.prototype.maybeFireBullet = function () {
@@ -292,12 +294,31 @@ Ship.prototype.halt = function () {
 var NOMINAL_ROTATE_RATE = 0.1;
 
 Ship.prototype.updateRotation = function (du) {
-    if (keys[this.KEY_LEFT]) {
+    /*if (keys[this.KEY_LEFT]) {
         this.rotation -= NOMINAL_ROTATE_RATE * du;
     }
     if (keys[this.KEY_RIGHT]) {
         this.rotation += NOMINAL_ROTATE_RATE * du;
-    }
+    }*/
+    //skítamix
+    var w = 64,
+        h = 64;
+
+
+    var xIndex1 = Math.floor(this.cx-w/2);
+    var xIndex2 = Math.floor(this.cx+w/2);
+    //console.log(xIndex1);
+    //console.log(xIndex2);
+    //console.log(consts.yArray[xIndex1]);
+    //console.log(consts.yArray[xIndex2]);
+    var line1 = [this.cx,this.cy-h/2,this.cx,this.cy+h/2];
+    var line2 = [xIndex1,consts.yArray[xIndex1], xIndex2, consts.yArray[xIndex2]];
+    //console.log(line1);
+    //console.log(line2);
+    //console.log(util.toDegrees(Math.atan2(90,0)));
+    this.rotation = util.toDegrees(Math.atan2(consts.yArray[xIndex2],w/2));
+    //this.rotation = util.toDegrees(util.angleBetween2Lines(line1, line2));
+    //console.log(this.rotation);
 };
 
 Ship.prototype.render = function (ctx) {

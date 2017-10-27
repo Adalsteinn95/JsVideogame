@@ -126,6 +126,17 @@ fillBox: function (ctx, x, y, w, h, style) {
 
  toDegrees: function (angle) {
   return angle * (180 / Math.PI);
+},
+
+//Clamp for index wrapping x is a number
+clamp: function(x){
+  var num = x;
+  if(num > g_canvas.width){
+    num = num - g_canvas.width;
+  }else if ( num < 0){
+    num = num + g_canvas.width;
+  }
+  return num;
 }
 
 };

@@ -1,5 +1,3 @@
-var g_canvas = document.getElementById('gameCanvas');
-var g_ctx = g_canvas.getContext('2d');
 
 
 var g_landscape = [];
@@ -9,7 +7,7 @@ var fun = function(x) {
 }
 
 
-function draw (ctx) {
+function drawterrain (ctx) {
 
     ctx.fillStyle = "blue";
 
@@ -19,16 +17,11 @@ function draw (ctx) {
 
     for (i in g_landscape) {
         ctx.lineTo(g_landscape[i][0], g_landscape[i][1]);
-        console.log(g_landscape[i][0], g_landscape[i][1]);
+        //console.log(g_landscape[i][0], g_landscape[i][1]);
     }
     ctx.fill();
 }
 
-function clear(ctx) {
-    ctx.fillStyle = "black";
-
-    ctx.clearRect(0,0,600,600);
-}
 
 function initlandScape(ls, f, bound, boundShift) {
 
@@ -61,17 +54,9 @@ function bombLandscape(x, radius) {
         g_landscape[i][1] += (Math.sin(Math.acos(ratio)) * radius);
         ratio += step;
     }
-    draw(g_ctx);
+    //draw(g_ctx);
 }
 
-function test() {
-    var s = document.getElementById('bomb').value;
 
-    s = s.split(',');
 
-    bombLandscape(parseInt(s[0]), parseInt(s[1]));
-
-}
-
-g_landscape = initlandScape(g_landscape, fun, 15, 0);
 //draw(g_ctx);

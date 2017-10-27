@@ -33,6 +33,7 @@ function gatherInputs() {
 
 function updateSimulation(du) {
 
+    //drawterrain(ctx);
     processDiagnostics();
 
     entityManager.update(du);
@@ -87,9 +88,12 @@ function processDiagnostics() {
 
 
 // GAME-SPECIFIC RENDERING
-
+var first = true;
 function renderSimulation(ctx) {
-
+    //skítamic for test
+    if(first){
+      drawterrain(ctx);
+  }
     entityManager.render(ctx);
 
     if (g_renderSpatialDebug) spatialManager.render(ctx);
@@ -127,6 +131,8 @@ function preloadDone() {
 
     entityManager.init();
     createInitialShips();
+
+    g_landscape = initlandScape(g_landscape, fun, 15, 0);
 
     main.init();
 }

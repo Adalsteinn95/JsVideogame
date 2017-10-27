@@ -246,8 +246,8 @@ Ship.prototype.applyAccel = function (accelX, accelY, du) {
     // s = s + v_ave * t
     //console.log(this.cx);
     this.cx += du * intervalVelX;
-    var Xindex = Math.floor(this.cx);
-    this.cy = consts.yArray[Xindex];
+    var Xindex = util.clamp(Math.floor(this.cx));
+    this.cy = g_landscape[Xindex][1];
 };
 
 Ship.prototype.maybeFireBullet = function () {
@@ -307,16 +307,18 @@ Ship.prototype.updateRotation = function (du) {
 
     var xIndex1 = Math.floor(this.cx-w/2);
     var xIndex2 = Math.floor(this.cx+w/2);
+    xIndex1 = util.clamp(xIndex1);
+    xIndex2 = util.clamp(xIndex2);
     //console.log(xIndex1);
     //console.log(xIndex2);
     //console.log(consts.yArray[xIndex1]);
     //console.log(consts.yArray[xIndex2]);
     var line1 = [this.cx,this.cy-h/2,this.cx,this.cy+h/2];
-    var line2 = [xIndex1,consts.yArray[xIndex1], xIndex2, consts.yArray[xIndex2]];
+    var line2 = [xIndex1,g_landscape[xIndex1][1], xIndex2, g_landscape[xIndex2][1]];
     //console.log(line1);
     //console.log(line2);
     //console.log(util.toDegrees(Math.atan2(90,0)));
-    this.rotation = util.toDegrees(Math.atan2(consts.yArray[xIndex2],w/2));
+    this.rotation = 90 - util.toDegrees(Math.atan2(g_landscape[xIndex2][1],w/2));
     //this.rotation = util.toDegrees(util.angleBetween2Lines(line1, line2));
     //console.log(this.rotation);
 };

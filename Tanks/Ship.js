@@ -247,7 +247,7 @@ Ship.prototype.applyAccel = function (accelX, accelY, du) {
     //console.log(this.cx);
     this.cx += du * intervalVelX;
     var Xindex = util.clamp(Math.floor(this.cx));
-    this.cy = g_landscape[Xindex][1];
+    this.cy = entityManager._categories[0][0].landscape[Xindex][1];
 };
 
 Ship.prototype.maybeFireBullet = function () {
@@ -314,12 +314,11 @@ Ship.prototype.updateRotation = function (du) {
     //console.log(consts.yArray[xIndex1]);
     //console.log(consts.yArray[xIndex2]);
     var line1 = [this.cx,this.cy-h/2,this.cx,this.cy+h/2];
-    var line2 = [xIndex1,g_landscape[xIndex1][1], xIndex2, g_landscape[xIndex2][1]];
+    var line2 = [xIndex1,entityManager._categories[0][0].landscape[xIndex1][1], xIndex2, entityManager._categories[0][0].landscape[xIndex2][1]];
     //console.log(line1);
     //console.log(line2);
     //console.log(util.toDegrees(Math.atan2(90,0)));
-    this.rotation = 90 - util.toDegrees(Math.atan2(g_landscape[xIndex2][1],w/2));
-    //this.rotation = util.toDegrees(util.angleBetween2Lines(line1, line2));
+    this.rotation = 90 - util.toDegrees(Math.atan2(entityManager._categories[0][0].landscape[xIndex2][1],w/2));
     //console.log(this.rotation);
 };
 

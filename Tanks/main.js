@@ -103,7 +103,7 @@ main._requestNextIteration = function () {
 
 var TOGGLE_TIMER_SHOW = 'T'.charCodeAt(0);
 
-main._doTimerShow = true;
+main._doTimerShow = false;
 
 main._debugRender = function (ctx) {
 

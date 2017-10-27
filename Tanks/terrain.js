@@ -1,29 +1,71 @@
+// ==========
+// TERRAIN STUFF
+// ==========
+
+"use strict";
+
+/* jshint browser: true, devel: true, globalstrict: true */
+
+/*
+0        1         2         3         4         5         6         7         8
+12345678901234567890123456789012345678901234567890123456789012345678901234567890
+*/
 
 
-var g_landscape = [];
+// A generic contructor which accepts an arbitrary descriptor object
+function Terrain(descr) {
 
-var fun = function(x) {
-    return (x*x) * Math.sin(x);
+    // Common inherited setup logic from Entity
+    this.setup(descr);
+    this.initlandScape();
+    this.rememberResets();
+
+};
+
+Terrain.prototype = new Entity();
+
+Terrain.prototype.rememberResets = function () {
+    // Remember my reset positions
+    this.reset_landscape = this.landscape;
+};
+
+Terrain.prototype.initlandScape = function () {
+  util.initlandScape(this.landscape, util.fun, 15, 0);
+};
+
+Entity.prototype.findHitEntity = function () {
+  //do nothing, we handle the terrain collision diffrently
+};
+
+Entity.prototype.update = function () {
+  //do nothing for now until we get the bullets working
 }
 
+/*
+util.initlandScape(this.landscape, util.fun, 15, 0);
+console.log(this.landscape);*/
 
-function drawterrain (ctx) {
+Terrain.prototype.render = function(ctx) {
 
     ctx.fillStyle = "blue";
 
     var i = 0;
+    ctx.beginPath();
+    ctx.moveTo(this.landscape[0], this.landscape[1]);
 
-    ctx.moveTo(g_landscape[0][0], g_landscape[0][1]);
+    for (i in this.landscape) {
+        //if(i%2 === 0){
+        ctx.lineTo(this.landscape[i][0], this.landscape[i][1]);
 
-    for (i in g_landscape) {
-        ctx.lineTo(g_landscape[i][0], g_landscape[i][1]);
         //console.log(g_landscape[i][0], g_landscape[i][1]);
     }
+
+    ctx.closePath();
     ctx.fill();
 }
 
-
-function initlandScape(ls, f, bound, boundShift) {
+/*
+Terrain.prototype.initlandScape = function(ls, f, bound, boundShift) {
 
     var x = -bound + boundShift;
 
@@ -40,8 +82,8 @@ function initlandScape(ls, f, bound, boundShift) {
 
     return ls;
 }
-
-function bombLandscape(x, radius) {
+*/
+Terrain.prototype.bombLandscape = function(x, radius) {
 
     x = Math.floor(x);
     radius = Math.floor(radius);

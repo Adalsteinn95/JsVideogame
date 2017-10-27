@@ -17,6 +17,16 @@ function createInitialShips() {
 
 }
 
+function generateLandscape() {
+
+  /* var terrain = new Terrain({
+     landscape: [],
+   })*/
+   entityManager.generateTerrain({
+     landscape: []
+   });
+}
+
 // =============
 // GATHER INPUTS
 // =============
@@ -91,9 +101,9 @@ function processDiagnostics() {
 var first = true;
 function renderSimulation(ctx) {
     //skítamic for test
-    if(first){
+    /*if(first){
       drawterrain(ctx);
-  }
+  }*/
     entityManager.render(ctx);
 
     if (g_renderSpatialDebug) spatialManager.render(ctx);
@@ -130,9 +140,10 @@ function preloadDone() {
     g_sprites.bullet.scale = 0.25;
 
     entityManager.init();
+    generateLandscape();
     createInitialShips();
 
-    g_landscape = initlandScape(g_landscape, fun, 15, 0);
+
 
     main.init();
 }

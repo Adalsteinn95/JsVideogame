@@ -178,7 +178,6 @@ update: function(du) {
 render: function(ctx) {
 
     var debugX = 10, debugY = 100;
-    console.log(this._terrain);
 
     for (var c = 0; c < this._categories.length; ++c) {
 

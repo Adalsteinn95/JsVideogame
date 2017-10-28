@@ -40,7 +40,8 @@ Sprite.prototype.drawCentredAt = function (ctx, cx, cy, rotation) {
     //var line1 = [cx,cy-h/2,cx,cy+h/2];
     //var line2 = [cx-w/2,consts.yArray[0], cx+w/2, consts.yArray[1]];
     //ctx.rotate(util.angleBetween2Lines(line1, line2));
-    ctx.rotate(rotation);
+    ctx.rotate((rotation * Math.PI/180));
+    ctx.rotate(90);
     ctx.scale(this.scale, this.scale);
 
     // drawImage expects "top-left" coords, so we offset our destination

@@ -46,6 +46,7 @@ Ship.prototype.KEY_FIRE   = ' '.charCodeAt(0);
 
 // Initial, inheritable, default values
 Ship.prototype.rotation = 0;
+Ship.prototype.oldrotation = 0;
 Ship.prototype.cx = 200;
 Ship.prototype.cy = 200;
 Ship.prototype.velX = 0;
@@ -309,17 +310,19 @@ Ship.prototype.updateRotation = function (du) {
     var xIndex2 = Math.floor(this.cx+w/2);
     xIndex1 = util.clamp(xIndex1);
     xIndex2 = util.clamp(xIndex2);
+
     //console.log(xIndex1);
     //console.log(xIndex2);
-    //console.log(consts.yArray[xIndex1]);
-    //console.log(consts.yArray[xIndex2]);
-    var line1 = [this.cx,this.cy-h/2,this.cx,this.cy+h/2];
-    var line2 = [xIndex1,entityManager._categories[0][0].landscape[xIndex1][1], xIndex2, entityManager._categories[0][0].landscape[xIndex2][1]];
-    //console.log(line1);
-    //console.log(line2);
-    //console.log(util.toDegrees(Math.atan2(90,0)));
-    this.rotation = 90 - util.toDegrees(Math.atan2(entityManager._categories[0][0].landscape[xIndex2][1],w/2));
-    //console.log(this.rotation);
+      console.log(entityManager._categories[0][0].landscape[xIndex2][1]);
+      //var line1 = [this.cx,this.cy-h/2,this.cx,this.cy+h/2];
+      //var line2 = [xIndex1,entityManager._categories[0][0].landscape[xIndex1][1], xIndex2, entityManager._categories[0][0].landscape[xIndex2][1]];
+
+  //  this.rotation = 90 - util.toDegrees(Math.atan2(entityManager._categories[0][0].landscape[xIndex2][1],w/2));
+    this.rotation = util.toDegrees(Math.atan2(entityManager._categories[0][0].landscape[xIndex2][1] - this.cy , entityManager._categories[0][0].landscape[xIndex2][0] - this.cx));
+      //this.rotation += Math.atan2(entityManager._categories[0][0].landscape[xIndex2][1],w/2);
+      console.log(util.toDegrees(this.rotation));
+    
+
 };
 
 Ship.prototype.render = function (ctx) {

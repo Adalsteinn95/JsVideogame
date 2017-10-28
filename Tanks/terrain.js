@@ -17,7 +17,7 @@ function Terrain(descr) {
 
     // Common inherited setup logic from Entity
     this.setup(descr);
-    this.initlandScape();
+    this.initlandScape(this.landscape, this.function, this.bound, this.xShift);
     this.rememberResets();
 
 };
@@ -29,10 +29,6 @@ Terrain.prototype.rememberResets = function () {
     this.reset_landscape = this.landscape;
 };
 
-Terrain.prototype.initlandScape = function () {
-  util.initlandScape(this.landscape, util.fun, 15, 0);
-};
-
 Entity.prototype.findHitEntity = function () {
   //do nothing, we handle the terrain collision diffrently
 };
@@ -40,10 +36,6 @@ Entity.prototype.findHitEntity = function () {
 Entity.prototype.update = function () {
   //do nothing for now until we get the bullets working
 }
-
-/*
-util.initlandScape(this.landscape, util.fun, 15, 0);
-console.log(this.landscape);*/
 
 Terrain.prototype.render = function(ctx) {
 
@@ -54,35 +46,31 @@ Terrain.prototype.render = function(ctx) {
     ctx.moveTo(this.landscape[0], this.landscape[1]);
 
     for (i in this.landscape) {
-        //if(i%2 === 0){
         ctx.lineTo(this.landscape[i][0], this.landscape[i][1]);
-
-        //console.log(g_landscape[i][0], g_landscape[i][1]);
     }
 
     ctx.closePath();
     ctx.fill();
 }
 
-/*
-Terrain.prototype.initlandScape = function(ls, f, bound, boundShift) {
+Terrain.prototype.initlandScape = function(ls, f, bound, xShift) {
 
-    var x = -bound + boundShift;
+    var x = -bound + xShift;
 
     for (var i = 0; i < g_canvas.width; i++) {
         var y = f(x);
-        y += 300;
+        y += g_canvas.height/2;
         ls.push([i,y]);
 
         x += ((2*bound)/g_canvas.width);
     }
 
-    ls.push([600,600]);
-    ls.push([0,600]);
-
+    ls.push([g_canvas.width,g_canvas.height]);
+    ls.push([0,g_canvas.height]);
+    console.log(ls);
     return ls;
 }
-*/
+
 Terrain.prototype.bombLandscape = function(x, radius) {
 
     x = Math.floor(x);
@@ -93,12 +81,7 @@ Terrain.prototype.bombLandscape = function(x, radius) {
     var ratio = -1, step = 1/radius;
 
     for (var i = diff; i < 2*radius + diff; i++) {
-        this.landscape[i][1] += (Math.sin(Math.acos(ratio)) * radius);
+        this.landscape[i][1] += util.sinAcos(ratio, radius);
         ratio += step;
     }
-    //draw(g_ctx);
 }
-
-
-
-//draw(g_ctx);

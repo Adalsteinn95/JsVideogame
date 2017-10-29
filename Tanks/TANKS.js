@@ -90,6 +90,7 @@ function processDiagnostics() {
 
 function renderSimulation(ctx) {
 
+    graphicsManager.render(ctx);
     entityManager.render(ctx);
 
     if (g_renderSpatialDebug) spatialManager.render(ctx);
@@ -108,7 +109,8 @@ function requestPreloads() {
     var requiredImages = {
         ship   : "https://notendur.hi.is/~pk/308G/images/ship.png",
         ship2  : "https://notendur.hi.is/~pk/308G/images/ship_2.png",
-        rock   : "https://notendur.hi.is/~pk/308G/images/rock.png"
+        rock   : "https://notendur.hi.is/~pk/308G/images/rock.png",
+        cloud  : "../cloudsimg/cloud1.PNG"
     };
 
     imagesPreload(requiredImages, g_images, preloadDone);
@@ -124,6 +126,7 @@ function preloadDone() {
 
     g_sprites.bullet = new Sprite(g_images.ship);
     g_sprites.bullet.scale = 0.25;
+    g_sprites.cloud = new Sprite(g_images.cloud);
 
     entityManager.init();
     createInitialShips();

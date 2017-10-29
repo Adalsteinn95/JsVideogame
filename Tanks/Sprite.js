@@ -33,7 +33,7 @@ Sprite.prototype.drawCentredAt = function (ctx, cx, cy, rotation) {
 
     var w = this.width,
         h = this.height;
-        
+
 
     ctx.save();
     ctx.translate(cx, cy);

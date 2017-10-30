@@ -40,7 +40,7 @@ Sprite.prototype.drawCentredAt = function (ctx, cx, cy, rotation) {
 
     ctx.rotate((rotation * Math.PI/180));
     //gert til að sjá þetta betur á ship spritinu, taka í burtu þegar tank sprite er komið
-    ctx.rotate(90);
+    //ctx.rotate(90);
     ctx.scale(this.scale, this.scale);
 
     // drawImage expects "top-left" coords, so we offset our destination

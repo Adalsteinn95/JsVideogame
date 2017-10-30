@@ -93,7 +93,14 @@ deferredSetup : function () {
 
 init: function() {
     this._generateRocks();
-    //this._generateShip();
+    this.generateTerrain({
+        landscape: [],
+        function: util.fun,
+        bound: 15,
+        xShift: 0
+    });
+
+    console.log(this._terrain);
 },
 
 fireBullet: function(cx, cy, velX, velY, rotation) {

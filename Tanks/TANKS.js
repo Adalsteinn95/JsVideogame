@@ -17,15 +17,6 @@ function createInitialShips() {
 
 }
 
-function generateLandscape() {
-
-  /* var terrain = new Terrain({
-     landscape: [],
-   })*/
-   entityManager.generateTerrain({
-     landscape: []
-   });
-}
 
 // =============
 // GATHER INPUTS
@@ -140,7 +131,7 @@ function preloadDone() {
     g_sprites.bullet.scale = 0.25;
 
     entityManager.init();
-    generateLandscape();
+    //generateLandscape();
     createInitialShips();
 
 

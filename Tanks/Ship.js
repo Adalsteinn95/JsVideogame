@@ -308,14 +308,18 @@ Ship.prototype.updateRotation = function (du) {
 
     //console.log(xIndex1);
     //console.log(xIndex2);
-      console.log(entityManager._categories[0][0].landscape[xIndex2][1]);
+      //console.log(entityManager._categories[0][0].landscape[xIndex2][1]);
       //var line1 = [this.cx,this.cy-h/2,this.cx,this.cy+h/2];
       //var line2 = [xIndex1,entityManager._categories[0][0].landscape[xIndex1][1], xIndex2, entityManager._categories[0][0].landscape[xIndex2][1]];
 
   //  this.rotation = 90 - util.toDegrees(Math.atan2(entityManager._categories[0][0].landscape[xIndex2][1],w/2));
     this.rotation = util.toDegrees(Math.atan2(entityManager._categories[0][0].landscape[xIndex2][1] - this.cy , entityManager._categories[0][0].landscape[xIndex2][0] - this.cx));
       //this.rotation += Math.atan2(entityManager._categories[0][0].landscape[xIndex2][1],w/2);
+<<<<<<< HEAD
       console.log(util.toDegrees(this.rotation));
+=======
+      //console.log(util.toDegrees(this.rotation));
+>>>>>>> 0380b6f542c9afc8cc5e402b44671820820767d8
 
 
 };

@@ -144,22 +144,8 @@ fun: function(x) {
     return (x*x) * Math.sin(x);
 },
 
-initlandScape: function(ls, f, bound, boundShift) {
-
-    var x = -bound + boundShift;
-
-    for (var i = 0; i < g_canvas.width; i++) {
-        var y = f(x);
-        y += 300;
-        ls.push([i,Math.floor(y)]);
-
-        x += ((2*bound)/g_canvas.width);
-    }
-
-    ls.push([600,600]);
-    ls.push([0,600]);
-    console.log(ls);
-    return ls;
+sinAcos: function(ratio, radius) {
+    return Math.sin(Math.acos(ratio)) * radius;
 }
 
 };

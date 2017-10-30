@@ -46,7 +46,7 @@ Ship.prototype.KEY_FIRE   = ' '.charCodeAt(0);
 
 // Initial, inheritable, default values
 Ship.prototype.rotation = 0;
-Ship.prototype.oldrotation = 0;
+Ship.prototype.gunrotation = 0;
 Ship.prototype.cx = 200;
 Ship.prototype.cy = 200;
 Ship.prototype.velX = 0;
@@ -179,8 +179,9 @@ Ship.prototype.computeSubStep = function (du) {
     this.wrapPosition();
 
     if (thrust === 0 || g_allowMixedActions) {
-        this.updateRotation(du);
+        this.updateGunRotation(du);
     }
+    this.updateRotation(du);
 };
 
 var NOMINAL_GRAVITY = 0.12;
@@ -190,7 +191,7 @@ Ship.prototype.computeGravity = function () {
 };
 
 var NOMINAL_THRUST = +0.2;
-var NOMINAL_RETRO  = -0.1;
+var NOMINAL_RETRO  = -0.2;
 
 Ship.prototype.computeThrustMag = function () {
 
@@ -236,12 +237,12 @@ Ship.prototype.applyAccel = function (accelX, accelY, du) {
 
 	// Ignore the bounce if the ship is already in
 	// the "border zone" (to avoid trapping them there)
-	if (this.cy > maxY || this.cy < minY) {
+	/*if (this.cy > maxY || this.cy < minY) {
 	    // do nothing
 	} else if (nextY > maxY || nextY < minY) {
             this.velY = oldVelY * -0.9;
             intervalVelY = this.velY;
-        }
+        }*/
     }
 
     // s = s + v_ave * t
@@ -255,8 +256,8 @@ Ship.prototype.maybeFireBullet = function () {
 
     if (keys[this.KEY_FIRE]) {
 
-        var dX = +Math.sin(this.rotation);
-        var dY = -Math.cos(this.rotation);
+        var dX = +Math.sin(this.gunrotation);
+        var dY = -Math.cos(this.gunrotation);
         var launchDist = this.getRadius() * 1.2;
 
         var relVel = this.launchVel;
@@ -266,7 +267,7 @@ Ship.prototype.maybeFireBullet = function () {
         entityManager.fireBullet(
            this.cx + dX * launchDist, this.cy + dY * launchDist,
            this.velX + relVelX, this.velY + relVelY,
-           this.rotation);
+           this.gunrotation);
 
     }
 
@@ -292,7 +293,7 @@ Ship.prototype.halt = function () {
     this.velY = 0;
 };
 
-var NOMINAL_ROTATE_RATE = 0.1;
+var NOMINAL_ROTATE_RATE = 0.01;
 
 Ship.prototype.updateRotation = function (du) {
 
@@ -300,21 +301,27 @@ Ship.prototype.updateRotation = function (du) {
     var w = 64,
         h = 64;
 
-
     var xIndex1 = Math.floor(this.cx-w/2);
     var xIndex2 = Math.floor(this.cx+w/2);
     xIndex1 = util.clamp(xIndex1);
     xIndex2 = util.clamp(xIndex2);
 
-    //console.log(xIndex1);
-    //console.log(xIndex2);
       //console.log(entityManager._categories[0][0].landscape[xIndex2][1]);
   //  this.rotation = 90 - util.toDegrees(Math.atan2(entityManager._categories[0][0].landscape[xIndex2][1],w/2));
     this.rotation = util.toDegrees(Math.atan2(entityManager._categories[1][0].landscape[xIndex2][1] - this.cy , entityManager._categories[1][0].landscape[xIndex2][0] - this.cx));
+
       //this.rotation += Math.atan2(entityManager._categories[0][0].landscape[xIndex2][1],w/2);
     //  console.log(util.toDegrees(this.rotation));
 
+};
 
+Ship.prototype.updateGunRotation = function (du) {
+    if (keys[this.KEY_LEFT]) {
+        this.gunrotation -= NOMINAL_ROTATE_RATE * du;
+    }
+    if (keys[this.KEY_RIGHT]) {
+        this.gunrotation += NOMINAL_ROTATE_RATE * du;
+    }
 };
 
 Ship.prototype.render = function (ctx) {

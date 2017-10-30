@@ -163,6 +163,7 @@ Ship.prototype.applyAccel = function (accelX, accelY, du) {
     this.cx += accelX;
     var Xindex = util.clamp(Math.floor(this.cx));
     this.cy = entityManager._categories[1][0].landscape[Xindex][1];
+    if(this.cy > 600){ this.cy = 600}
 };
 
 Ship.prototype.maybeFireBullet = function () {
@@ -185,7 +186,7 @@ Ship.prototype.maybeFireBullet = function () {
            this.power * relVelX + this.velX, -this.power * this.velY + relVelY,
            this.gunrotation);
 
-           this.resetPower();
+          // this.resetPower();
 
     }
 

@@ -295,12 +295,7 @@ Ship.prototype.halt = function () {
 var NOMINAL_ROTATE_RATE = 0.1;
 
 Ship.prototype.updateRotation = function (du) {
-    /*if (keys[this.KEY_LEFT]) {
-        this.rotation -= NOMINAL_ROTATE_RATE * du;
-    }
-    if (keys[this.KEY_RIGHT]) {
-        this.rotation += NOMINAL_ROTATE_RATE * du;
-    }*/
+
     //skítamix
     var w = 64,
         h = 64;
@@ -321,7 +316,7 @@ Ship.prototype.updateRotation = function (du) {
     this.rotation = util.toDegrees(Math.atan2(entityManager._categories[0][0].landscape[xIndex2][1] - this.cy , entityManager._categories[0][0].landscape[xIndex2][0] - this.cx));
       //this.rotation += Math.atan2(entityManager._categories[0][0].landscape[xIndex2][1],w/2);
       console.log(util.toDegrees(this.rotation));
-    
+
 
 };
 

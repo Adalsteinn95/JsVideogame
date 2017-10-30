@@ -183,7 +183,7 @@ update: function(du) {
 
 
             if (status === this.KILL_ME_NOW) {
-
+                console.log("ping");
                 // remove the dead guy, and shuffle the others down to
                 // prevent a confusing gap from appearing in the array
                 aCategory.splice(i,1);

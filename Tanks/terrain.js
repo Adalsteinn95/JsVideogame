@@ -29,6 +29,7 @@ Terrain.prototype.rememberResets = function () {
     this.reset_landscape = this.landscape;
 };
 
+
 Entity.prototype.findHitEntity = function () {
   //do nothing, we handle the terrain collision diffrently
 };
@@ -36,6 +37,7 @@ Entity.prototype.findHitEntity = function () {
 Entity.prototype.update = function () {
   //do nothing for now until we get the bullets working
 }
+
 
 Terrain.prototype.render = function(ctx) {
 
@@ -46,12 +48,16 @@ Terrain.prototype.render = function(ctx) {
     ctx.moveTo(this.landscape[0], this.landscape[1]);
 
     for (i in this.landscape) {
+        //if(i%2 === 0){
         ctx.lineTo(this.landscape[i][0], this.landscape[i][1]);
+
+        //console.log(g_landscape[i][0], g_landscape[i][1]);
     }
 
     ctx.closePath();
     ctx.fill();
 }
+
 
 Terrain.prototype.initlandScape = function(ls, f, bound, xShift) {
 
@@ -67,7 +73,7 @@ Terrain.prototype.initlandScape = function(ls, f, bound, xShift) {
 
     ls.push([g_canvas.width,g_canvas.height]);
     ls.push([0,g_canvas.height]);
-    console.log(ls);
+    //console.log(ls);
     return ls;
 }
 
@@ -81,7 +87,13 @@ Terrain.prototype.bombLandscape = function(x, radius) {
     var ratio = -1, step = 1/radius;
 
     for (var i = diff; i < 2*radius + diff; i++) {
-        this.landscape[i][1] += util.sinAcos(ratio, radius);
+
+        this.landscape[util.clamp(i)][1] += (Math.sin(Math.acos(ratio)) * radius);
         ratio += step;
     }
+    //draw(g_ctx);
 }
+
+
+
+//draw(g_ctx);

@@ -87,8 +87,6 @@ Bullet.prototype.update = function (du) {
 Bullet.prototype.terrainHit = function(x, y){
   var xIndex = util.clamp(Math.floor(x));
 
-  console.log(entityManager._categories[1][0].landscape[xIndex][1]);
-  console.log(y);
   if(entityManager._categories[1][0].landscape[xIndex][1] < y){
     entityManager._terrain[0].bombLandscape(x, 50);
     //this.kill();
@@ -111,9 +109,9 @@ Bullet.prototype.render = function (ctx) {
 
     var fadeThresh = Bullet.prototype.lifeSpan / 3;
 
-    /*if (this.lifeSpan < fadeThresh) {
+    if (this.lifeSpan < fadeThresh) {
         ctx.globalAlpha = this.lifeSpan / fadeThresh;
-    }*/
+    }
 
     g_sprites.bullet.drawWrappedCentredAt(
         ctx, this.cx, this.cy, this.rotation

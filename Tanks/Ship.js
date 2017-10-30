@@ -54,7 +54,7 @@ Ship.prototype.velX = 0;
 Ship.prototype.velY = 0;
 Ship.prototype.launchVel = 2;
 Ship.prototype.numSubSteps = 1;
-Ship.prototype.power = 2;
+Ship.prototype.power = 10;
 
 
 Ship.prototype.warp = function () {
@@ -185,7 +185,7 @@ Ship.prototype.maybeFireBullet = function () {
            this.power * relVelX + this.velX, -this.power * this.velY + relVelY,
            this.gunrotation);
 
-           this.resetPower();
+           //this.resetPower();
 
     }
 
@@ -241,7 +241,7 @@ Ship.prototype.updateGunRotation = function (du) {
     }
 };
 
-var POWER_INCREASE = 0.015
+var POWER_INCREASE = 1;
 
 Ship.prototype.updatePower = function (du) {
     if (keys[this.KEY_POWER]) {

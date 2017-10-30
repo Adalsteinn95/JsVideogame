@@ -48,10 +48,7 @@ Terrain.prototype.render = function(ctx) {
     ctx.moveTo(this.landscape[0], this.landscape[1]);
 
     for (i in this.landscape) {
-        //if(i%2 === 0){
         ctx.lineTo(this.landscape[i][0], this.landscape[i][1]);
-
-        //console.log(g_landscape[i][0], g_landscape[i][1]);
     }
 
     ctx.closePath();
@@ -73,7 +70,6 @@ Terrain.prototype.initlandScape = function(ls, f, bound, xShift) {
 
     ls.push([g_canvas.width,g_canvas.height]);
     ls.push([0,g_canvas.height]);
-    //console.log(ls);
     return ls;
 }
 
@@ -88,12 +84,7 @@ Terrain.prototype.bombLandscape = function(x, radius) {
 
     for (var i = diff; i < 2*radius + diff; i++) {
 
-        this.landscape[util.clamp(i)][1] += (Math.sin(Math.acos(ratio)) * radius);
+        this.landscape[util.clamp(i)][1] += util.sinAcos(ratio, radius);
         ratio += step;
     }
-    //draw(g_ctx);
 }
-
-
-
-//draw(g_ctx);

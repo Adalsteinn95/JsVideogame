@@ -36,6 +36,7 @@ function updateSimulation(du) {
 
     //drawterrain(ctx);
     processDiagnostics();
+    terrain.render(ctx);
 
     entityManager.update(du);
 
@@ -93,8 +94,9 @@ var first = true;
 function renderSimulation(ctx) {
 
     //graphicsManager.render(ctx);
-
+    //landscape.render(ctx);
     entityManager.render(ctx);
+    terrain.render(ctx);
 
     if (g_renderSpatialDebug) spatialManager.render(ctx);
 }

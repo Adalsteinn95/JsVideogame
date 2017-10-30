@@ -92,7 +92,7 @@ function processDiagnostics() {
 var first = true;
 function renderSimulation(ctx) {
 
-    graphicsManager.render(ctx);
+    //graphicsManager.render(ctx);
 
     entityManager.render(ctx);
 
@@ -113,7 +113,10 @@ function requestPreloads() {
         ship   : "https://notendur.hi.is/~pk/308G/images/ship.png",
         ship2  : "https://notendur.hi.is/~pk/308G/images/ship_2.png",
         rock   : "https://notendur.hi.is/~pk/308G/images/rock.png",
-        cloud  : "../cloudsimg/cloud1.PNG"
+        cloud1  : "../cloudsimg/cloud1.PNG",
+        cloud2  : "../cloudsimg/cloud2.PNG",
+        cloud3  : "../cloudsimg/cloud3.PNG",
+        terrain : "http://i0.kym-cdn.com/entries/icons/mobile/000/013/564/doge.jpg"
     };
 
     imagesPreload(requiredImages, g_images, preloadDone);
@@ -129,7 +132,10 @@ function preloadDone() {
 
     g_sprites.bullet = new Sprite(g_images.ship);
     g_sprites.bullet.scale = 0.25;
-    g_sprites.cloud = new Sprite(g_images.cloud);
+    g_sprites.cloud1 = new Sprite(g_images.cloud1);
+    g_sprites.cloud2 = new Sprite(g_images.cloud2);
+    g_sprites.cloud3 = new Sprite(g_images.cloud3);
+    g_sprites.terrain = new Sprite(g_images.terrain);
 
     entityManager.init();
     //generateLandscape();

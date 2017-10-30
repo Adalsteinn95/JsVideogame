@@ -3,9 +3,10 @@ var cloudY = 100;
 
 var graphicsManager = {
 
-  render : function(ctx) {
+  /*render : function(ctx) {
 
     this.drawBackground(ctx, 200)
+    g_sprite.cloud.wrapPosition();
   },
 
   drawBackground : function (ctx,wind) {
@@ -17,4 +18,6 @@ var graphicsManager = {
   updateCloud : function (cloud,wind) {
     cloudX += wind / 100;
   }
+  */
+
 }

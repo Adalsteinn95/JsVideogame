@@ -31,6 +31,7 @@ _rocks   : [],
 _bullets : [],
 _ships   : [],
 _terrain : [],
+_clouds : [],
 
 _bShowRocks : true,
 
@@ -42,6 +43,15 @@ _generateRocks : function() {
 
     for (i = 0; i < NUM_ROCKS; ++i) {
         this.generateRock();
+    }
+},
+_generateClouds : function() {
+    var i,
+    NUM_CLOUDS = 4;
+
+    for (i = 0; i < NUM_CLOUDS; ++i) {
+
+      this.generateClouds();
     }
 },
 
@@ -88,17 +98,19 @@ KILL_ME_NOW : -1,
 // i.e. thing which need `this` to be defined.
 //
 deferredSetup : function () {
-    this._categories = [ this._terrain, this._rocks, this._bullets, this._ships];
+    this._categories = [this._clouds, this._terrain, this._rocks, this._bullets, this._ships ];
 },
 
 init: function() {
     this._generateRocks();
+    this._generateClouds();
     this.generateTerrain({
         landscape: [],
         function: util.fun,
         bound: 15,
         xShift: 0
     });
+
 
     console.log(this._terrain);
 },
@@ -121,6 +133,10 @@ generateRock : function(descr) {
 
 generateTerrain : function(descr) {
     this._terrain.push(new Terrain(descr));
+},
+
+generateClouds : function (descr) {
+    this._clouds.push(new Cloud(descr));
 },
 
 generateShip : function(descr) {

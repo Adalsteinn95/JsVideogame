@@ -90,12 +90,12 @@ Ship.prototype.update = function (du) {
     //
     // Handle collisions
     //
-    var hitEntity = this.findHitEntity();
+    /*var hitEntity = this.findHitEntity();
     if (hitEntity) {
         var canTakeHit = hitEntity.takeBulletHit;
         if (canTakeHit) canTakeHit.call(hitEntity);
         this.takeBulletHit();
-    }
+    }*/
 
     // Perform movement substeps
     var steps = this.numSubSteps;
@@ -161,8 +161,8 @@ Ship.prototype.applyAccel = function (accelX, accelY, du) {
     // s = s + v_ave * t
     //console.log(this.cx);
     this.cx += accelX;
-    var Xindex = util.clamp(Math.floor(this.cx));
-    this.cy = entityManager._categories[1][0].landscape[Xindex][1];
+    var xIndex = util.clamp(Math.floor(this.cx));
+    this.cy = g_landscape[xIndex];
 };
 
 Ship.prototype.maybeFireBullet = function () {
@@ -225,7 +225,7 @@ Ship.prototype.updateRotation = function (du) {
 
       //console.log(entityManager._categories[0][0].landscape[xIndex2][1]);
   //  this.rotation = 90 - util.toDegrees(Math.atan2(entityManager._categories[0][0].landscape[xIndex2][1],w/2));
-    this.rotation = util.toDegrees(Math.atan2(entityManager._categories[1][0].landscape[xIndex2][1] - this.cy , entityManager._categories[1][0].landscape[xIndex2][0] - this.cx));
+    this.rotation = util.toDegrees(Math.atan2(g_landscape[xIndex1] - this.cy , g_landscape[xIndex2] - this.cx));
 
       //this.rotation += Math.atan2(entityManager._categories[0][0].landscape[xIndex2][1],w/2);
     //  console.log(util.toDegrees(this.rotation));

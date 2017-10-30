@@ -87,7 +87,8 @@ Terrain.prototype.bombLandscape = function(x, radius) {
     var ratio = -1, step = 1/radius;
 
     for (var i = diff; i < 2*radius + diff; i++) {
-        this.landscape[i][1] += (Math.sin(Math.acos(ratio)) * radius);
+
+        this.landscape[util.clamp(i)][1] += (Math.sin(Math.acos(ratio)) * radius);
         ratio += step;
     }
     //draw(g_ctx);

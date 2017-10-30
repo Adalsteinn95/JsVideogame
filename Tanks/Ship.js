@@ -47,7 +47,7 @@ Ship.prototype.KEY_FIRE   = ' '.charCodeAt(0);
 
 // Initial, inheritable, default values
 Ship.prototype.rotation = 0;
-Ship.prototype.gunrotation = 0;
+Ship.prototype.gunrotation = -50;
 Ship.prototype.cx = 200;
 Ship.prototype.cy = 200;
 Ship.prototype.velX = 0;
@@ -182,7 +182,7 @@ Ship.prototype.maybeFireBullet = function () {
 
         entityManager.fireBullet(
            this.cx + dX * launchDist, this.cy + dY * launchDist,
-           this.power, -this.power,
+           this.power * relVelX + this.velX, -this.power * this.velY + relVelY,
            this.gunrotation);
 
            this.resetPower();

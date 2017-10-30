@@ -30,6 +30,7 @@ var entityManager = {
 _rocks   : [],
 _bullets : [],
 _ships   : [],
+_terrain : [],
 
 _bShowRocks : true,
 
@@ -87,12 +88,19 @@ KILL_ME_NOW : -1,
 // i.e. thing which need `this` to be defined.
 //
 deferredSetup : function () {
-    this._categories = [this._rocks, this._bullets, this._ships];
+    this._categories = [ this._terrain, this._rocks, this._bullets, this._ships];
 },
 
 init: function() {
     this._generateRocks();
-    //this._generateShip();
+    this.generateTerrain({
+        landscape: [],
+        function: util.fun,
+        bound: 15,
+        xShift: 0
+    });
+
+    console.log(this._terrain);
 },
 
 fireBullet: function(cx, cy, velX, velY, rotation) {
@@ -109,6 +117,10 @@ fireBullet: function(cx, cy, velX, velY, rotation) {
 generateRock : function(descr) {
     //console.log("ping");
     //this._rocks.push(new Rock(descr));
+},
+
+generateTerrain : function(descr) {
+    this._terrain.push(new Terrain(descr));
 },
 
 generateShip : function(descr) {

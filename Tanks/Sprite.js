@@ -37,10 +37,10 @@ Sprite.prototype.drawCentredAt = function (ctx, cx, cy, rotation) {
 
     ctx.save();
     ctx.translate(cx, cy);
-    //var line1 = [cx,cy-h/2,cx,cy+h/2];
-    //var line2 = [cx-w/2,consts.yArray[0], cx+w/2, consts.yArray[1]];
-    //ctx.rotate(util.angleBetween2Lines(line1, line2));
-    ctx.rotate(rotation);
+
+    ctx.rotate((rotation * Math.PI/180));
+    //gert til að sjá þetta betur á ship spritinu, taka í burtu þegar tank sprite er komið
+    ctx.rotate(90);
     ctx.scale(this.scale, this.scale);
 
     // drawImage expects "top-left" coords, so we offset our destination
@@ -50,25 +50,6 @@ Sprite.prototype.drawCentredAt = function (ctx, cx, cy, rotation) {
 
     ctx.restore();
 };
-/*
-Sprite.prototype.drawCentredAt = function (ctx, cx, cy, rotation) {
-    if (rotation === undefined) rotation = 0;
-
-    var w = this.width,
-        h = this.height;
-
-    ctx.save();
-    ctx.translate(cx, cy);
-    ctx.rotate(rotation);
-    ctx.scale(this.scale, this.scale);
-
-    // drawImage expects "top-left" coords, so we offset our destination
-    // coords accordingly, to draw our sprite centred at the origin
-    ctx.drawImage(this.image,
-                  -w/2, -h/2);
-
-    ctx.restore();
-}; */
 
 Sprite.prototype.drawWrappedCentredAt = function (ctx, cx, cy, rotation) {
 

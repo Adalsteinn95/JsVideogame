@@ -17,6 +17,7 @@ function createInitialShips() {
 
 }
 
+
 // =============
 // GATHER INPUTS
 // =============
@@ -33,6 +34,7 @@ function gatherInputs() {
 
 function updateSimulation(du) {
 
+    //drawterrain(ctx);
     processDiagnostics();
 
     entityManager.update(du);
@@ -87,10 +89,11 @@ function processDiagnostics() {
 
 
 // GAME-SPECIFIC RENDERING
-
+var first = true;
 function renderSimulation(ctx) {
 
     graphicsManager.render(ctx);
+
     entityManager.render(ctx);
 
     if (g_renderSpatialDebug) spatialManager.render(ctx);
@@ -129,7 +132,10 @@ function preloadDone() {
     g_sprites.cloud = new Sprite(g_images.cloud);
 
     entityManager.init();
+    //generateLandscape();
     createInitialShips();
+
+
 
     main.init();
 }

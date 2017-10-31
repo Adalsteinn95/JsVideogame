@@ -6,7 +6,6 @@ function Cloud(descr) {
 
     //set random cloud image
     var randSprite = Math.random();
-    console.log('RANDSPRITE', randSprite)
 
     if(randSprite < .33) {
       this.sprite = g_sprites.cloud1
@@ -17,16 +16,7 @@ function Cloud(descr) {
     else  {
       this.sprite = g_sprites.cloud3
     }
-    // Default sprite and scale, if not otherwise specified
-    //this.sprite = this.sprite || g_sprites.cloud;
     this.scale  = this.scale  || 1;
-
-/*
-    // Diagnostics to check inheritance stuff
-    this._rockProperty = true;
-    console.dir(this);
-*/
-
 };
 
 
@@ -51,17 +41,13 @@ Cloud.prototype.randomiseVelocity = function () {
 
     var speed = util.randRange(MIN_SPEED, MAX_SPEED) / SECS_TO_NOMINALS;
 
-
     this.velX = speed
-    //this.velY = this.velY || speed * Math.sin(dirn);
-
 };
 
 
 Cloud.prototype.update = function (du) {
 
     this.cx += this.velX * du;
-    //this.cy += this.velY * du;
 
     this.wrapPosition();
 

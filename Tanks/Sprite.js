@@ -39,8 +39,6 @@ Sprite.prototype.drawCentredAt = function (ctx, cx, cy, rotation) {
     ctx.translate(cx, cy);
 
     ctx.rotate((rotation * Math.PI/180));
-    //gert til að sjá þetta betur á ship spritinu, taka í burtu þegar tank sprite er komið
-    //ctx.rotate(90);
     ctx.scale(this.scale, this.scale);
 
     // drawImage expects "top-left" coords, so we offset our destination
@@ -71,8 +69,4 @@ Sprite.prototype.drawWrappedVerticalCentredAt = function (ctx, cx, cy, rotation)
 
     // Draw primary instance
     this.drawCentredAt(ctx, cx, cy, rotation);
-
-    // Top and Bottom wraps
-   //this.drawCentredAt(ctx, cx, cy - sh, rotation);
-    //this.drawCentredAt(ctx, cx, cy + sh, rotation);
 };

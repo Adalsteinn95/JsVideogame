@@ -32,16 +32,11 @@ _bullets : [],
 _ships   : [],
 _clouds : [],
 
-_bShowRocks : true,
-
 // "PRIVATE" METHODS
 
-_generateRocks : function() {
-  //do nothing
-},
 _generateClouds : function() {
     var i,
-    NUM_CLOUDS = 0;
+    NUM_CLOUDS = 4;
 
     for (i = 0; i < NUM_CLOUDS; ++i) {
 
@@ -96,10 +91,7 @@ deferredSetup : function () {
 },
 
 init: function() {
-    this._generateRocks();
     this._generateClouds();
-
-
 },
 
 fireBullet: function(cx, cy, velX, velY, rotation) {
@@ -112,13 +104,6 @@ fireBullet: function(cx, cy, velX, velY, rotation) {
         rotation : rotation
     }));
 },
-
-generateRock : function(descr) {
-    //console.log("ping");
-    //this._rocks.push(new Rock(descr));
-},
-
-
 
 generateClouds : function (descr) {
     this._clouds.push(new Cloud(descr));
@@ -149,10 +134,6 @@ resetShips: function() {
 
 haltShips: function() {
     this._forEachOf(this._ships, Ship.prototype.halt);
-},
-
-toggleRocks: function() {
-    this._bShowRocks = !this._bShowRocks;
 },
 
 update: function(du) {

@@ -84,7 +84,7 @@ Bullet.prototype.update = function (du) {
 Bullet.prototype.terrainHit = function(x, y){
     var xIndex = util.clamp(Math.floor(x));
 
-    if(g_landscape[xIndex][1] < y){
+    if(g_landscape[xIndex] < y){
         terrain.bombLandscape(x, 50);
         this.lifeSpan = 0;
     }

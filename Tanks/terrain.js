@@ -29,11 +29,14 @@ render: function(ctx) {
     ctx.fillStyle = "blue";
     var i = 0;
     ctx.beginPath();
-    ctx.moveTo(g_landscape[0][0], g_landscape[0][1]);
+    ctx.moveTo(0, g_landscape[0]);
 
     for (i in g_landscape) {
-        ctx.lineTo(g_landscape[i][0], g_landscape[i][1]);
+        ctx.lineTo(i, g_landscape[i]);
     }
+
+    ctx.lineTo(g_canvas.width, g_canvas.height);
+    ctx.lineTo(0, g_canvas.height);
 
     ctx.closePath();
     ctx.fill();
@@ -46,13 +49,11 @@ initlandScape: function(ls, f, bound, xShift) {
     for (var i = 0; i < g_canvas.width; i++) {
         var y = f(x);
         y += g_canvas.height/2;
-        ls.push([i,y]);
+        ls.push(y);
 
         x += ((2*bound)/g_canvas.width);
     }
 
-    ls.push([g_canvas.width,g_canvas.height]);
-    ls.push([0,g_canvas.height]);
     return ls;
 },
 
@@ -67,7 +68,7 @@ bombLandscape: function(x, radius) {
 
     for (var i = diff; i < 2*radius + diff; i++) {
 
-        g_landscape[util.clamp(i)][1] += util.sinAcos(ratio, radius);
+        g_landscape[util.clamp(i)] += util.sinAcos(ratio, radius);
         ratio += step;
     }
 }

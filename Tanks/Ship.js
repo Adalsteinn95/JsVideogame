@@ -158,7 +158,7 @@ Ship.prototype.applyAccel = function (accelX, accelY, du) {
     this.cx += accelX;
 
     var xIndex = util.clamp(Math.floor(this.cx));
-    this.cy = g_landscape[xIndex][1];
+    this.cy = g_landscape[xIndex];
     if(this.cy > 600){
       this.cy = 600;
     }
@@ -214,7 +214,7 @@ Ship.prototype.updateRotation = function (du) {
     xIndex2 = util.clamp(xIndex2);
 
     //when it wraps we need to add canvas length so the tank doesnt spin
-    var xLine = g_landscape[xIndex2][0];
+    var xLine = xIndex2;
     if(xLine < this.cx) {
         xLine = -1;
     }
@@ -222,7 +222,7 @@ Ship.prototype.updateRotation = function (du) {
         xLine = 1;
     }
 
-    this.rotation = util.toDegrees(Math.atan2(g_landscape[xIndex2][1] - this.cy , (g_landscape[xIndex2][0] - this.cx) * xLine));
+    this.rotation = util.toDegrees(Math.atan2(g_landscape[xIndex2] - this.cy , (xIndex2 - this.cx) * xLine));
 };
 
 Ship.prototype.updateGunRotation = function (du) {

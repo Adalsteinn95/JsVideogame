@@ -161,6 +161,7 @@ Ship.prototype.applyAccel = function (accelX, accelY, du) {
     // s = s + v_ave * t
     //console.log(this.cx);
     this.cx += accelX;
+
     var xIndex = util.clamp(Math.floor(this.cx));
     this.cy = g_landscape[xIndex][1];
 };
@@ -185,7 +186,7 @@ Ship.prototype.maybeFireBullet = function () {
            this.power * relVelX + this.velX, -this.power * this.velY + relVelY,
            this.gunrotation);
 
-           this.resetPower();
+          // this.resetPower();
 
     }
 

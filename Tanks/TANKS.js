@@ -36,7 +36,8 @@ function updateSimulation(du) {
 
     //drawterrain(ctx);
     processDiagnostics();
-
+    //terrain.rendertest(ctx);
+    terrain.render(ctx);
     entityManager.update(du);
 
     // Prevent perpetual firing!
@@ -93,8 +94,9 @@ var first = true;
 function renderSimulation(ctx) {
 
     //graphicsManager.render(ctx);
-
+    terrain.render(ctx);
     entityManager.render(ctx);
+
 
     if (g_renderSpatialDebug) spatialManager.render(ctx);
 }

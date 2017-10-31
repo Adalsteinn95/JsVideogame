@@ -39,6 +39,8 @@ Bullet.prototype.cy = 200;
 Bullet.prototype.velX = 1;
 Bullet.prototype.velY = 1;
 
+Bullet.prototype.life = 10;
+
 // Convert times from milliseconds to "nominal" time units.
 Bullet.prototype.lifeSpan = 3000 / NOMINAL_UPDATE_INTERVAL;
 
@@ -55,7 +57,9 @@ Bullet.prototype.update = function (du) {
     this.cx += this.velX * du;
     this.cy += this.velY * du;
 
+    if(this.life < 0){
     this.velY += NOMINAL_GRAVITY;
+  } else {this.life--;}
 
     this.rotation += 1 * du;
     this.rotation = util.wrapRange(this.rotation,
@@ -87,8 +91,10 @@ Bullet.prototype.update = function (du) {
 Bullet.prototype.terrainHit = function(x, y){
   var xIndex = util.clamp(Math.floor(x));
 
-  if(entityManager._categories[1][0].landscape[xIndex][1] < y){
-    entityManager._terrain[0].bombLandscape(x, 50);
+  //console.log(entityManager._categories[1][0].landscape[xIndex][1]);
+  //console.log(y);
+  if(g_landscape[xIndex][1] < y){
+    terrain.bombLandscape(x, 50);
     //this.kill();
     this.lifeSpan = 0;
   }

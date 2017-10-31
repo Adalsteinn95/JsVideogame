@@ -10,53 +10,48 @@
 0        1         2         3         4         5         6         7         8
 12345678901234567890123456789012345678901234567890123456789012345678901234567890
 */
+var g_landscape = [];
+var bound = 15;
+var xShift = 0;
 
 
-// A generic contructor which accepts an arbitrary descriptor object
-function Terrain(descr) {
+var terrain = {
 
-    // Common inherited setup logic from Entity
-    this.setup(descr);
-    this.initlandScape(this.landscape, this.function, this.bound, this.xShift);
-    this.rememberResets();
 
-};
-
-Terrain.prototype = new Entity();
-
-Terrain.prototype.rememberResets = function () {
+rememberResets: function () {
     // Remember my reset positions
     this.reset_landscape = this.landscape;
-};
+},
 
 
-Entity.prototype.findHitEntity = function () {
-  //do nothing, we handle the terrain collision diffrently
-};
-
-Entity.prototype.update = function () {
-  //do nothing for now until we get the bullets working
-}
-
-
-Terrain.prototype.render = function(ctx) {
+render: function(ctx) {
 
     ctx.fillStyle = "blue";
-
     var i = 0;
     ctx.beginPath();
-    ctx.moveTo(this.landscape[0], this.landscape[1]);
+    ctx.moveTo(g_landscape[0][0], g_landscape[0][1]);
 
-    for (i in this.landscape) {
-        ctx.lineTo(this.landscape[i][0], this.landscape[i][1]);
+    for (i in g_landscape) {
+        //if(i%2 === 0){
+        ctx.lineTo(g_landscape[i][0], g_landscape[i][1]);
+
+        //console.log(g_landscape[i][0], g_landscape[i][1]);
     }
 
     ctx.closePath();
     ctx.fill();
-}
+},
+
+rendertest: function(ctx) {
+
+    ctx.fillStyle = "blue";
+
+    util.fillCircle(ctx,100,100,100);
+    //ctx.fill();
+},
 
 
-Terrain.prototype.initlandScape = function(ls, f, bound, xShift) {
+initlandScape: function(ls, f, bound, xShift) {
 
     var x = -bound + xShift;
 
@@ -71,9 +66,9 @@ Terrain.prototype.initlandScape = function(ls, f, bound, xShift) {
     ls.push([g_canvas.width,g_canvas.height]);
     ls.push([0,g_canvas.height]);
     return ls;
-}
+},
 
-Terrain.prototype.bombLandscape = function(x, radius) {
+bombLandscape: function(x, radius) {
 
     x = Math.floor(x);
     radius = Math.floor(radius);
@@ -84,7 +79,22 @@ Terrain.prototype.bombLandscape = function(x, radius) {
 
     for (var i = diff; i < 2*radius + diff; i++) {
 
-        this.landscape[util.clamp(i)][1] += util.sinAcos(ratio, radius);
+        g_landscape[util.clamp(i)][1] += (Math.sin(Math.acos(ratio)) * radius);
         ratio += step;
     }
 }
+
+}
+
+
+g_landscape = terrain.initlandScape(g_landscape, util.fun,bound,xShift);
+console.log(g_landscape);
+
+/*
+this.generateTerrain({
+    landscape: [],
+    function: util.fun,
+    bound: 15,
+    xShift: 0
+});
+*/

@@ -11,39 +11,38 @@
 12345678901234567890123456789012345678901234567890123456789012345678901234567890
 */
 
-
 // A generic contructor which accepts an arbitrary descriptor object
 function Ship(descr) {
 
-    // Common inherited setup logic from Entity
-    this.setup(descr);
+  // Common inherited setup logic from Entity
+  this.setup(descr);
 
-    this.rememberResets();
+  this.rememberResets();
 
-    // Default sprite, if not otherwise specified
-    this.sprite = this.sprite || g_sprites.ship;
+  // Default sprite, if not otherwise specified
+  this.sprite = this.sprite || g_sprites.ship;
 
-    // Set normal drawing scale, and warp state off
-    this._scale = 1;
-    this._isWarping = false;
+  // Set normal drawing scale, and warp state off
+  this._scale = 1;
+  this._isWarping = false;
 };
 
 Ship.prototype = new Entity();
 
-Ship.prototype.rememberResets = function () {
-    // Remember my reset positions
-    this.reset_cx = this.cx;
-    this.reset_cy = this.cy;
-    this.reset_rotation = this.rotation;
+Ship.prototype.rememberResets = function() {
+  // Remember my reset positions
+  this.reset_cx = this.cx;
+  this.reset_cy = this.cy;
+  this.reset_rotation = this.rotation;
 };
 
 Ship.prototype.KEY_THRUST = 'W'.charCodeAt(0);
-Ship.prototype.KEY_RETRO  = 'S'.charCodeAt(0);
-Ship.prototype.KEY_LEFT   = 'A'.charCodeAt(0);
-Ship.prototype.KEY_RIGHT  = 'D'.charCodeAt(0);
-Ship.prototype.KEY_POWER  = '5'.charCodeAt(0);
+Ship.prototype.KEY_RETRO = 'S'.charCodeAt(0);
+Ship.prototype.KEY_LEFT = 'A'.charCodeAt(0);
+Ship.prototype.KEY_RIGHT = 'D'.charCodeAt(0);
+Ship.prototype.KEY_POWER = '5'.charCodeAt(0);
 
-Ship.prototype.KEY_FIRE   = ' '.charCodeAt(0);
+Ship.prototype.KEY_FIRE = ' '.charCodeAt(0);
 
 // Initial, inheritable, default values
 Ship.prototype.rotation = 0;
@@ -57,77 +56,75 @@ Ship.prototype.numSubSteps = 1;
 Ship.prototype.power = 2;
 Ship.prototype.POWER_INCREASE = 0.015;
 
+Ship.prototype.warp = function() {
 
-Ship.prototype.warp = function () {
+  this._isWarping = true;
+  this._scaleDirn = -1;
+  //this.warpSound.play();
 
-    this._isWarping = true;
-    this._scaleDirn = -1;
-    //this.warpSound.play();
-
-    // Unregister me from my old posistion
-    // ...so that I can't be collided with while warping
-    spatialManager.unregister(this);
+  // Unregister me from my old posistion
+  // ...so that I can't be collided with while warping
+  spatialManager.unregister(this);
 };
 
+Ship.prototype.update = function(du) {
 
-Ship.prototype.update = function (du) {
-
-    if(this._isDeadNow === true){
-      spatialManager.unregister(this);
-      return entityManager.KILL_ME_NOW;
-    }
-
-    // Handle warping
-    if (this._isWarping) {
-        this._updateWarp(du);
-        return;
-    }
-    this.updatePower (du);
-
-    // TODO: YOUR STUFF HERE! --- Unregister and check for death
+  if (this._isDeadNow === true) {
     spatialManager.unregister(this);
+    return entityManager.KILL_ME_NOW;
+  }
 
-    // Handle collisions
-    //
-    /*var hitEntity = this.findHitEntity();
+  // Handle warping
+  if (this._isWarping) {
+    this._updateWarp(du);
+    return;
+  }
+  this.updatePower(du);
+
+  // TODO: YOUR STUFF HERE! --- Unregister and check for death
+  spatialManager.unregister(this);
+
+  // Handle collisions
+  //
+  /*var hitEntity = this.findHitEntity();
     if (hitEntity) {
         var canTakeHit = hitEntity.takeBulletHit;
         if (canTakeHit) canTakeHit.call(hitEntity);
         this.takeBulletHit();
     }*/
 
-    // Perform movement substeps
-    var steps = this.numSubSteps;
-    var dStep = du / steps;
-    for (var i = 0; i < steps; ++i) {
-        this.computeSubStep(dStep);
-    }
+  // Perform movement substeps
+  var steps = this.numSubSteps;
+  var dStep = du / steps;
+  for (var i = 0; i < steps; ++i) {
+    this.computeSubStep(dStep);
+  }
 
-    // Handle firing
-    this.maybeFireBullet();
+  // Handle firing
+  this.maybeFireBullet();
 
-    spatialManager.register(this);
+  spatialManager.register(this);
 
 };
 
-Ship.prototype.computeSubStep = function (du) {
+Ship.prototype.computeSubStep = function(du) {
 
-    var thrust = this.computeThrustMag();
+  var thrust = this.computeThrustMag();
 
-    // Apply thrust directionally, based on our rotation
-    var accelX = thrust;
-    var accelY = thrust;
+  // Apply thrust directionally, based on our rotation
+  var accelX = thrust;
+  var accelY = thrust;
 
-    //accelY += this.computeGravity();
+  //accelY += this.computeGravity();
 
-    this.applyAccel(accelX, accelY, du);
+  this.applyAccel(accelX, accelY, du);
 
-    this.wrapPosition();
+  this.wrapPosition();
 
-    if (thrust === 0 || g_allowMixedActions) {
-        this.updateGunRotation(du);
-    }
-    this.updateRotation(du);
+  if (thrust === 0 || g_allowMixedActions) {
+    this.updateGunRotation(du);
+  }
+  this.updateRotation(du);
 };
 
 /*
@@ -136,120 +133,169 @@ Ship.prototype.computeGravity = function () {
 };*/
 
 var NOMINAL_THRUST = +1;
-var NOMINAL_RETRO  = -1;
+var NOMINAL_RETRO = -1;
 
-Ship.prototype.computeThrustMag = function () {
+Ship.prototype.computeThrustMag = function() {
 
-    var thrust = 0;
+  var thrust = 0;
 
-    if (keys[this.KEY_THRUST]) {
-        thrust += NOMINAL_THRUST;
-    }
-    if (keys[this.KEY_RETRO]) {
-        thrust += NOMINAL_RETRO;
-    }
+  if (keys[this.KEY_THRUST]) {
+    thrust += NOMINAL_THRUST;
+  }
+  if (keys[this.KEY_RETRO]) {
+    thrust += NOMINAL_RETRO;
+  }
 
-    return thrust;
+  return thrust;
 };
 
-Ship.prototype.applyAccel = function (accelX, accelY, du) {
+Ship.prototype.applyAccel = function(accelX, accelY, du) {
 
-    // s = s + v_ave * t
-    this.cx += accelX;
+  // s = s + v_ave * t
+  this.cx += accelX;
 
-    var xIndex = util.clamp(Math.floor(this.cx));
-    this.cy = g_landscape[xIndex];
-    if(this.cy > 600){
-      this.cy = 600;
-    }
+  var xIndex = util.clamp(Math.floor(this.cx));
+  this.cy = g_landscape[xIndex];
+  if (this.cy > 600) {
+    this.cy = 600;
+  }
 };
 
-Ship.prototype.maybeFireBullet = function () {
+Ship.prototype.predictX = 0;
+Ship.prototype.predictY = 0;
+Ship.prototype.predictCord = [];
 
-    if (keys[this.KEY_FIRE]) {
 
-        var dX = +Math.sin(this.gunrotation);
-        var dY = -Math.cos(this.gunrotation);
-        var launchDist = this.getRadius() * 1.2;
+Ship.prototype.maybeFireBullet = function() {
 
-        var relVel = this.launchVel;
-        var relVelX = dX * relVel;
-        var relVelY = dY * relVel;
+  if (keys[this.KEY_FIRE]) {
 
-        entityManager.fireBullet(
-           this.cx + dX * launchDist, this.cy + dY * launchDist,
-           this.power * relVelX + this.velX * this.power, -this.power * this.velY + relVelY * (this.power/2),
-           this.gunrotation);
-    }
+    var dX = +Math.sin(this.gunrotation);
+    var dY = -Math.cos(this.gunrotation);
+    var launchDist = this.getRadius() * 1.2;
+
+    var relVel = this.launchVel;
+    var relVelX = dX * relVel;
+    var relVelY = dY * relVel;
+
+    var startVelX = this.power * relVelX + this.velX * this.power;
+    var startVelY = -this.power * this.velY + relVelY * (this.power / 2);
+
+
+    entityManager.fireBullet(this.cx + dX * launchDist, this.cy + dY * launchDist, startVelX, startVelY, this.gunrotation);
+  }
 };
 
-Ship.prototype.getRadius = function () {
-    return (this.sprite.width / 2) * 0.9;
+Ship.prototype.getRadius = function() {
+  return (this.sprite.width / 2) * 0.9;
 };
 
+Ship.prototype.reset = function() {
+  this.setPos(this.reset_cx, this.reset_cy);
+  this.rotation = this.reset_rotation;
 
-Ship.prototype.reset = function () {
-    this.setPos(this.reset_cx, this.reset_cy);
-    this.rotation = this.reset_rotation;
-
-    this.halt();
+  this.halt();
 };
 
-Ship.prototype.halt = function () {
-    this.velX = 0;
-    this.velY = 0;
+Ship.prototype.halt = function() {
+  this.velX = 0;
+  this.velY = 0;
 };
 
 var NOMINAL_ROTATE_RATE = 0.01;
 
-Ship.prototype.updateRotation = function (du) {
+Ship.prototype.updateRotation = function(du) {
 
-    //skítamix
-    var w = 64,
-        h = 64;
+  //skítamix
+  var w = 64,
+    h = 64;
 
-    var xIndex1 = Math.floor(this.cx-w/2);
-    var xIndex2 = Math.floor(this.cx+w/2);
-    xIndex1 = util.clamp(xIndex1);
-    xIndex2 = util.clamp(xIndex2);
+  var xIndex1 = Math.floor(this.cx - w / 2);
+  var xIndex2 = Math.floor(this.cx + w / 2);
+  xIndex1 = util.clamp(xIndex1);
+  xIndex2 = util.clamp(xIndex2);
 
-    //when it wraps we need to add canvas length so the tank doesnt spin
-    var xLine = xIndex2;
-    if(xLine < this.cx) {
-        xLine = -1;
-    }
-    else {
-        xLine = 1;
-    }
+  //when it wraps we need to add canvas length so the tank doesnt spin
+  var xLine = xIndex2;
+  if (xLine < this.cx) {
+    xLine = -1;
+  } else {
+    xLine = 1;
+  }
 
-    this.rotation = util.toDegrees(Math.atan2(g_landscape[xIndex2] - this.cy , (xIndex2 - this.cx) * xLine));
+  this.rotation = util.toDegrees(Math.atan2(g_landscape[xIndex2] - this.cy, (xIndex2 - this.cx) * xLine));
 };
 
-Ship.prototype.updateGunRotation = function (du) {
-    if (keys[this.KEY_LEFT]) {
-        this.gunrotation -= NOMINAL_ROTATE_RATE * du;
-    }
-    if (keys[this.KEY_RIGHT]) {
-        this.gunrotation += NOMINAL_ROTATE_RATE * du;
-    }
+Ship.prototype.updateGunRotation = function(du) {
+  this.predictCord = [];
+
+
+  var dX = +Math.sin(this.gunrotation);
+  var dY = -Math.cos(this.gunrotation);
+  var launchDist = this.getRadius() * 1.2;
+
+  var relVel = this.launchVel;
+  var relVelX = dX * relVel;
+  var relVelY = dY * relVel;
+
+  var startVelX = this.power * relVelX + this.velX * this.power;
+  var startVelY = -this.power * this.velY + relVelY * (this.power / 2);
+
+
+
+  var testX = this.cx + dX * launchDist;
+  var testY = this.cy + dY * launchDist;
+  var veltestY = startVelY - 1.145;
+
+  var test = 100
+  while(test > 0){
+    testX += startVelX;
+    testY += veltestY;
+    //console.log(testY);
+    this.predictCord.push({testX,testY});
+
+    veltestY += NOMINAL_GRAVITY;
+
+    test--;
+  }
+
+  if (keys[this.KEY_LEFT]) {
+    this.gunrotation -= NOMINAL_ROTATE_RATE * du;
+  }
+  if (keys[this.KEY_RIGHT]) {
+    this.gunrotation += NOMINAL_ROTATE_RATE * du;
+  }
 };
 
-Ship.prototype.updatePower = function (du) {
-    if (keys[this.KEY_POWER]) {
-        this.power += this.POWER_INCREASE /* du*/;
-    }
+Ship.prototype.updatePower = function(du) {
+  if (keys[this.KEY_POWER]) {
+    this.power += this.POWER_INCREASE/* du*/;
+  }
 };
 
-Ship.prototype.resetPower = function (du) {
-      this.power = 2;
+Ship.prototype.resetPower = function(du) {
+  this.power = 2;
 };
 
-Ship.prototype.render = function (ctx) {
-    var origScale = this.sprite.scale;
-    // pass my scale into the sprite, for drawing
-    this.sprite.scale = this._scale;
-    this.sprite.drawWrappedCentredAt(
-	ctx, this.cx, this.cy, this.rotation
-    );
-    this.sprite.scale = origScale;
+Ship.prototype.render = function(ctx) {
+  var origScale = this.sprite.scale;
+  // pass my scale into the sprite, for drawing
+  this.sprite.scale = this._scale;
+  this.sprite.drawWrappedCentredAt(ctx, this.cx, this.cy, this.rotation);
+  this.sprite.scale = origScale;
+
+
+  ctx.beginPath();
+  ctx.moveTo(0,300);
+  ctx.lineTo(1000,300);
+  ctx.strokeStyle = '#ff0000';
+  ctx.stroke();
+
+  ctx.beginPath();
+  for (var i = 0; i < this.predictCord.length; i++) {
+    ctx.arc(this.predictCord[i].testX, this.predictCord[i].testY, 2, 0, 2 * Math.PI, false);
+  }
+  ctx.stroke();
+
+
 };

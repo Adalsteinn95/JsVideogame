@@ -51,8 +51,8 @@ Bullet.prototype.update = function (du) {
 
     if (this.lifeSpan === 0) return entityManager.KILL_ME_NOW;
 
-    this.cx += this.velX * du;
-    this.cy += this.velY * du;
+    this.cx += this.velX;
+    this.cy += this.velY;
 
     if(this.life < 0) {
         this.velY += NOMINAL_GRAVITY;

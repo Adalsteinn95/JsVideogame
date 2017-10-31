@@ -1,8 +1,5 @@
 function Cloud(descr) {
 
-    // Common inherited setup logic from Entity
-    this.setup(descr);
-
     this.randomisePosition();
     this.randomiseVelocity();
     this.randomiseScale();
@@ -31,6 +28,8 @@ function Cloud(descr) {
 */
 
 };
+
+
 
 Cloud.prototype = new Entity();
 

@@ -27,12 +27,11 @@ rememberResets: function () {
 render: function(ctx) {
 
     ctx.fillStyle = "blue";
-
     var i = 0;
     ctx.beginPath();
-    ctx.moveTo(g_landscape[0], g_landscape[1]);
+    ctx.moveTo(g_landscape[0][0], g_landscape[0][1]);
 
-    for (i in this.landscape) {
+    for (i in g_landscape) {
         //if(i%2 === 0){
         ctx.lineTo(g_landscape[i][0], g_landscape[i][1]);
 
@@ -41,6 +40,14 @@ render: function(ctx) {
 
     ctx.closePath();
     ctx.fill();
+},
+
+rendertest: function(ctx) {
+
+    ctx.fillStyle = "blue";
+
+    util.fillCircle(ctx,100,100,100);
+    //ctx.fill();
 },
 
 
@@ -73,7 +80,7 @@ bombLandscape: function(x, radius) {
 
     for (var i = diff; i < 2*radius + diff; i++) {
 
-        this.landscape[util.clamp(i)][1] += (Math.sin(Math.acos(ratio)) * radius);
+        g_landscape[util.clamp(i)][1] += (Math.sin(Math.acos(ratio)) * radius);
         ratio += step;
     }
 }

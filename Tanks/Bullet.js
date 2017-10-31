@@ -89,8 +89,8 @@ Bullet.prototype.terrainHit = function(x, y){
 
   //console.log(entityManager._categories[1][0].landscape[xIndex][1]);
   //console.log(y);
-  if(entityManager._categories[1][0].landscape[xIndex][1] < y){
-    entityManager._terrain[0].bombLandscape(x, 50);
+  if(g_landscape[xIndex][1] < y){
+    terrain.bombLandscape(x, 50);
     //this.kill();
     this.lifeSpan = 0;
   }

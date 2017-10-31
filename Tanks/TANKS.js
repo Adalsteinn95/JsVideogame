@@ -34,9 +34,7 @@ function gatherInputs() {
 
 function updateSimulation(du) {
 
-    //drawterrain(ctx);
     processDiagnostics();
-    //terrain.rendertest(ctx);
     terrain.render(ctx);
     entityManager.update(du);
 
@@ -140,10 +138,7 @@ function preloadDone() {
     g_sprites.terrain = new Sprite(g_images.terrain);
 
     entityManager.init();
-    //generateLandscape();
     createInitialShips();
-
-
 
     main.init();
 }

@@ -54,7 +54,8 @@ Ship.prototype.velX = 0;
 Ship.prototype.velY = 0;
 Ship.prototype.launchVel = 2;
 Ship.prototype.numSubSteps = 1;
-Ship.prototype.power = 10;
+Ship.prototype.power = 2;
+Ship.prototype.POWER_INCREASE = 0.015;
 
 
 Ship.prototype.warp = function () {
@@ -86,8 +87,6 @@ Ship.prototype.update = function (du) {
     // TODO: YOUR STUFF HERE! --- Unregister and check for death
     spatialManager.unregister(this);
 
-    // TODO? NO, ACTUALLY, I JUST DID THIS BIT FOR YOU! :-)
-    //
     // Handle collisions
     //
     /*var hitEntity = this.findHitEntity();
@@ -107,8 +106,6 @@ Ship.prototype.update = function (du) {
     // Handle firing
     this.maybeFireBullet();
 
-
-    // TODO: YOUR STUFF HERE! --- Warp if isColliding, otherwise Register
     spatialManager.register(this);
 
 };
@@ -118,8 +115,8 @@ Ship.prototype.computeSubStep = function (du) {
     var thrust = this.computeThrustMag();
 
     // Apply thrust directionally, based on our rotation
-    var accelX = /*+Math.sin(this.rotation) */ thrust;
-    var accelY = /*-Math.cos(this.rotation) */ thrust;
+    var accelX = thrust;
+    var accelY = thrust;
 
     //accelY += this.computeGravity();
 
@@ -133,7 +130,6 @@ Ship.prototype.computeSubStep = function (du) {
     this.updateRotation(du);
 };
 
-//var NOMINAL_GRAVITY = 0.12;
 /*
 Ship.prototype.computeGravity = function () {
     return g_useGravity ? NOMINAL_GRAVITY : 0;
@@ -159,7 +155,6 @@ Ship.prototype.computeThrustMag = function () {
 Ship.prototype.applyAccel = function (accelX, accelY, du) {
 
     // s = s + v_ave * t
-    //console.log(this.cx);
     this.cx += accelX;
 
     var xIndex = util.clamp(Math.floor(this.cx));
@@ -176,22 +171,16 @@ Ship.prototype.maybeFireBullet = function () {
         var dX = +Math.sin(this.gunrotation);
         var dY = -Math.cos(this.gunrotation);
         var launchDist = this.getRadius() * 1.2;
-        console.log(launchDist);
 
         var relVel = this.launchVel;
         var relVelX = dX * relVel;
         var relVelY = dY * relVel;
-        console.log(this.power);
-          console.log(-this.power);
 
         entityManager.fireBullet(
            this.cx + dX * launchDist, this.cy + dY * launchDist,
            this.power * relVelX + this.velX * this.power, -this.power * this.velY + relVelY * (this.power/2),
            this.gunrotation);
     }
-
-
-
 };
 
 Ship.prototype.getRadius = function () {
@@ -226,16 +215,14 @@ Ship.prototype.updateRotation = function (du) {
 
     //when it wraps we need to add canvas length so the tank doesnt spin
     var xLine = g_landscape[xIndex2][0];
-    if(xLine < this.cx){
-      xLine = -1;
-    }else { xLine = 1}
-      //console.log(entityManager._categories[0][0].landscape[xIndex2][1]);
-  //  this.rotation = 90 - util.toDegrees(Math.atan2(entityManager._categories[0][0].landscape[xIndex2][1],w/2));
+    if(xLine < this.cx) {
+        xLine = -1;
+    }
+    else {
+        xLine = 1;
+    }
+
     this.rotation = util.toDegrees(Math.atan2(g_landscape[xIndex2][1] - this.cy , (g_landscape[xIndex2][0] - this.cx) * xLine));
-
-      //this.rotation += Math.atan2(entityManager._categories[0][0].landscape[xIndex2][1],w/2);
-    //  console.log(util.toDegrees(this.rotation));
-
 };
 
 Ship.prototype.updateGunRotation = function (du) {
@@ -247,13 +234,10 @@ Ship.prototype.updateGunRotation = function (du) {
     }
 };
 
-var POWER_INCREASE = 1;
-
 Ship.prototype.updatePower = function (du) {
     if (keys[this.KEY_POWER]) {
-        this.power += POWER_INCREASE * du;
+        this.power += this.POWER_INCREASE /* du*/;
     }
-
 };
 
 Ship.prototype.resetPower = function (du) {

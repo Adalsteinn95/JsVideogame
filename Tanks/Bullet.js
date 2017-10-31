@@ -44,22 +44,21 @@ Bullet.prototype.life = 10;
 // Convert times from milliseconds to "nominal" time units.
 Bullet.prototype.lifeSpan = 3000 / NOMINAL_UPDATE_INTERVAL;
 
-var NOMINAL_GRAVITY = 0.12;
-
 Bullet.prototype.update = function (du) {
 
     // TODO: YOUR STUFF HERE! --- Unregister and check for death
     spatialManager.unregister(this);
 
-    this.lifeSpan -= du;
-    if (this.lifeSpan < 0) return entityManager.KILL_ME_NOW;
+    if (this.lifeSpan === 0) return entityManager.KILL_ME_NOW;
 
     this.cx += this.velX * du;
     this.cy += this.velY * du;
 
-    if(this.life < 0){
-    this.velY += NOMINAL_GRAVITY;
-  } else {this.life--;}
+    if(this.life < 0) {
+        this.velY += NOMINAL_GRAVITY;
+    } else {
+        this.life--;
+    }
 
     this.rotation += 1 * du;
     this.rotation = util.wrapRange(this.rotation,
@@ -67,10 +66,7 @@ Bullet.prototype.update = function (du) {
 
     this.wrapPosition();
 
-    // TODO? NO, ACTUALLY, I JUST DID THIS BIT FOR YOU! :-)
-    //
     // Handle collisions
-    //
     var hitEntity = this.findHitEntity();
     if (hitEntity) {
         var canTakeHit = hitEntity.takeBulletHit;
@@ -80,28 +76,22 @@ Bullet.prototype.update = function (du) {
 
     //terrain hit first edition
     this.terrainHit(this.cx, this.cy);
-    //skítamix
-    if (this.lifeSpan < 0) return entityManager.KILL_ME_NOW;
 
-
-    // TODO: YOUR STUFF HERE! --- (Re-)Register
+    //(Re-)Register
     spatialManager.register(this);
 };
 
 Bullet.prototype.terrainHit = function(x, y){
-  var xIndex = util.clamp(Math.floor(x));
+    var xIndex = util.clamp(Math.floor(x));
 
-  //console.log(entityManager._categories[1][0].landscape[xIndex][1]);
-  //console.log(y);
-  if(g_landscape[xIndex][1] < y){
-    terrain.bombLandscape(x, 50);
-    //this.kill();
-    this.lifeSpan = 0;
-  }
+    if(g_landscape[xIndex][1] < y){
+        terrain.bombLandscape(x, 50);
+        this.lifeSpan = 0;
+    }
 };
 
 Bullet.prototype.getRadius = function () {
-    return 4;
+    return 1;
 };
 
 Bullet.prototype.takeBulletHit = function () {
@@ -113,15 +103,7 @@ Bullet.prototype.takeBulletHit = function () {
 
 Bullet.prototype.render = function (ctx) {
 
-    var fadeThresh = Bullet.prototype.lifeSpan / 3;
-
-    if (this.lifeSpan < fadeThresh) {
-        ctx.globalAlpha = this.lifeSpan / fadeThresh;
-    }
-
     g_sprites.bullet.drawWrappedCentredAt(
         ctx, this.cx, this.cy, this.rotation
     );
-
-    ctx.globalAlpha = 1;
 };

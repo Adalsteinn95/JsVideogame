@@ -103,16 +103,6 @@ fillBox: function (ctx, x, y, w, h, style) {
     ctx.fillStyle = oldStyle;
 },
 
-//Line between 2 points
-// ====================
-/*  findLine: function (x1, y1, x2, y2 ){
-    //meh
-  },
-  //skítamix
-  slope: function (y1,y2){
-    return y2-y1;
-  },*/
-
 //line1 and line 2 are array of start and end points of lines x1,y1,x2,y2
 //this is how we get the rotation from the slopes
  angleBetween2Lines: function (line1, line2){
@@ -139,11 +129,12 @@ clamp: function(x){
   return num;
 },
 
-//GEIRS DÓT
+// landscape function
 fun: function(x) {
     return (x*x) * Math.sin(x);
 },
 
+// destruction function
 sinAcos: function(ratio, radius) {
     return Math.sin(Math.acos(ratio)) * radius;
 }

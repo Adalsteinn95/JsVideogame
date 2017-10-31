@@ -32,24 +32,12 @@ render: function(ctx) {
     ctx.moveTo(g_landscape[0][0], g_landscape[0][1]);
 
     for (i in g_landscape) {
-        //if(i%2 === 0){
         ctx.lineTo(g_landscape[i][0], g_landscape[i][1]);
-
-        //console.log(g_landscape[i][0], g_landscape[i][1]);
     }
 
     ctx.closePath();
     ctx.fill();
 },
-
-rendertest: function(ctx) {
-
-    ctx.fillStyle = "blue";
-
-    util.fillCircle(ctx,100,100,100);
-    //ctx.fill();
-},
-
 
 initlandScape: function(ls, f, bound, xShift) {
 
@@ -79,7 +67,7 @@ bombLandscape: function(x, radius) {
 
     for (var i = diff; i < 2*radius + diff; i++) {
 
-        g_landscape[util.clamp(i)][1] += (Math.sin(Math.acos(ratio)) * radius);
+        g_landscape[util.clamp(i)][1] += util.sinAcos(ratio, radius);
         ratio += step;
     }
 }
@@ -88,13 +76,3 @@ bombLandscape: function(x, radius) {
 
 
 g_landscape = terrain.initlandScape(g_landscape, util.fun,bound,xShift);
-console.log(g_landscape);
-
-/*
-this.generateTerrain({
-    landscape: [],
-    function: util.fun,
-    bound: 15,
-    xShift: 0
-});
-*/

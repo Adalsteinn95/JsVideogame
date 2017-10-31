@@ -164,6 +164,9 @@ Ship.prototype.applyAccel = function (accelX, accelY, du) {
 
     var xIndex = util.clamp(Math.floor(this.cx));
     this.cy = g_landscape[xIndex][1];
+    if(this.cy > 600){
+      this.cy = 600;
+    }
 };
 
 Ship.prototype.maybeFireBullet = function () {
@@ -226,7 +229,7 @@ Ship.prototype.updateRotation = function (du) {
 
       //console.log(entityManager._categories[0][0].landscape[xIndex2][1]);
   //  this.rotation = 90 - util.toDegrees(Math.atan2(entityManager._categories[0][0].landscape[xIndex2][1],w/2));
-    this.rotation = util.toDegrees(Math.atan2(g_landscape[xIndex1][1] - this.cy , g_landscape[xIndex2][1] - this.cx));
+    this.rotation = util.toDegrees(Math.atan2(g_landscape[xIndex2][1] - this.cy , g_landscape[xIndex2][0] - this.cx));
 
       //this.rotation += Math.atan2(entityManager._categories[0][0].landscape[xIndex2][1],w/2);
     //  console.log(util.toDegrees(this.rotation));

@@ -39,6 +39,8 @@ Bullet.prototype.cy = 200;
 Bullet.prototype.velX = 1;
 Bullet.prototype.velY = 1;
 
+Bullet.prototype.life = 10;
+
 // Convert times from milliseconds to "nominal" time units.
 Bullet.prototype.lifeSpan = 3000 / NOMINAL_UPDATE_INTERVAL;
 
@@ -55,7 +57,9 @@ Bullet.prototype.update = function (du) {
     this.cx += this.velX * du;
     this.cy += this.velY * du;
 
+    if(this.life < 0){
     this.velY += NOMINAL_GRAVITY;
+  } else {this.life--;}
 
     this.rotation += 1 * du;
     this.rotation = util.wrapRange(this.rotation,

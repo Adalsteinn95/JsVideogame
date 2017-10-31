@@ -41,7 +41,7 @@ _generateRocks : function() {
 },
 _generateClouds : function() {
     var i,
-    NUM_CLOUDS = 4;
+    NUM_CLOUDS = 0;
 
     for (i = 0; i < NUM_CLOUDS; ++i) {
 

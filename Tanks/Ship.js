@@ -186,7 +186,7 @@ Ship.prototype.maybeFireBullet = function () {
 
         entityManager.fireBullet(
            this.cx + dX * launchDist, this.cy + dY * launchDist,
-           this.power * relVelX + this.velX, -this.power * this.velY + relVelY,
+           this.power * relVelX + this.velX * this.power, -this.power * this.velY + relVelY * (this.power/2),
            this.gunrotation);
 
           // this.resetPower();
@@ -227,9 +227,14 @@ Ship.prototype.updateRotation = function (du) {
     xIndex1 = util.clamp(xIndex1);
     xIndex2 = util.clamp(xIndex2);
 
+    //when it wraps we need to add canvas length so the tank doesnt spin
+    var xLine = g_landscape[xIndex2][0];
+    if(xLine < this.cx){
+      xLine = -1;
+    }else { xLine = 1}
       //console.log(entityManager._categories[0][0].landscape[xIndex2][1]);
   //  this.rotation = 90 - util.toDegrees(Math.atan2(entityManager._categories[0][0].landscape[xIndex2][1],w/2));
-    this.rotation = util.toDegrees(Math.atan2(g_landscape[xIndex2][1] - this.cy , g_landscape[xIndex2][0] - this.cx));
+    this.rotation = util.toDegrees(Math.atan2(g_landscape[xIndex2][1] - this.cy , (g_landscape[xIndex2][0] - this.cx) * xLine));
 
       //this.rotation += Math.atan2(entityManager._categories[0][0].landscape[xIndex2][1],w/2);
     //  console.log(util.toDegrees(this.rotation));

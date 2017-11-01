@@ -41,6 +41,7 @@ Ship.prototype.KEY_RETRO = 'S'.charCodeAt(0);
 Ship.prototype.KEY_LEFT = 'A'.charCodeAt(0);
 Ship.prototype.KEY_RIGHT = 'D'.charCodeAt(0);
 Ship.prototype.KEY_POWER = '5'.charCodeAt(0);
+Ship.prototype.KEY_LESSPOWER = '4'.charCodeAt(0);
 
 Ship.prototype.KEY_FIRE = ' '.charCodeAt(0);
 
@@ -249,29 +250,28 @@ Ship.prototype.updateGunRotation = function(du) {
 
   var testX = this.cx + dX * launchDist;
   var testY = this.cy + dY * launchDist;
-  var veltestY = startVelY - 1.15;
+  var veltestY = startVelY;
 
-  while(true && testX < g_canvas.width){
+  while(true){
 
     testX += startVelX;
     testY += veltestY;
     //console.log(testY);
 
     testX = util.clamp(testX);
-    testY = util.clamp(testY);
+    testY = testY;
 
     if(g_landscape[Math.floor(testX)] < testY){
-      break;
-  };
-
-  /*ends here*/
-
+        break;
+    };
 
     this.predictCord.push({testX,testY});
 
     veltestY += NOMINAL_GRAVITY;
 
   }
+
+    /*ends here*/
 
   if (keys[this.KEY_LEFT]) {
     this.gunrotation -= NOMINAL_ROTATE_RATE * du * 2;
@@ -284,6 +284,9 @@ Ship.prototype.updateGunRotation = function(du) {
 Ship.prototype.updatePower = function(du) {
   if (keys[this.KEY_POWER]) {
     this.power += this.POWER_INCREASE/* du*/;
+  }
+  if (keys[this.KEY_LESSPOWER]) {
+    this.power -= this.POWER_INCREASE/* du*/;
   }
 };
 

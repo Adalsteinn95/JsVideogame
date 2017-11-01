@@ -51,15 +51,11 @@ Bullet.prototype.update = function (du) {
 
     if (this.lifeSpan === 0) return entityManager.KILL_ME_NOW;
 
-    this.cx += this.velX * du;
-    this.cy += this.velY * du;
+    this.cx += this.velX;
+    this.cy += this.velY;
+    this.velY += NOMINAL_GRAVITY;
 
-    if(this.life < 0) {
-        this.velY += NOMINAL_GRAVITY;
-    } else {
-        this.life--;
-    }
-
+    
     this.rotation += 1 * du;
     this.rotation = util.wrapRange(this.rotation,
                                    0, consts.FULL_CIRCLE);

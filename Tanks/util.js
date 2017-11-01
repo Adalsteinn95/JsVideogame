@@ -137,6 +137,7 @@ fun: function(x) {
 // destruction function
 sinAcos: function(ratio, radius) {
     return Math.sin(Math.acos(ratio)) * radius;
-}
+},
+
 
 };

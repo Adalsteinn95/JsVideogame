@@ -54,7 +54,7 @@ Ship.prototype.velY = 0;
 Ship.prototype.launchVel = 2;
 Ship.prototype.numSubSteps = 1;
 Ship.prototype.power = 2;
-Ship.prototype.POWER_INCREASE = 0.015;
+Ship.prototype.POWER_INCREASE = 0.085;
 
 Ship.prototype.warp = function() {
 
@@ -227,6 +227,8 @@ Ship.prototype.updateRotation = function(du) {
 };
 
 Ship.prototype.updateGunRotation = function(du) {
+
+  /*bullet trail prediction */
   this.predictCord = [];
 
 
@@ -243,27 +245,39 @@ Ship.prototype.updateGunRotation = function(du) {
 
 
 
+
+
   var testX = this.cx + dX * launchDist;
   var testY = this.cy + dY * launchDist;
-  var veltestY = startVelY - 1.145;
+  var veltestY = startVelY - 1.15;
 
-  var test = 100
-  while(test > 0){
+  while(true && testX < g_canvas.width){
+
     testX += startVelX;
     testY += veltestY;
     //console.log(testY);
+
+    testX = util.clamp(testX);
+    testY = util.clamp(testY);
+
+    if(g_landscape[Math.floor(testX)] < testY){
+      break;
+  };
+
+  /*ends here*/
+
+
     this.predictCord.push({testX,testY});
 
     veltestY += NOMINAL_GRAVITY;
 
-    test--;
   }
 
   if (keys[this.KEY_LEFT]) {
-    this.gunrotation -= NOMINAL_ROTATE_RATE * du;
+    this.gunrotation -= NOMINAL_ROTATE_RATE * du * 2;
   }
   if (keys[this.KEY_RIGHT]) {
-    this.gunrotation += NOMINAL_ROTATE_RATE * du;
+    this.gunrotation += NOMINAL_ROTATE_RATE * du * 2;
   }
 };
 
@@ -285,16 +299,21 @@ Ship.prototype.render = function(ctx) {
   this.sprite.scale = origScale;
 
 
-  ctx.beginPath();
-  ctx.moveTo(0,300);
-  ctx.lineTo(1000,300);
-  ctx.strokeStyle = '#ff0000';
-  ctx.stroke();
+
+
 
   ctx.beginPath();
-  for (var i = 0; i < this.predictCord.length; i++) {
-    ctx.arc(this.predictCord[i].testX, this.predictCord[i].testY, 2, 0, 2 * Math.PI, false);
+  for (var i = 0; i < this.predictCord.length-1; i++) {
+      ctx.strokeStyle = '#ff0000';
+      if(this.predictCord[i].testX - this.predictCord[i+1].testX > 100 || this.predictCord[i+1].testX - this.predictCord[i].testX > 100 ){
+
+      } else {
+        ctx.moveTo(this.predictCord[i].testX,this.predictCord[i].testY);
+        ctx.lineTo(this.predictCord[i+1].testX,this.predictCord[i+1].testY);
+        ctx.lineWidth = 2;
+      }
   }
+
   ctx.stroke();
 
 

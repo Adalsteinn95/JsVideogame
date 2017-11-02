@@ -11,7 +11,7 @@ var g_ctx = g_canvas.getContext("2d");
 function createInitialShips() {
 
     entityManager.generateShip({
-        cx : 660,
+        cx : 440,
         cy : 200
     });
 
@@ -49,7 +49,7 @@ function updateSimulation(du) {
 var g_allowMixedActions = true;
 var g_useGravity = false;
 var g_useAveVel = true;
-var g_renderSpatialDebug = false;
+var g_renderSpatialDebug = true;
 
 var KEY_MIXED   = keyCode('M');;
 var KEY_GRAVITY = keyCode('G');
@@ -116,7 +116,8 @@ function requestPreloads() {
         cloud1  : "../cloudsimg/cloud1.PNG",
         cloud2  : "../cloudsimg/cloud2.PNG",
         cloud3  : "../cloudsimg/cloud3.PNG",
-        terrain : "http://i0.kym-cdn.com/entries/icons/mobile/000/013/564/doge.jpg"
+        terrain : "http://i0.kym-cdn.com/entries/icons/mobile/000/013/564/doge.jpg",
+        tankgun : "../myndir/gun.png"
     };
 
     imagesPreload(requiredImages, g_images, preloadDone);
@@ -128,6 +129,7 @@ function preloadDone() {
 
     g_sprites.ship  = new Sprite(g_images.ship);
     g_sprites.ship2 = new Sprite(g_images.ship2);
+    g_sprites.tankgun = new Sprite(g_images.tankgun);
     //g_sprites.rock  = new Sprite(g_images.rock);
 
     g_sprites.bullet = new Sprite(g_images.ship);

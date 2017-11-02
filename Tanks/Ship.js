@@ -211,8 +211,10 @@ Ship.prototype.updateRotation = function(du) {
   var w = 64,
     h = 64;
 
-  var xIndex1 = Math.floor(this.cx - w / 2);
-  var xIndex2 = Math.floor(this.cx + w / 2);
+  //var xIndex1 = Math.floor(this.cx - w / 2);
+  //var xIndex2 = Math.floor(this.cx + w / 2);
+  var xIndex1 = Math.floor(this.cx - 5);
+  var xIndex2 = Math.floor(this.cx + 5);
   xIndex1 = util.clamp(xIndex1);
   xIndex2 = util.clamp(xIndex2);
 
@@ -225,6 +227,7 @@ Ship.prototype.updateRotation = function(du) {
   }
 
   this.rotation = util.toDegrees(Math.atan2(g_landscape[xIndex2] - this.cy, (xIndex2 - this.cx) * xLine));
+
 };
 
 Ship.prototype.updateGunRotation = function(du) {
@@ -298,11 +301,16 @@ Ship.prototype.render = function(ctx) {
   var origScale = this.sprite.scale;
   // pass my scale into the sprite, for drawing
   this.sprite.scale = this._scale;
-  this.sprite.drawWrappedCentredAt(ctx, this.cx, this.cy, this.rotation);
+  //if rotation is big enough then translate by the x-axis
+  var xOffset = 0;
+  var yOffset;
+
+
+  var xOffset = (Math.cos((this.rotation  * Math.PI/180)+ 90)) * this.sprite.width/2;
+  var yOffset = (Math.sin((this.rotation  * Math.PI/180)+ 90)) * this.sprite.height/2;
+
+  this.sprite.drawWrappedCentredAt(ctx, this.cx - (xOffset ) , this.cy - yOffset, this.rotation);
   this.sprite.scale = origScale;
-
-
-
 
 
   ctx.beginPath();

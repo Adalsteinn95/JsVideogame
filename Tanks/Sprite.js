@@ -39,6 +39,35 @@ Sprite.prototype.drawCentredAt = function (ctx, cx, cy, rotation) {
     ctx.translate(cx, cy);
 
     ctx.rotate((rotation * Math.PI/180));
+    //console.log(rotation);
+
+    ctx.scale(this.scale, this.scale);
+
+    // drawImage expects "top-left" coords, so we offset our destination
+    // coords accordingly, to draw our sprite centred at the origin
+    ctx.drawImage(this.image,
+                  -w/2, -h/2);
+
+    ctx.restore();
+};
+
+
+Sprite.prototype.drawGunCentredAt = function (ctx, cx, cy, rotation) {
+
+    if (rotation === undefined) rotation = 0;
+
+    var w = this.width,
+        h = this.height;
+
+
+    ctx.save();
+    ctx.translate(cx, cy);
+
+    ctx.rotate((rotation * Math.PI/180));
+
+    //console.log(rotation);
+    ctx.translate(g_sprites.tankgun.width/2,0);
+
     ctx.scale(this.scale, this.scale);
 
     // drawImage expects "top-left" coords, so we offset our destination

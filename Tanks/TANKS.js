@@ -14,7 +14,6 @@ function createInitialShips() {
         cx : 660,
         cy : 200
     });
-
 }
 
 
@@ -110,7 +109,7 @@ var g_images = {};
 function requestPreloads() {
 
     var requiredImages = {
-        ship   : "../myndir/tank.png",
+        ship   : "../myndir/tanks/green.png",
         ship2  : "https://notendur.hi.is/~pk/308G/images/ship_2.png",
         rock   : "https://notendur.hi.is/~pk/308G/images/rock.png",
         cloud1  : "../cloudsimg/cloud1.PNG",

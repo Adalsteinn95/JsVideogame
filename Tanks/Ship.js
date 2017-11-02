@@ -252,7 +252,7 @@ Ship.prototype.updateGunRotation = function(du) {
   var testY = this.cy + dY * launchDist;
   var veltestY = startVelY;
 
-  while(true){
+  while(true && testX < g_canvas.width){
 
     testX += startVelX;
     testY += veltestY;

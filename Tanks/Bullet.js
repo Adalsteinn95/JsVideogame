@@ -41,10 +41,18 @@ Bullet.prototype.velY = 1;
 
 Bullet.prototype.life = 10;
 
+Bullet.prototype.tankWeapon = g_weapon;
+
 // Convert times from milliseconds to "nominal" time units.
 Bullet.prototype.lifeSpan = 3000 / NOMINAL_UPDATE_INTERVAL;
 
 Bullet.prototype.update = function (du) {
+
+    if(this.partOfShower) {
+      this.velX += (this.showerIndex/100 );
+      //console.log('THIS.SHOWERINDEX', this.showerIndex)
+    }
+    //console.log(this)
 
     // TODO: YOUR STUFF HERE! --- Unregister and check for death
     spatialManager.unregister(this);
@@ -55,7 +63,7 @@ Bullet.prototype.update = function (du) {
     this.cy += this.velY;
     this.velY += NOMINAL_GRAVITY;
 
-    
+
     this.rotation += 1 * du;
     this.rotation = util.wrapRange(this.rotation,
                                    0, consts.FULL_CIRCLE);
@@ -79,10 +87,14 @@ Bullet.prototype.update = function (du) {
 
 Bullet.prototype.terrainHit = function(x, y){
     var xIndex = util.clamp(Math.floor(x));
+    console.log(g_weapon)
 
     if(g_landscape[xIndex] < y){
-        terrain.bombLandscape(x, 50);
+        terrain.bombLandscape(x, g_weapon.damage);
         this.lifeSpan = 0;
+    }
+    if(g_weapon === weapon.volcano) {
+      spawn
     }
 };
 
@@ -96,6 +108,10 @@ Bullet.prototype.takeBulletHit = function () {
     // Make a noise when I am zapped by another bullet
     //this.zappedSound.play();
 };
+
+Bullet.prototype.checkForWeapon = function (weapon) {
+
+}
 
 Bullet.prototype.render = function (ctx) {
 

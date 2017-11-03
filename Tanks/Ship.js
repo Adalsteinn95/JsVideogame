@@ -56,6 +56,8 @@ Ship.prototype.launchVel = 2;
 Ship.prototype.numSubSteps = 1;
 Ship.prototype.power = 2;
 Ship.prototype.POWER_INCREASE = 0.085;
+//ship.prototype.weapon =  weapon.normal;
+
 
 Ship.prototype.warp = function() {
 
@@ -69,6 +71,11 @@ Ship.prototype.warp = function() {
 };
 
 Ship.prototype.update = function(du) {
+  //update weapon if it has been changed
+  if(this.weapon !== g_weapon){
+    this.updateWeapon();
+    console.log(this.weapon)
+  };
 
   if (this._isDeadNow === true) {
     spatialManager.unregister(this);
@@ -182,8 +189,15 @@ Ship.prototype.maybeFireBullet = function() {
     var startVelX = this.power * relVelX + this.velX * this.power;
     var startVelY = -this.power * this.velY + relVelY * (this.power / 2);
 
+    if(this.weapon === weapons.shower) {
+      for (var i = -this.weapon.showerAmount/2; i < this.weapon.showerAmount/2; i++) {
+        entityManager.fireBullet(this.cx + dX * launchDist, this.cy + dY * launchDist, startVelX, startVelY, this.gunrotation,this.weapon,true,i);
+      }
+    }
+    else{
+      entityManager.fireBullet(this.cx + dX * launchDist, this.cy + dY * launchDist, startVelX, startVelY,this.weapon, this.gunrotation);
 
-    entityManager.fireBullet(this.cx + dX * launchDist, this.cy + dY * launchDist, startVelX, startVelY, this.gunrotation);
+    }
   }
 };
 
@@ -293,6 +307,11 @@ Ship.prototype.updatePower = function(du) {
 Ship.prototype.resetPower = function(du) {
   this.power = 2;
 };
+
+Ship.prototype.updateWeapon = function() {
+  this.weapon = g_weapon;
+}
+
 
 Ship.prototype.render = function(ctx) {
   var origScale = this.sprite.scale;

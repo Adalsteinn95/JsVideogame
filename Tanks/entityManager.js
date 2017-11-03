@@ -94,14 +94,17 @@ init: function() {
     this._generateClouds();
 },
 
-fireBullet: function(cx, cy, velX, velY, rotation) {
+fireBullet: function(cx, cy, velX, velY, rotation, weapon,partOfShower, i) {
     this._bullets.push(new Bullet({
         cx   : cx,
         cy   : cy,
         velX : velX,
         velY : velY,
 
-        rotation : rotation
+        rotation : rotation,
+        tankWeapon : weapon,
+        partOfShower: partOfShower,
+        showerIndex : i
     }));
 },
 

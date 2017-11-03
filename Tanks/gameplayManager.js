@@ -2,6 +2,12 @@
 
 var gameplayManager = {
 
+    lock : false,
+
+    keyLock : function() {
+        return this.lock;
+    }
+
     _players : [],
 
     initGame : function() {
@@ -17,6 +23,6 @@ var gameplayManager = {
     },
 
     prompt : function() {
-        
+
     }
 }

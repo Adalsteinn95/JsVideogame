@@ -172,7 +172,6 @@ Ship.prototype.predictX = 0;
 Ship.prototype.predictY = 0;
 Ship.prototype.predictCord = [];
 
-
 Ship.prototype.maybeFireBullet = function() {
 
   if (keys[this.KEY_FIRE]) {
@@ -189,7 +188,6 @@ Ship.prototype.maybeFireBullet = function() {
 
     var startVelX = this.power * relVelX + this.velX * this.power;
     var startVelY = -this.power * this.velY + relVelY * (this.power / 2);
-
 
     entityManager.fireBullet(this.cx + dX * launchDist, this.cy + dY * launchDist, startVelX, startVelY, this.spriteGunRotation);
   }
@@ -225,8 +223,9 @@ Ship.prototype.updateRotation = function(du) {
   //var xIndex2 = Math.floor(this.cx + w / 2);
   var xIndex1 = Math.floor(this.cx - 5);
   var xIndex2 = Math.floor(this.cx + 5);
-  xIndex1 = util.clamp(xIndex1);
-  xIndex2 = util.clamp(xIndex2);
+  xIndex1 = xIndex1;
+  xIndex2 = xIndex2;
+
 
   //when it wraps we need to add canvas length so the tank doesnt spin
   var xLine = xIndex2;
@@ -238,7 +237,6 @@ Ship.prototype.updateRotation = function(du) {
 
   this.rotation = util.toDegrees(Math.atan2(g_landscape[xIndex2] - this.cy, (xIndex2 - this.cx) * xLine));
 
-
 };
 
 Ship.prototype.updateGunRotation = function(du) {
@@ -246,11 +244,9 @@ Ship.prototype.updateGunRotation = function(du) {
   /*bullet trail prediction */
   this.predictCord = [];
 
-
   var dX = +Math.sin(this.gunrotation);
   var dY = -Math.cos(this.gunrotation);
-  var launchDist = this.getRadius() ;
-
+  var launchDist = this.getRadius();
 
   var relVel = this.launchVel;
   var relVelX = dX * relVel;
@@ -259,31 +255,91 @@ Ship.prototype.updateGunRotation = function(du) {
   var startVelX = this.power * relVelX + this.velX * this.power;
   var startVelY = -this.power * this.velY + relVelY * (this.power / 2);
 
-
   var testX = this.cx - this.offsetX + dX * launchDist;
   var testY = this.cy - this.offsetY + dY * launchDist;
   var veltestY = startVelY;
 
-  while(testX < g_canvas.width){
+
+  while (testX < g_canvas.width || testX > g_canvas.width) {
 
     testX += startVelX;
-    testY += veltestY ;
+    testY += veltestY;
 
     testX = util.clamp(testX);
     testY = testY;
 
-    if(g_landscape[Math.floor(testX)] < testY){
-        break;
+    if (g_landscape[Math.floor(testX)] < testY) {
+      break;
     };
 
-    this.predictCord.push({testX,testY});
+    this.predictCord.push({testX, testY});
 
     veltestY += NOMINAL_GRAVITY;
 
   }
 
-    /*ends here*/
+  //this.power = 5;
+  var destX = util.clamp(testX);
+  var fakePower = this.power;
 
+
+  if(Math.floor(destX) === 400){
+  } else {
+    if (Math.floor(destX) > 400 || 380 > Math.floor(destX)) {
+        this.gunrotation += NOMINAL_ROTATE_RATE * 2;
+        this.spriteGunRotation += 1.15;
+        destX += startVelX;
+        destX = util.clamp(destX);
+
+        while(fakePower > 0){
+          fakePower -= this.POWER_INCREASE;
+
+          var d_X = +Math.sin(this.gunrotation);
+
+          var relVelX = d_X * this.launchVel;
+
+          var startVelX = fakePower * relVelX + this.velX * fakePower;
+          destX += startVelX;
+
+          if(Math.floor(destX) <= 400 && 380 <= Math.floor(destX)){
+            this.power = fakePower;
+          }
+          if(fakePower < 0){
+            break;
+          }
+        }
+
+        while(fakePower < 10){
+          fakePower += this.POWER_INCREASE;
+
+          var dX = +Math.sin(this.gunrotation);
+
+          var relVelX = dX * this.launchVel;
+
+          var startVelX = fakePower * relVelX + this.velX * fakePower;
+          destX += startVelX;
+
+          if(Math.floor(destX) <= 400 && 380 <= Math.floor(destX)){
+            this.power = fakePower;
+          }
+          if(fakePower > 10){
+            break;
+          }
+        }
+
+
+    }
+  }
+
+
+
+
+
+
+
+  /*ends here*/
+  /*
+  console.log(testX);
   if (keys[this.KEY_LEFT]) {
     this.gunrotation -= NOMINAL_ROTATE_RATE * 2;
     this.spriteGunRotation -= 1.15;
@@ -291,7 +347,7 @@ Ship.prototype.updateGunRotation = function(du) {
   if (keys[this.KEY_RIGHT]) {
     this.gunrotation += NOMINAL_ROTATE_RATE * 2;
     this.spriteGunRotation += 1.15;
-  }
+  }*/
 };
 
 Ship.prototype.updatePower = function(du) {
@@ -306,7 +362,7 @@ Ship.prototype.updatePower = function(du) {
 Ship.prototype.resetPower = function(du) {
   this.power = 2;
 };
-var test = 0;
+
 Ship.prototype.render = function(ctx) {
   var origScale = this.sprite.scale;
   // pass my scale into the sprite, for drawing
@@ -315,39 +371,34 @@ Ship.prototype.render = function(ctx) {
   var xOffset = 0;
   var yOffset;
 
-
-  var xOffset = (Math.cos((this.rotation  * Math.PI/180)+ 90)) * this.sprite.width/2;
-  var yOffset = (Math.sin((this.rotation  * Math.PI/180)+ 90)) * this.sprite.height/2;
+  var xOffset = (Math.cos((this.rotation * Math.PI / 180) + 90)) * this.sprite.width / 2;
+  var yOffset = (Math.sin((this.rotation * Math.PI / 180) + 90)) * this.sprite.height / 2;
 
   this.offsetX = xOffset;
   this.offsetY = yOffset;
 
-  this.sprite.drawWrappedCentredAt(ctx, this.cx - (xOffset ) , this.cy - yOffset, this.rotation);
+  this.sprite.drawWrappedCentredAt(ctx, this.cx - (xOffset), this.cy - yOffset, this.rotation);
   //this.sprite.drawWrappedCentredAt(ctx, this.cx  , this.cy , this.rotation);
 
-
-  this.gunsprite.drawGunCentredAt(ctx, this.cx - (xOffset )  , this.cy - yOffset , this.spriteGunRotation);
+  this.gunsprite.drawGunCentredAt(ctx, this.cx - (xOffset), this.cy - yOffset, this.spriteGunRotation);
   this.sprite.scale = origScale;
   //console.log(this.gunrotation * Math.PI / 180);
 
-//==================
-///Projectile path
-//===================
+  //==================
+  ///Projectile path
+  //===================
 
   ctx.beginPath();
-  for (var i = 0; i < this.predictCord.length-1; i++) {
-      ctx.strokeStyle = '#ff0000';
-      if(this.predictCord[i].testX - this.predictCord[i+1].testX > 100 || this.predictCord[i+1].testX - this.predictCord[i].testX > 100 ){
+  for (var i = 0; i < this.predictCord.length - 1; i++) {
+    ctx.strokeStyle = '#ff0000';
+    if (this.predictCord[i].testX - this.predictCord[i + 1].testX > 100 || this.predictCord[i + 1].testX - this.predictCord[i].testX > 100) {} else {
+      ctx.moveTo(this.predictCord[i].testX, this.predictCord[i].testY);
 
-      } else {
-        ctx.moveTo(this.predictCord[i].testX,this.predictCord[i].testY);
-
-        ctx.lineTo(this.predictCord[i+1].testX,this.predictCord[i+1].testY);
-        ctx.lineWidth = 2;
-      }
+      ctx.lineTo(this.predictCord[i + 1].testX, this.predictCord[i + 1].testY);
+      ctx.lineWidth = 2;
+    }
   }
 
   ctx.stroke();
-
 
 };

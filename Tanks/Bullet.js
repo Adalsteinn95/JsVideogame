@@ -93,9 +93,11 @@ Bullet.prototype.terrainHit = function(x, y){
         terrain.bombLandscape(x, g_weapon.damage);
         this.lifeSpan = 0;
     }
+    /*
     if(g_weapon === weapon.volcano) {
-      spawn
+
     }
+    */
 };
 
 Bullet.prototype.getRadius = function () {

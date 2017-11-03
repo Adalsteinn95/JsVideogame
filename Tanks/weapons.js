@@ -22,7 +22,7 @@ var weapons = {
     damage: 20
   },
   volcano: {
-    volcanoAmount:5,
-    damage:50
+    volcanoAmount:15,
+    damage:20
   }
 }

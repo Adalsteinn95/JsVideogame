@@ -87,17 +87,26 @@ Bullet.prototype.update = function (du) {
 
 Bullet.prototype.terrainHit = function(x, y){
     var xIndex = util.clamp(Math.floor(x));
-    console.log(g_weapon)
 
     if(g_landscape[xIndex] < y){
+        this.checkForVolcano()
         terrain.bombLandscape(x, g_weapon.damage);
         this.lifeSpan = 0;
     }
-    /*
-    if(g_weapon === weapon.volcano) {
 
+
+
+};
+
+Bullet.prototype.checkForVolcano = function() {
+  if(g_weapon === weapons.volcano && this.volcanoMaster) {
+    for (var i = -g_weapon.volcanoAmount/2; i < g_weapon.volcanoAmount/2; i++) {
+      var randVelX = util.randRange(-2,2)
+      var randVelY = util.randRange(-2,-4)
+      console.log(randVelY)
+      entityManager.fireBullet(this.cx, this.cy, randVelX, randVelY, this.gunrotation,true,i,false);
     }
-    */
+  }
 };
 
 Bullet.prototype.getRadius = function () {

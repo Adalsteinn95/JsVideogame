@@ -189,15 +189,21 @@ Ship.prototype.maybeFireBullet = function() {
     var startVelX = this.power * relVelX + this.velX * this.power;
     var startVelY = -this.power * this.velY + relVelY * (this.power / 2);
 
+
+    var volcanoMaster = this.weapon === weapons.volcano
+    console.log('THIS.WEAPON === WEAPONS.VOLCANO', this.weapon === weapons.volcano)
+
+
     if(this.weapon === weapons.shower) {
       for (var i = -this.weapon.showerAmount/2; i < this.weapon.showerAmount/2; i++) {
-        entityManager.fireBullet(this.cx + dX * launchDist, this.cy + dY * launchDist, startVelX, startVelY, this.gunrotation,this.weapon,true,i);
+        entityManager.fireBullet(this.cx + dX * launchDist, this.cy + dY * launchDist, startVelX, startVelY, this.gunrotation,true,i,false);
       }
     }
     else{
-      entityManager.fireBullet(this.cx + dX * launchDist, this.cy + dY * launchDist, startVelX, startVelY,this.weapon, this.gunrotation);
+      entityManager.fireBullet(this.cx + dX * launchDist, this.cy + dY * launchDist, startVelX, startVelY, this.gunrotation, false, 0, volcanoMaster);
 
     }
+    volcanoMaster = false;
   }
 };
 

@@ -94,7 +94,7 @@ init: function() {
     this._generateClouds();
 },
 
-fireBullet: function(cx, cy, velX, velY, rotation, weapon,partOfShower, i) {
+fireBullet: function(cx, cy, velX, velY, rotation,partOfShower, i,volcanoMaster) {
     this._bullets.push(new Bullet({
         cx   : cx,
         cy   : cy,
@@ -102,9 +102,9 @@ fireBullet: function(cx, cy, velX, velY, rotation, weapon,partOfShower, i) {
         velY : velY,
 
         rotation : rotation,
-        tankWeapon : weapon,
         partOfShower: partOfShower,
-        showerIndex : i
+        showerIndex : i,
+        volcanoMaster : volcanoMaster
     }));
 },
 

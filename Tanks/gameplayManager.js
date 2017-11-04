@@ -6,9 +6,9 @@ var gameplayManager = {
 
     keyLock : function() {
         return this.lock;
-    }
+    },
 
-    _players : [],
+    players : [],
 
     initGame : function() {
 

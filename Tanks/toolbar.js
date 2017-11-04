@@ -125,9 +125,16 @@ var toolbar = {
 
         util.fillBox(ctx, 360, 40, 180, 120, "#ADD8E6");
 
-        
+        ctx.save();
+        // draw landscape preview
+        ctx.restore();
 
         util.strokeBox(ctx, 360, 40, 180, 120, "black");
+
+        if (keys[this.KEY_CONFIRM]) {
+            this.setupReady = true;
+            gameplayManager.isDoorLocked = false;
+        }
 
     },
 

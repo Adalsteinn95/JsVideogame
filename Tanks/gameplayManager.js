@@ -8,7 +8,6 @@ var gameplayManager = {
     isDoorLocked : true,
     discardDoor : false,
 
-    setupReady : false,
     setupIndex : 0,
 
     players : [],

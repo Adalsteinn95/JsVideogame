@@ -100,8 +100,8 @@ function renderSimulation(ctx) {
     //graphicsManager.render(ctx);
     terrain.render(ctx);
     entityManager.render(ctx);
-    toolbar.render(ctx)
-
+    gameplayManager.render(ctx)
+    toolbar.render(dash_ctx);
 
     if (g_renderSpatialDebug) spatialManager.render(ctx);
 }
@@ -149,6 +149,7 @@ function preloadDone() {
     console.log(g_images);
 
     entityManager.init();
+    gameplayManager.init();
     toolbar.init();
     createInitialShips();
 

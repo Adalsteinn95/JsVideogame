@@ -97,6 +97,13 @@ function processDiagnostics() {
 var first = true;
 function renderSimulation(ctx) {
 
+    if (gameplayManager.setupReady) {
+        // start game
+    }
+    else {
+        gameplayManager.setup();
+    }
+
     //graphicsManager.render(ctx);
     terrain.render(ctx);
     entityManager.render(ctx);

@@ -103,6 +103,14 @@ fillBox: function (ctx, x, y, w, h, style) {
     ctx.fillStyle = oldStyle;
 },
 
+drawTextAt : function(ctx, x, y, font, size, style, msg) {
+    ctx.save();
+    ctx.fillStyle = style;
+    ctx.font = size + " " + font;
+    ctx.fillText(msg, x, y);
+    ctx.restore();
+},
+
 //line1 and line 2 are array of start and end points of lines x1,y1,x2,y2
 //this is how we get the rotation from the slopes
  angleBetween2Lines: function (line1, line2){
@@ -137,7 +145,7 @@ fun: function(x) {
 // destruction function
 sinAcos: function(ratio, radius) {
     return Math.sin(Math.acos(ratio)) * radius;
-},
+}
 
 
 };

@@ -8,6 +8,9 @@ var gameplayManager = {
     isDoorLocked : true,
     discardDoor : false,
 
+    setupReady : false,
+    setupIndex : 0,
+
     players : [],
 
     keyLock : function() {
@@ -18,7 +21,7 @@ var gameplayManager = {
         this.render(g_ctx);
     },
 
-    playerSetup : function() {
+    setup : function() {
 
     },
 
@@ -30,10 +33,6 @@ var gameplayManager = {
 
     addPlayer : function() {
         this._players.push(new Player(descr));
-    },
-
-    prompt : function() {
-
     },
 
     gameDoor : function(ctx) {

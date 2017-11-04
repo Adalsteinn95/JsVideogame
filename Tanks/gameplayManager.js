@@ -31,8 +31,8 @@ var gameplayManager = {
         }
     },
 
-    addPlayer : function() {
-        this._players.push(new Player(descr));
+    addPlayer : function(descr) {
+        this.players.push(new Player(descr));
     },
 
     gameDoor : function(ctx) {

@@ -11,14 +11,16 @@ var toolbar = {
     KEY_CONFIRM : '13', //'enter'-keycode
     KEY_BACK : '8', //'backspace'-keycode
 
+    //various private variables
     _ : {
-        topics : 3,
         numPlayers : 2,
         maxPlayers : 4,
-        minPlayers : 2
+        minPlayers : 2,
+        playerIndex : 0,
+        humanOrAI : 0
     },
 
-
+    playerIdSetup : [],
 
     init : function() {
         this.drawBackground(dash_ctx);
@@ -60,14 +62,6 @@ var toolbar = {
                 break;
             default:
         }
-
-        if (keys[this.KEY_CONFIRM] && this.setupIndex < this._.topics-1) {
-            this.setupIndex++;
-        }
-        if (keys[this.KEY_BACK] && this.setupIndex > 0) {
-            this.setupIndex--;
-        }
-        console.log(this.setupIndex);
     },
 
     renderNumPlayer : function(ctx) {
@@ -82,18 +76,51 @@ var toolbar = {
         if (keys[this.KEY_MINUS] && this._.numPlayers > this._.minPlayers) {
             this._.numPlayers--;
         }
-
-        if (keys[this.KEY_TEST]) {
-            console.log("virkar");
+        if (keys[this.KEY_CONFIRM]) {
+            this.setupIndex++;
         }
     },
 
-    renderPlayerSetup : function() {
+    renderPlayerSetup : function(ctx) {
 
+        var id = this._.humanOrAI ? "Human" : "AI";
+
+        util.drawTextAt(ctx, 50, 75, "Courier", "20px", "black",
+                        "Player " + (this._.playerIndex + 1) + " is:");
+        util.drawTextAt(ctx, 50, 100, "Courier", "20px", "black",
+                        id);
+
+        if (keys[this.KEY_PLUS] || keys[this.KEY_MINUS]) {
+            this._.humanOrAI = !this._.humanOrAI;
+        }
+
+        if (keys[this.KEY_CONFIRM]) {
+            if (this.playerIdSetup.length < this._.numPlayers) {
+
+                this.playerIdSetup[this._.playerIndex] = id;
+                this._.playerIndex++;
+            }
+            if (this.playerIdSetup.length === this._.numPlayers) {
+                this.pushPlayers(this.playerIdSetup);
+                this.setupIndex++;
+            }
+        }
+        //if (keys[this.KEY_BACK]) { this.setupIndex--; }
     },
 
-    renderMapPreview : function() {
+    pushPlayers(playerIds) {
+        for (var i in playerIds) {
+            gameplayManager.addPlayer({
+                nr : (i + 1),
+                id : playerIds[i]
+            });
+        }
+    },
 
+    renderMapPreview : function(ctx) {
+        //if (keys[this.KEY_BACK]) { this.setupIndex--; }
+
+        console.log(gameplayManager.players);
     },
 
     //////////////////////////

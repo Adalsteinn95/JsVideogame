@@ -103,6 +103,13 @@ fillBox: function (ctx, x, y, w, h, style) {
     ctx.fillStyle = oldStyle;
 },
 
+strokeBox : function(ctx, x, y, w, h, style) {
+    var oldStyle = ctx.strokeStyle;
+    ctx.strokeStyle = style;
+    ctx.strokeRect(x, y, w, h);
+    ctx.strokeStyle = oldStyle;
+},
+
 drawTextAt : function(ctx, x, y, font, size, style, msg) {
     ctx.save();
     ctx.fillStyle = style;

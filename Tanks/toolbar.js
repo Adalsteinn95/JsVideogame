@@ -120,7 +120,15 @@ var toolbar = {
     renderMapPreview : function(ctx) {
         //if (keys[this.KEY_BACK]) { this.setupIndex--; }
 
-        console.log(gameplayManager.players);
+        util.drawTextAt(ctx, 50, 75, "Courier", "20px", "black",
+                        "Map preview:");
+
+        util.fillBox(ctx, 360, 40, 180, 120, "#ADD8E6");
+
+        
+
+        util.strokeBox(ctx, 360, 40, 180, 120, "black");
+
     },
 
     //////////////////////////

@@ -98,19 +98,19 @@ var first = true;
 function renderSimulation(ctx) {
 
     if (gameplayManager.setupReady) {
-        // start game
+        //graphicsManager.render(ctx);
+        terrain.render(ctx);
+        entityManager.render(ctx);
+
+        if (g_renderSpatialDebug) spatialManager.render(ctx);
     }
+
     else {
         gameplayManager.setup();
     }
 
-    //graphicsManager.render(ctx);
-    terrain.render(ctx);
-    entityManager.render(ctx);
     gameplayManager.render(ctx)
     toolbar.render(dash_ctx);
-
-    if (g_renderSpatialDebug) spatialManager.render(ctx);
 }
 
 
@@ -155,10 +155,10 @@ function preloadDone() {
 
     console.log(g_images);
 
-    entityManager.init();
-    gameplayManager.init();
+    //entityManager.init();
+    //gameplayManager.init();
     toolbar.init();
-    createInitialShips();
+    //createInitialShips();
 
     main.init();
 }

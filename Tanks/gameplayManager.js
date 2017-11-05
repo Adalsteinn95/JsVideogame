@@ -8,6 +8,7 @@ var gameplayManager = {
     isDoorLocked : true,
     discardDoor : false,
 
+    setupReady : false,
     setupIndex : 0,
 
     players : [],
@@ -17,7 +18,8 @@ var gameplayManager = {
     },
 
     init : function() {
-        this.render(g_ctx);
+        this.loadPlayers();
+        this.setupReady = true;
     },
 
     setup : function() {
@@ -56,5 +58,18 @@ var gameplayManager = {
         if (this.doorTranslate > g_canvas.width/2) {
             this.discardDoor = true;
         }
+    },
+
+    loadPlayers : function() {
+        for (var i in this.players) {
+             entityManager.generateShip({
+                 cx : util.randRange(0, g_canvas.width),
+                 cy: 200,
+                 playerNr : this.players[i].nr,
+                 playerId : this.players[i].id
+             });
+        }
+
+
     }
 }

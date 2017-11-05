@@ -17,7 +17,7 @@ var toolbar = {
         maxPlayers : 4,
         minPlayers : 2,
         playerIndex : 0,
-        humanOrAI : 0
+        humanOrAI : false
     },
 
     playerIdSetup : [],
@@ -111,7 +111,7 @@ var toolbar = {
     pushPlayers(playerIds) {
         for (var i in playerIds) {
             gameplayManager.addPlayer({
-                nr : (i + 1),
+                nr : i,
                 id : playerIds[i]
             });
         }
@@ -133,6 +133,7 @@ var toolbar = {
 
         if (keys[this.KEY_CONFIRM]) {
             this.setupReady = true;
+            gameplayManager.init();
             gameplayManager.isDoorLocked = false;
         }
 

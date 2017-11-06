@@ -91,6 +91,7 @@ strokeCircle: function (ctx, x, y, r) {
 },
 
 fillCircle: function (ctx, x, y, r) {
+    ctx.fillStyle = "YELLOW";
     ctx.beginPath();
     ctx.arc(x, y, r, 0, Math.PI * 2);
     ctx.fill();
@@ -136,7 +137,7 @@ drawTextAt : function(ctx, x, y, font, size, style, msg) {
 //Clamp for index wrapping x is a number
 clamp: function(x){
   var num = x;
-  if(num > g_canvas.width){
+  if(num >= g_canvas.width){
     num = num - g_canvas.width;
   }else if ( num < 0){
     num = num + g_canvas.width;

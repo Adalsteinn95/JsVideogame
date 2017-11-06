@@ -79,7 +79,7 @@ wrappedDistSq: function(x1, y1, x2, y2, xWrap, yWrap) {
 
 clearCanvas: function (ctx) {
     var prevfillStyle = ctx.fillStyle;
-    ctx.fillStyle = "black";
+    ctx.fillStyle = "#ADD8E6";
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx.fillStyle = prevfillStyle;
 },
@@ -102,6 +102,21 @@ fillBox: function (ctx, x, y, w, h, style) {
     ctx.fillStyle = style;
     ctx.fillRect(x, y, w, h);
     ctx.fillStyle = oldStyle;
+},
+
+strokeBox : function(ctx, x, y, w, h, style) {
+    var oldStyle = ctx.strokeStyle;
+    ctx.strokeStyle = style;
+    ctx.strokeRect(x, y, w, h);
+    ctx.strokeStyle = oldStyle;
+},
+
+drawTextAt : function(ctx, x, y, font, size, style, msg) {
+    ctx.save();
+    ctx.fillStyle = style;
+    ctx.font = size + " " + font;
+    ctx.fillText(msg, x, y);
+    ctx.restore();
 },
 
 //line1 and line 2 are array of start and end points of lines x1,y1,x2,y2
@@ -138,7 +153,7 @@ fun: function(x) {
 // destruction function
 sinAcos: function(ratio, radius) {
     return Math.sin(Math.acos(ratio)) * radius;
-},
+}
 
 
 };

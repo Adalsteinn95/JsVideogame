@@ -26,7 +26,7 @@ rememberResets: function () {
 
 render: function(ctx) {
 
-    ctx.fillStyle = "blue";
+    ctx.fillStyle = "#228B22";
     var i = 0;
     ctx.beginPath();
     ctx.moveTo(0, g_landscape[0]);

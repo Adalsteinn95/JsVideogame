@@ -11,10 +11,16 @@ var g_ctx = g_canvas.getContext("2d");
 function createInitialShips() {
 
     entityManager.generateShip({
-        cx : 440,
-        cy : 200
+        cx : 300,
+        cy : 200,
+        id : 1
     });
 
+    entityManager.generateShip({
+        cx : 600,
+        cy : 200,
+        id : 2
+    });
 }
 
 
@@ -91,12 +97,20 @@ function processDiagnostics() {
 var first = true;
 function renderSimulation(ctx) {
 
-    //graphicsManager.render(ctx);
-    terrain.render(ctx);
-    entityManager.render(ctx);
+    if (gameplayManager.setupReady) {
+        //graphicsManager.render(ctx);
+        terrain.render(ctx);
+        entityManager.render(ctx);
 
+        if (g_renderSpatialDebug) spatialManager.render(ctx);
+    }
 
-    if (g_renderSpatialDebug) spatialManager.render(ctx);
+    else {
+        gameplayManager.setup();
+    }
+
+    gameplayManager.render(ctx)
+    toolbar.render(dash_ctx);
 }
 
 
@@ -110,13 +124,15 @@ var g_images = {};
 function requestPreloads() {
 
     var requiredImages = {
-        ship   : "../myndir/tank.png",
+        ship   : "../myndir/tanks/green.png",
         ship2  : "https://notendur.hi.is/~pk/308G/images/ship_2.png",
         rock   : "https://notendur.hi.is/~pk/308G/images/rock.png",
         cloud1  : "../cloudsimg/cloud1.PNG",
         cloud2  : "../cloudsimg/cloud2.PNG",
         cloud3  : "../cloudsimg/cloud3.PNG",
         terrain : "http://i0.kym-cdn.com/entries/icons/mobile/000/013/564/doge.jpg",
+        leftDoor : "../myndir/doorLeft.png",
+        rightDoor : "../myndir/doorRight.png",
         tankgun : "../myndir/gun.png"
     };
 
@@ -139,8 +155,12 @@ function preloadDone() {
     g_sprites.cloud3 = new Sprite(g_images.cloud3);
     g_sprites.terrain = new Sprite(g_images.terrain);
 
-    entityManager.init();
-    createInitialShips();
+    console.log(g_images);
+
+    //entityManager.init();
+    //gameplayManager.init();
+    toolbar.init();
+    //createInitialShips();
 
     main.init();
 }

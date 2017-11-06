@@ -133,7 +133,7 @@ function requestPreloads() {
         terrain : "http://i0.kym-cdn.com/entries/icons/mobile/000/013/564/doge.jpg",
         leftDoor : "../myndir/doorLeft.png",
         rightDoor : "../myndir/doorRight.png",
-        tankgun : "../myndir/gun.png"
+        tankgun : "../myndir/guns/green.png"
     };
 
     imagesPreload(requiredImages, g_images, preloadDone);

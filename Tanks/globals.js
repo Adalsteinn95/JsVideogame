@@ -14,8 +14,8 @@ Evil, ugly (but "necessary") globals, which everyone can use.
 var g_canvas = document.getElementById("myCanvas");
 var g_ctx = g_canvas.getContext("2d");
 
-//var g_dash = document.getElementById("toolbar");
-//var dash_ctx = g_dash.getContext("2d");
+var g_dash = document.getElementById("toolbar");
+var dash_ctx = g_dash.getContext("2d");
 
 var g_landscape = [];
 var NOMINAL_GRAVITY = 0.12;

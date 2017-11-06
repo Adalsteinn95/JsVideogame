@@ -166,13 +166,14 @@ var NOMINAL_RETRO = -1;
 
 Ship.prototype.computeThrustMag = function() {
 
+  console.log(this.cx - this.sprite.width);
   var thrust = 0;
   //ATHUGA
-  if (keys[this.KEY_THRUST] && this.rotation > -85){
+  if (keys[this.KEY_THRUST] && this.rotation > -85 && this.cx + this.sprite.width/2 < g_canvas.width){
     thrust += NOMINAL_THRUST;
     this.dir = true;
   }
-  if (keys[this.KEY_RETRO] && this.rotation < 85){
+  if (keys[this.KEY_RETRO] && this.rotation < 85 && this.cx - this.sprite.width/2 +10 > 0){
     thrust += NOMINAL_RETRO;
     this.dir = false;
   }
@@ -221,8 +222,6 @@ Ship.prototype.maybeFireBullet = function() {
     var dX = +Math.sin(this.gunrotation);
     var dY = -Math.cos(this.gunrotation);
     var launchDist = this.getRadius();
-    //launchDist -= this.offsetX;
-    //console.log(launchDist);
 
     var relVel = this.launchVel;
     var relVelX = dX * relVel;
@@ -257,16 +256,14 @@ var NOMINAL_ROTATE_RATE = 0.01;
 
 Ship.prototype.updateRotation = function(du) {
 
-  //skítamix
-  var w = 64,
-    h = 64;
+
 
   //var xIndex1 = Math.floor(this.cx - w / 2);
   //var xIndex2 = Math.floor(this.cx + w / 2);
   var xIndex1 = Math.floor(this.cx - 5);
   var xIndex2 = Math.floor(this.cx + 5);
-  xIndex1 = xIndex1;
-  xIndex2 = xIndex2;
+  xIndex1 = util.clamp(xIndex1);
+  xIndex2 = util.clamp(xIndex2);
 
 
   //when it wraps we need to add canvas length so the tank doesnt spin
@@ -432,7 +429,7 @@ Ship.prototype.render = function(ctx) {
   this.offsetX = xOffset;
   this.offsetY = yOffset;
 
-  this.sprite.drawWrappedCentredAt(ctx, this.cx - (xOffset), this.cy - yOffset, this.rotation);
+  this.sprite.drawCentredAt(ctx, this.cx - (xOffset), this.cy - yOffset, this.rotation);
   //this.sprite.drawWrappedCentredAt(ctx, this.cx  , this.cy , this.rotation);
 
   this.gunsprite.drawGunCentredAt(ctx, this.cx - (xOffset )  , this.cy - yOffset , this.spriteGunRotation);

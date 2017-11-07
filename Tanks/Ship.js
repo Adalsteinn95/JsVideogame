@@ -61,6 +61,9 @@ Ship.prototype.POWER_INCREASE = 0.085;
 //true = heading right, false heading left
 Ship.prototype.dir = true;
 
+//is it this players turn?
+Ship.prototype.myTurn = false;
+
 //test fyrir spatialID
 Ship.prototype.offsetX = 0;
 Ship.prototype.offsetY = 0;
@@ -83,11 +86,7 @@ Ship.prototype.update = function(du) {
     return entityManager.KILL_ME_NOW;
   }
 
-  // Handle warping
-  if (this._isWarping) {
-    this._updateWarp(du);
-    return;
-  }
+
   this.updatePower(du);
 
   // TODO: YOUR STUFF HERE! --- Unregister and check for death
@@ -128,18 +127,16 @@ Ship.prototype.computeSubStep = function(du) {
   }
 */
   //
-
+//
 
   var thrust = this.computeThrustMag();
 
   //falling down from a hill
   if((this.rotation < -50 && this.dir === true) || (this.rotation > 50 && this.dir === false)){
-    console.log("ping");
+
     thrust = this.falldown(thrust);
   }
 
-
-  this.direction();
 
   // Apply thrust directionally, based on our rotation
   var accelX = thrust;
@@ -151,7 +148,7 @@ Ship.prototype.computeSubStep = function(du) {
 
   this.wrapPosition();
 
-
+//
 
 
 };
@@ -167,7 +164,7 @@ var NOMINAL_RETRO = -1;
 Ship.prototype.computeThrustMag = function() {
 
   var thrust = 0;
-  //ATHUGA
+  if(this.myTurn === true ){
   if (keys[this.KEY_THRUST] && this.rotation > -85 && this.cx + this.sprite.width/2 < g_canvas.width){
     thrust += NOMINAL_THRUST;
     this.dir = true;
@@ -176,6 +173,7 @@ Ship.prototype.computeThrustMag = function() {
     thrust += NOMINAL_RETRO;
     this.dir = false;
   }
+}
 
   return thrust;
 };
@@ -216,7 +214,10 @@ Ship.prototype.falldown = function(thrust) {
 
 Ship.prototype.maybeFireBullet = function() {
 
-  if (keys[this.KEY_FIRE]) {
+
+  if (keys[this.KEY_FIRE] && this.myTurn === true) {
+
+    this.myTurn = false;
 
     var dX = +Math.sin(this.gunrotation);
     var dY = -Math.cos(this.gunrotation);
@@ -230,6 +231,8 @@ Ship.prototype.maybeFireBullet = function() {
     var startVelY = -this.power * this.velY + relVelY * (this.power / 2);
 
     entityManager.fireBullet(this.cx + dX * launchDist, this.cy + dY * launchDist, startVelX, startVelY, this.spriteGunRotation);
+
+
   }
 };
 
@@ -380,7 +383,7 @@ Ship.prototype.updateGunRotation = function(du) {
 
 
 
-
+if(this.myTurn === true){
   if (keys[this.KEY_LEFT] && util.toDegrees(this.gunrotation) > -90) {
 
     this.gunrotation -= NOMINAL_ROTATE_RATE * 2;
@@ -392,6 +395,7 @@ Ship.prototype.updateGunRotation = function(du) {
   }
 
   this.spriteGunRotation = util.toDegrees(this.gunrotation) - 90;
+}
   //console.log(util.toDegrees(this.gunrotation));
   //console.log(this.spriteGunRotation);
 
@@ -400,12 +404,14 @@ Ship.prototype.updateGunRotation = function(du) {
 };
 
 Ship.prototype.updatePower = function(du) {
+if(this.myTurn === true){
   if (keys[this.KEY_POWER]) {
     this.power += this.POWER_INCREASE/* du*/;
   }
   if (keys[this.KEY_LESSPOWER]) {
     this.power -= this.POWER_INCREASE/* du*/;
   }
+}
 };
 
 Ship.prototype.resetPower = function(du) {

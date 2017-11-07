@@ -71,7 +71,10 @@ bombLandscape: function(x, radius) {
         g_landscape[util.clamp(i)] += util.sinAcos(ratio, radius);
         ratio += step;
     }
+
+    gameplayManager.nextTurn();
 }
+
 
 }
 

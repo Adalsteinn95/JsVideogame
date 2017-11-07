@@ -41,7 +41,7 @@ function gatherInputs() {
 function updateSimulation(du) {
 
     processDiagnostics();
-    terrain.render(ctx);
+    terrain.render(ctx, g_landscape, g_canvas);
     entityManager.update(du);
 
     // Prevent perpetual firing!
@@ -99,7 +99,7 @@ function renderSimulation(ctx) {
 
     if (gameplayManager.setupReady) {
         //graphicsManager.render(ctx);
-        terrain.render(ctx);
+        terrain.render(ctx, g_landscape, g_canvas);
         entityManager.render(ctx);
 
         if (g_renderSpatialDebug) spatialManager.render(ctx);

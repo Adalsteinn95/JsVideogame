@@ -2,7 +2,6 @@
 
 var toolbar = {
 
-    infoString : "testing hello",
     setupReady : false,
     setupIndex : 0,
 
@@ -17,12 +16,31 @@ var toolbar = {
         maxPlayers : 4,
         minPlayers : 2,
         playerIndex : 0,
-        humanOrAI : false
+        humanOrAI : false,
+
+        previewBox : {
+            cx : 360,
+            cy : 40,
+            width : g_canvas.width/5,
+            height : g_canvas.height/5
+        },
+
+        landScapeSettings : {
+            bound : 15,
+            xShift : 0
+        },
+
+        previewLandScape : []
     },
 
     playerIdSetup : [],
 
     init : function() {
+        var set = this._.landScapeSettings;
+        this._.previewLandScape = terrain.initlandScape(util.fun,
+                                                        set.bound,
+                                                        set.xShift,
+                                                        this._.previewBox);
         this.drawBackground(dash_ctx);
     },
 
@@ -31,18 +49,9 @@ var toolbar = {
         ctx.fillRect(0,0, g_dash.width, g_dash.height);
     },
 
-    drawInfo : function(ctx) {
-        ctx.save();
-        ctx.font = "30px Courier";
-        ctx.fillStyle = "black";
-        ctx.fillText(this.infoString, 50, 50);
-        ctx.restore();
-    },
-
     render : function(ctx) {
         this.drawBackground(ctx);
         this.setupReady ? this.renderToolbar(ctx) : this.renderSetup(ctx);
-        this.drawInfo(ctx);
     },
 
     ////////////////////
@@ -118,16 +127,21 @@ var toolbar = {
 
     renderMapPreview : function(ctx) {
 
+        var box = this._.previewBox;
+
         util.drawTextAt(ctx, 50, 75, "Courier", "20px", "black",
                         "Map preview:");
 
-        util.fillBox(ctx, 360, 40, 180, 120, "#ADD8E6");
+        util.fillBox(ctx, box.cx, box.cy, box.width, box.height, "#ADD8E6");
 
         ctx.save();
-        // draw landscape preview
+        ctx.translate(box.cx, box.cy);
+        ctx.scale(0.2, 0.2);
+        terrain.render(ctx, g_landscape, g_canvas);
+
         ctx.restore();
 
-        util.strokeBox(ctx, 360, 40, 180, 120, "black");
+        util.strokeBox(ctx, box.cx, box.cy, box.width, box.height, "black");
 
         if (eatKey(this.KEY_CONFIRM)) {
             this.setupReady = true;
@@ -142,7 +156,7 @@ var toolbar = {
     //////////////////////////
 
     renderToolbar : function(ctx) {
-
+        this.renderMapPreview(ctx);
     }
 
 

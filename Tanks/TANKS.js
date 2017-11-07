@@ -11,8 +11,9 @@ var g_ctx = g_canvas.getContext("2d");
 function createInitialShips() {
 
     entityManager.generateShip({
-        cx : 300,
+        cx : 200,
         cy : 200,
+        weapon: weapons.shower,
         id : 1
     });
 
@@ -55,6 +56,8 @@ function updateSimulation(du) {
 var g_allowMixedActions = true;
 var g_useGravity = false;
 var g_useAveVel = true;
+var g_weapon = weapons.normal;
+
 var g_renderSpatialDebug = true;
 
 var KEY_MIXED   = keyCode('M');;
@@ -71,6 +74,13 @@ var KEY_1 = keyCode('1');
 var KEY_2 = keyCode('2');
 
 var KEY_K = keyCode('K');
+var button = document.getElementById("weaponbutton");
+button.addEventListener("click", function() {
+  var e = document.getElementById("weaponSelect");
+  g_weapon = weapons[e.options[e.selectedIndex].text];
+
+
+});
 
 function processDiagnostics() {
 
@@ -144,7 +154,7 @@ function preloadDone() {
     g_sprites.ship  = new Sprite(g_images.ship);
     g_sprites.tankgun = new Sprite(g_images.tankgun);
 
-    g_sprites.bullet = new Sprite(g_images.ship);
+    g_sprites.bullet = new Sprite(g_images.ship2);
     g_sprites.bullet.scale = 0.25;
     g_sprites.cloud1 = new Sprite(g_images.cloud1);
     g_sprites.cloud2 = new Sprite(g_images.cloud2);

@@ -94,14 +94,17 @@ init: function() {
     this._generateClouds();
 },
 
-fireBullet: function(cx, cy, velX, velY, rotation) {
+fireBullet: function(cx, cy, velX, velY, rotation,partOfShower, i,volcanoMaster) {
     this._bullets.push(new Bullet({
-        cx   : cx - this._categories[2][0].offsetX,
-        cy   : cy - this._categories[2][0].offsetY,
+        cx   : cx,
+        cy   : cy,
         velX : velX,
         velY : velY,
 
-        rotation : rotation
+        rotation : rotation,
+        partOfShower: partOfShower,
+        showerIndex : i,
+        volcanoMaster : volcanoMaster
     }));
 },
 

@@ -58,6 +58,8 @@ Ship.prototype.launchVel = 2;
 Ship.prototype.numSubSteps = 1;
 Ship.prototype.power = 2;
 Ship.prototype.POWER_INCREASE = 0.085;
+//Ship.prototype.weapon =  weapon.normal;
+
 //true = heading right, false heading left
 Ship.prototype.dir = true;
 
@@ -67,6 +69,7 @@ Ship.prototype.myTurn = false;
 //test fyrir spatialID
 Ship.prototype.offsetX = 0;
 Ship.prototype.offsetY = 0;
+
 
 Ship.prototype.warp = function() {
 
@@ -80,6 +83,11 @@ Ship.prototype.warp = function() {
 };
 
 Ship.prototype.update = function(du) {
+  //update weapon if it has been changed
+  if(this.weapon !== g_weapon){
+    this.updateWeapon();
+    console.log(this.weapon)
+  };
 
   if (this._isDeadNow === true) {
     spatialManager.unregister(this);
@@ -216,6 +224,7 @@ Ship.prototype.maybeFireBullet = function() {
 
 
   if (keys[this.KEY_FIRE] && this.myTurn === true) {
+    console.log("hello")
 
     this.myTurn = false;
 
@@ -230,9 +239,24 @@ Ship.prototype.maybeFireBullet = function() {
     var startVelX = this.power * relVelX + this.velX * this.power;
     var startVelY = -this.power * this.velY + relVelY * (this.power / 2);
 
-    entityManager.fireBullet(this.cx + dX * launchDist, this.cy + dY * launchDist, startVelX, startVelY, this.spriteGunRotation);
+    //entityManager.fireBullet(this.cx + dX * launchDist, this.cy + dY * launchDist, startVelX, startVelY, this.spriteGunRotation);
 
 
+    var volcanoMaster = this.weapon === weapons.volcano
+
+
+    console.log('THIS.WEAPON ', this.weapon )
+    if(this.weapon === weapons.shower) {
+      console.log('CONDITION PASSED')
+      for (var i = -this.weapon.showerAmount/2; i < this.weapon.showerAmount/2; i++) {
+        entityManager.fireBullet(this.cx + dX * launchDist - this.offsetX, this.cy + dY * launchDist - this.offsetY, startVelX, startVelY, this.spriteGunRotation,true,i,false);
+      }
+    }
+    else{
+      entityManager.fireBullet(this.cx + dX * launchDist - this.offsetX, this.cy + dY * launchDist - this.offsetY, startVelX, startVelY, this.spriteGunRotation, false, 0, volcanoMaster);
+
+    }
+    volcanoMaster = false;
   }
 };
 
@@ -418,6 +442,9 @@ Ship.prototype.resetPower = function(du) {
   this.power = 2;
 };
 
+Ship.prototype.updateWeapon = function() {
+  this.weapon = g_weapon;
+}
 
 Ship.prototype.render = function(ctx) {
   var origScale = this.sprite.scale;

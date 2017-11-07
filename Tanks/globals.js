@@ -18,6 +18,7 @@ var g_dash = document.getElementById("toolbar");
 var dash_ctx = g_dash.getContext("2d");
 
 var g_landscape = [];
+var g_weapon = "normal";
 var NOMINAL_GRAVITY = 0.12;
 
 

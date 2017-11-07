@@ -101,10 +101,17 @@ render: function(ctx) {
     ctx.strokeStyle = "red";
 
     for (var ID in this._entities) {
+
+
         var e = this._entities[ID];
+
         if(e !== false){
+          if(e.offsetX){
+            util.strokeCircle(ctx, e.cx - e.offsetX, e.cy - e.offsetY, e.getRadius());
+          } else {
         util.strokeCircle(ctx, e.cx, e.cy, e.getRadius());
       }
+    }
     }
     ctx.strokeStyle = oldStyle;
 }

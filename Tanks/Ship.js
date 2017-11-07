@@ -21,6 +21,7 @@ function Ship(descr) {
 
   // Default sprite, if not otherwise specified
   this.sprite = this.sprite || g_sprites.ship;
+  this.gunsprite = g_sprites.tankgun;
 
   // Set normal drawing scale, and warp state off
   this._scale = 1;
@@ -47,7 +48,8 @@ Ship.prototype.KEY_FIRE = ' '.charCodeAt(0);
 
 // Initial, inheritable, default values
 Ship.prototype.rotation = 0;
-Ship.prototype.gunrotation = -50;
+Ship.prototype.gunrotation = 0.7;
+Ship.prototype.spriteGunRotation = -40;
 Ship.prototype.cx = 200;
 Ship.prototype.cy = 200;
 Ship.prototype.velX = 0;
@@ -56,7 +58,17 @@ Ship.prototype.launchVel = 2;
 Ship.prototype.numSubSteps = 1;
 Ship.prototype.power = 2;
 Ship.prototype.POWER_INCREASE = 0.085;
-//ship.prototype.weapon =  weapon.normal;
+//Ship.prototype.weapon =  weapon.normal;
+
+//true = heading right, false heading left
+Ship.prototype.dir = true;
+
+//is it this players turn?
+Ship.prototype.myTurn = false;
+
+//test fyrir spatialID
+Ship.prototype.offsetX = 0;
+Ship.prototype.offsetY = 0;
 
 
 Ship.prototype.warp = function() {
@@ -82,11 +94,7 @@ Ship.prototype.update = function(du) {
     return entityManager.KILL_ME_NOW;
   }
 
-  // Handle warping
-  if (this._isWarping) {
-    this._updateWarp(du);
-    return;
-  }
+
   this.updatePower(du);
 
   // TODO: YOUR STUFF HERE! --- Unregister and check for death
@@ -117,7 +125,26 @@ Ship.prototype.update = function(du) {
 
 Ship.prototype.computeSubStep = function(du) {
 
+  if (thrust === 0 || g_allowMixedActions) {
+    this.updateGunRotation(du);
+  }
+  this.updateRotation(du);
+  /*if(this.rotation > 70){
+    this.cx--;
+    return;
+  }
+*/
+  //
+//
+
   var thrust = this.computeThrustMag();
+
+  //falling down from a hill
+  if((this.rotation < -50 && this.dir === true) || (this.rotation > 50 && this.dir === false)){
+
+    thrust = this.falldown(thrust);
+  }
+
 
   // Apply thrust directionally, based on our rotation
   var accelX = thrust;
@@ -129,16 +156,15 @@ Ship.prototype.computeSubStep = function(du) {
 
   this.wrapPosition();
 
-  if (thrust === 0 || g_allowMixedActions) {
-    this.updateGunRotation(du);
-  }
-  this.updateRotation(du);
+//
+
+
 };
 
-/*
-Ship.prototype.computeGravity = function () {
-    return g_useGravity ? NOMINAL_GRAVITY : 0;
-};*/
+
+Ship.prototype.direction = function () {
+    //óþarfi?
+};
 
 var NOMINAL_THRUST = +1;
 var NOMINAL_RETRO = -1;
@@ -146,13 +172,16 @@ var NOMINAL_RETRO = -1;
 Ship.prototype.computeThrustMag = function() {
 
   var thrust = 0;
-
-  if (keys[this.KEY_THRUST]) {
+  if(this.myTurn === true ){
+  if (keys[this.KEY_THRUST] && this.rotation > -85 && this.cx + this.sprite.width/2 < g_canvas.width){
     thrust += NOMINAL_THRUST;
+    this.dir = true;
   }
-  if (keys[this.KEY_RETRO]) {
+  if (keys[this.KEY_RETRO] && this.rotation < 85 && this.cx - this.sprite.width/2 +10 > 0){
     thrust += NOMINAL_RETRO;
+    this.dir = false;
   }
+}
 
   return thrust;
 };
@@ -174,13 +203,33 @@ Ship.prototype.predictY = 0;
 Ship.prototype.predictCord = [];
 
 
+Ship.prototype.falldown = function(thrust) {
+  //lalalalala
+  if(this.dir === true){
+    if(this.rotation > -78){
+      thrust += NOMINAL_RETRO/3
+    } else {thrust += NOMINAL_RETRO/2}
+  }
+  else {
+    if(this.rotation < 78){
+        thrust += NOMINAL_THRUST/3
+      } else {thrust += NOMINAL_THRUST/2}
+  }
+
+  return thrust;
+
+};
+
 Ship.prototype.maybeFireBullet = function() {
 
-  if (keys[this.KEY_FIRE]) {
+
+  if (keys[this.KEY_FIRE] && this.myTurn === true) {
+
+    this.myTurn = false;
 
     var dX = +Math.sin(this.gunrotation);
     var dY = -Math.cos(this.gunrotation);
-    var launchDist = this.getRadius() * 1.2;
+    var launchDist = this.getRadius();
 
     var relVel = this.launchVel;
     var relVelX = dX * relVel;
@@ -189,6 +238,8 @@ Ship.prototype.maybeFireBullet = function() {
     var startVelX = this.power * relVelX + this.velX * this.power;
     var startVelY = -this.power * this.velY + relVelY * (this.power / 2);
 
+    entityManager.fireBullet(this.cx + dX * launchDist, this.cy + dY * launchDist, startVelX, startVelY, this.spriteGunRotation);
+
 
     var volcanoMaster = this.weapon === weapons.volcano
     console.log('THIS.WEAPON === WEAPONS.VOLCANO', this.weapon === weapons.volcano)
@@ -196,11 +247,11 @@ Ship.prototype.maybeFireBullet = function() {
 
     if(this.weapon === weapons.shower) {
       for (var i = -this.weapon.showerAmount/2; i < this.weapon.showerAmount/2; i++) {
-        entityManager.fireBullet(this.cx + dX * launchDist, this.cy + dY * launchDist, startVelX, startVelY, this.gunrotation,true,i,false);
+        entityManager.fireBullet(this.cx + dX * launchDist - this.offsetX, this.cy + dY * launchDist - this.offsetY, startVelX, startVelY, this.gunrotation,true,i,false);
       }
     }
     else{
-      entityManager.fireBullet(this.cx + dX * launchDist, this.cy + dY * launchDist, startVelX, startVelY, this.gunrotation, false, 0, volcanoMaster);
+      entityManager.fireBullet(this.cx + dX * launchDist - this.offsetX, this.cy + dY * launchDist - this.offsetY, startVelX, startVelY, this.gunrotation, false, 0, volcanoMaster);
 
     }
     volcanoMaster = false;
@@ -208,7 +259,9 @@ Ship.prototype.maybeFireBullet = function() {
 };
 
 Ship.prototype.getRadius = function() {
-  return (this.sprite.width / 2) * 0.9;
+
+  //return (this.sprite.width / 2) * 0.9;
+  return (this.sprite.width / 2);
 };
 
 Ship.prototype.reset = function() {
@@ -227,14 +280,15 @@ var NOMINAL_ROTATE_RATE = 0.01;
 
 Ship.prototype.updateRotation = function(du) {
 
-  //skítamix
-  var w = 64,
-    h = 64;
 
-  var xIndex1 = Math.floor(this.cx - w / 2);
-  var xIndex2 = Math.floor(this.cx + w / 2);
+
+  //var xIndex1 = Math.floor(this.cx - w / 2);
+  //var xIndex2 = Math.floor(this.cx + w / 2);
+  var xIndex1 = Math.floor(this.cx - 5);
+  var xIndex2 = Math.floor(this.cx + 5);
   xIndex1 = util.clamp(xIndex1);
   xIndex2 = util.clamp(xIndex2);
+
 
   //when it wraps we need to add canvas length so the tank doesnt spin
   var xLine = xIndex2;
@@ -244,7 +298,10 @@ Ship.prototype.updateRotation = function(du) {
     xLine = 1;
   }
 
+
   this.rotation = util.toDegrees(Math.atan2(g_landscape[xIndex2] - this.cy, (xIndex2 - this.cx) * xLine));
+  //console.log(this.rotation);
+
 };
 
 Ship.prototype.updateGunRotation = function(du) {
@@ -252,10 +309,9 @@ Ship.prototype.updateGunRotation = function(du) {
   /*bullet trail prediction */
   this.predictCord = [];
 
-
   var dX = +Math.sin(this.gunrotation);
   var dY = -Math.cos(this.gunrotation);
-  var launchDist = this.getRadius() * 1.2;
+  var launchDist = this.getRadius();
 
   var relVel = this.launchVel;
   var relVelX = dX * relVel;
@@ -264,50 +320,120 @@ Ship.prototype.updateGunRotation = function(du) {
   var startVelX = this.power * relVelX + this.velX * this.power;
   var startVelY = -this.power * this.velY + relVelY * (this.power / 2);
 
-
-
-
-
-  var testX = this.cx + dX * launchDist;
-  var testY = this.cy + dY * launchDist;
+  var testX = this.cx - this.offsetX + dX * launchDist;
+  var testY = this.cy - this.offsetY + dY * launchDist;
   var veltestY = startVelY;
 
-  while(true && testX < g_canvas.width){
+
+  while (testX < g_canvas.width || testX > g_canvas.width) {
 
     testX += startVelX;
     testY += veltestY;
-    //console.log(testY);
 
     testX = util.clamp(testX);
     testY = testY;
 
-    if(g_landscape[Math.floor(testX)] < testY){
-        break;
+    if (g_landscape[Math.floor(testX)] < testY) {
+      break;
     };
 
-    this.predictCord.push({testX,testY});
+
+    this.predictCord.push({testX, testY});
+
 
     veltestY += NOMINAL_GRAVITY;
 
   }
 
-    /*ends here*/
+/*
+  //this.power = 5;
+  var destX = util.clamp(testX);
+  var fakePower = this.power;
 
-  if (keys[this.KEY_LEFT]) {
-    this.gunrotation -= NOMINAL_ROTATE_RATE * du * 2;
+
+  if(Math.floor(destX) === 400){
+  } else {
+    if (Math.floor(destX) > 400 || 380 > Math.floor(destX)) {
+        this.gunrotation += NOMINAL_ROTATE_RATE * 2;
+        this.spriteGunRotation += 1.15;
+        destX += startVelX;
+        destX = util.clamp(destX);
+
+        while(fakePower > 0){
+          fakePower -= this.POWER_INCREASE;
+
+          var d_X = +Math.sin(this.gunrotation);
+
+          var relVelX = d_X * this.launchVel;
+
+          var startVelX = fakePower * relVelX + this.velX * fakePower;
+          destX += startVelX;
+
+          if(Math.floor(destX) <= 400 && 380 <= Math.floor(destX)){
+            this.power = fakePower;
+          }
+          if(fakePower < 0){
+            break;
+          }
+        }
+
+        while(fakePower < 10){
+          fakePower += this.POWER_INCREASE;
+
+          var dX = +Math.sin(this.gunrotation);
+
+          var relVelX = dX * this.launchVel;
+
+          var startVelX = fakePower * relVelX + this.velX * fakePower;
+          destX += startVelX;
+
+          if(Math.floor(destX) <= 400 && 380 <= Math.floor(destX)){
+            this.power = fakePower;
+          }
+          if(fakePower > 10){
+            break;
+          }
+        }
+
+
+    }
+  }*/
+
+
+
+
+
+
+
+if(this.myTurn === true){
+  if (keys[this.KEY_LEFT] && util.toDegrees(this.gunrotation) > -90) {
+
+    this.gunrotation -= NOMINAL_ROTATE_RATE * 2;
+    //this.spriteGunRotation -= 1.15;
   }
-  if (keys[this.KEY_RIGHT]) {
-    this.gunrotation += NOMINAL_ROTATE_RATE * du * 2;
+  if (keys[this.KEY_RIGHT] && util.toDegrees(this.gunrotation) < 90) {
+    this.gunrotation += NOMINAL_ROTATE_RATE * 2;
+    //this.spriteGunRotation += 1.15;
   }
+
+  this.spriteGunRotation = util.toDegrees(this.gunrotation) - 90;
+}
+  //console.log(util.toDegrees(this.gunrotation));
+  //console.log(this.spriteGunRotation);
+
+
+
 };
 
 Ship.prototype.updatePower = function(du) {
+if(this.myTurn === true){
   if (keys[this.KEY_POWER]) {
     this.power += this.POWER_INCREASE/* du*/;
   }
   if (keys[this.KEY_LESSPOWER]) {
     this.power -= this.POWER_INCREASE/* du*/;
   }
+}
 };
 
 Ship.prototype.resetPower = function(du) {
@@ -318,31 +444,43 @@ Ship.prototype.updateWeapon = function() {
   this.weapon = g_weapon;
 }
 
-
 Ship.prototype.render = function(ctx) {
   var origScale = this.sprite.scale;
   // pass my scale into the sprite, for drawing
   this.sprite.scale = this._scale;
-  this.sprite.drawWrappedCentredAt(ctx, this.cx, this.cy, this.rotation);
+  //if rotation is big enough then translate by the x-axis
+  var xOffset = 0;
+  var yOffset;
+
+
+  var xOffset = (Math.cos((this.rotation * Math.PI / 180) + 90)) * this.sprite.width / 2;
+  var yOffset = (Math.sin((this.rotation * Math.PI / 180) + 90)) * this.sprite.height / 2;
+
+  this.offsetX = xOffset;
+  this.offsetY = yOffset;
+
+  this.sprite.drawCentredAt(ctx, this.cx - (xOffset), this.cy - yOffset, this.rotation);
+  //this.sprite.drawWrappedCentredAt(ctx, this.cx  , this.cy , this.rotation);
+
+  this.gunsprite.drawGunCentredAt(ctx, this.cx - (xOffset )  , this.cy - yOffset , this.spriteGunRotation);
+
   this.sprite.scale = origScale;
 
-
-
-
+  //==================
+  ///Projectile path
+  //===================
 
   ctx.beginPath();
-  for (var i = 0; i < this.predictCord.length-1; i++) {
-      ctx.strokeStyle = '#ff0000';
-      if(this.predictCord[i].testX - this.predictCord[i+1].testX > 100 || this.predictCord[i+1].testX - this.predictCord[i].testX > 100 ){
+  for (var i = 0; i < this.predictCord.length - 1; i++) {
+    ctx.strokeStyle = '#ff0000';
+    if (this.predictCord[i].testX - this.predictCord[i + 1].testX > 100 || this.predictCord[i + 1].testX - this.predictCord[i].testX > 100) {} else {
+      ctx.moveTo(this.predictCord[i].testX, this.predictCord[i].testY);
 
-      } else {
-        ctx.moveTo(this.predictCord[i].testX,this.predictCord[i].testY);
-        ctx.lineTo(this.predictCord[i+1].testX,this.predictCord[i+1].testY);
-        ctx.lineWidth = 2;
-      }
+      ctx.lineTo(this.predictCord[i + 1].testX, this.predictCord[i + 1].testY);
+      ctx.lineWidth = 2;
+    }
   }
 
   ctx.stroke();
-
 
 };

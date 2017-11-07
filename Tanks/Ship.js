@@ -126,8 +126,6 @@ Ship.prototype.computeSubStep = function(du) {
     return;
   }
 */
-  //
-//
 
   var thrust = this.computeThrustMag();
 
@@ -137,7 +135,6 @@ Ship.prototype.computeSubStep = function(du) {
     thrust = this.falldown(thrust);
   }
 
-
   // Apply thrust directionally, based on our rotation
   var accelX = thrust;
   var accelY = thrust;
@@ -146,17 +143,10 @@ Ship.prototype.computeSubStep = function(du) {
 
   this.applyAccel(accelX, accelY, du);
 
-  this.wrapPosition();
-
-//
-
+  //this.wrapPosition();
 
 };
 
-
-Ship.prototype.direction = function () {
-    //óþarfi?
-};
 
 var NOMINAL_THRUST = +1;
 var NOMINAL_RETRO = -1;
@@ -216,6 +206,9 @@ Ship.prototype.maybeFireBullet = function() {
 
 
   if (keys[this.KEY_FIRE] && this.myTurn === true) {
+    if(this.myTurn === true){
+        console.log(this.cx);
+    }
 
     this.myTurn = false;
 
@@ -229,8 +222,8 @@ Ship.prototype.maybeFireBullet = function() {
 
     var startVelX = this.power * relVelX + this.velX * this.power;
     var startVelY = -this.power * this.velY + relVelY * (this.power / 2);
-
-    entityManager.fireBullet(this.cx + dX * launchDist, this.cy + dY * launchDist, startVelX, startVelY, this.spriteGunRotation);
+    console.log(this.offsetX);
+    entityManager.fireBullet((this.cx + dX * launchDist) - this.offsetX, (this.cy + dY * launchDist) - this.offsetY, startVelX, startVelY, this.spriteGunRotation);
 
 
   }
@@ -404,14 +397,14 @@ if(this.myTurn === true){
 };
 
 Ship.prototype.updatePower = function(du) {
-if(this.myTurn === true){
-  if (keys[this.KEY_POWER]) {
-    this.power += this.POWER_INCREASE/* du*/;
+  if(this.myTurn === true){
+    if (keys[this.KEY_POWER]) {
+      this.power += this.POWER_INCREASE/* du*/;
+    }
+    if (keys[this.KEY_LESSPOWER]) {
+      this.power -= this.POWER_INCREASE/* du*/;
+    }
   }
-  if (keys[this.KEY_LESSPOWER]) {
-    this.power -= this.POWER_INCREASE/* du*/;
-  }
-}
 };
 
 Ship.prototype.resetPower = function(du) {

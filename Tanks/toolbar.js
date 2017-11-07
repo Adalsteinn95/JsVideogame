@@ -70,13 +70,13 @@ var toolbar = {
         util.drawTextAt(ctx, 50, 100, "Courier", "20px", "black",
                         this._.numPlayers);
 
-        if (keys[this.KEY_PLUS] && this._.numPlayers < this._.maxPlayers) {
+        if (eatKey(this.KEY_PLUS) && this._.numPlayers < this._.maxPlayers) {
             this._.numPlayers++;
         }
-        if (keys[this.KEY_MINUS] && this._.numPlayers > this._.minPlayers) {
+        if (eatKey(this.KEY_MINUS) && this._.numPlayers > this._.minPlayers) {
             this._.numPlayers--;
         }
-        if (keys[this.KEY_CONFIRM]) {
+        if (eatKey(this.KEY_CONFIRM)) {
             this.setupIndex++;
         }
     },
@@ -90,11 +90,11 @@ var toolbar = {
         util.drawTextAt(ctx, 50, 100, "Courier", "20px", "black",
                         id);
 
-        if (keys[this.KEY_PLUS] || keys[this.KEY_MINUS]) {
+        if (eatKey(this.KEY_PLUS) || eatKey(this.KEY_MINUS)) {
             this._.humanOrAI = !this._.humanOrAI;
         }
 
-        if (keys[this.KEY_CONFIRM]) {
+        if (eatKey(this.KEY_CONFIRM)) {
             if (this.playerIdSetup.length < this._.numPlayers) {
 
                 this.playerIdSetup[this._.playerIndex] = id;
@@ -105,20 +105,18 @@ var toolbar = {
                 this.setupIndex++;
             }
         }
-        //if (keys[this.KEY_BACK]) { this.setupIndex--; }
     },
 
     pushPlayers(playerIds) {
         for (var i in playerIds) {
             gameplayManager.addPlayer({
-                nr : i,
+                nr : parseInt(i),
                 id : playerIds[i]
             });
         }
     },
 
     renderMapPreview : function(ctx) {
-        //if (keys[this.KEY_BACK]) { this.setupIndex--; }
 
         util.drawTextAt(ctx, 50, 75, "Courier", "20px", "black",
                         "Map preview:");
@@ -131,7 +129,7 @@ var toolbar = {
 
         util.strokeBox(ctx, 360, 40, 180, 120, "black");
 
-        if (keys[this.KEY_CONFIRM]) {
+        if (eatKey(this.KEY_CONFIRM)) {
             this.setupReady = true;
             gameplayManager.init();
             gameplayManager.isDoorLocked = false;

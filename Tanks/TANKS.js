@@ -125,8 +125,6 @@ function requestPreloads() {
 
     var requiredImages = {
         ship   : "../myndir/tanks/green.png",
-        ship2  : "https://notendur.hi.is/~pk/308G/images/ship_2.png",
-        rock   : "https://notendur.hi.is/~pk/308G/images/rock.png",
         cloud1  : "../cloudsimg/cloud1.PNG",
         cloud2  : "../cloudsimg/cloud2.PNG",
         cloud3  : "../cloudsimg/cloud3.PNG",
@@ -144,9 +142,7 @@ var g_sprites = {};
 function preloadDone() {
 
     g_sprites.ship  = new Sprite(g_images.ship);
-    g_sprites.ship2 = new Sprite(g_images.ship2);
     g_sprites.tankgun = new Sprite(g_images.tankgun);
-    //g_sprites.rock  = new Sprite(g_images.rock);
 
     g_sprites.bullet = new Sprite(g_images.ship);
     g_sprites.bullet.scale = 0.25;

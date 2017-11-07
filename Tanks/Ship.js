@@ -166,7 +166,6 @@ var NOMINAL_RETRO = -1;
 
 Ship.prototype.computeThrustMag = function() {
 
-  console.log(this.cx - this.sprite.width);
   var thrust = 0;
   //ATHUGA
   if (keys[this.KEY_THRUST] && this.rotation > -85 && this.cx + this.sprite.width/2 < g_canvas.width){

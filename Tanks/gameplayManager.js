@@ -69,7 +69,9 @@ var gameplayManager = {
                  playerId : this.players[i].id
              });
         }
+    },
 
-
+    update : function() {
+        
     }
 }

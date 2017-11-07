@@ -122,14 +122,14 @@ Ship.prototype.computeSubStep = function(du) {
   }
   this.updateRotation(du);
 
-
   var thrust = this.computeThrustMag();
 
   //falling down from a hill
-  if((this.rotation < -50 && this.dir === true) || (this.rotation > 50 && this.dir === false)){
+  if((this.rotation < -50 /*&& this.dir === true*/) || (this.rotation > 50 /*&& this.dir === false)*/)){
 
     thrust = this.falldown(thrust);
   }
+
 
   // Apply thrust directionally, based on our rotation
   var accelX = thrust;
@@ -149,6 +149,7 @@ var NOMINAL_THRUST = +1;
 var NOMINAL_RETRO = -1;
 
 Ship.prototype.computeThrustMag = function() {
+  console.log(this.cx - this.sprite.width/2 +10);
 
   var thrust = 0;
   if(this.myTurn === true ){
@@ -183,17 +184,34 @@ Ship.prototype.predictCord = [];
 
 
 Ship.prototype.falldown = function(thrust) {
-  //lalalalala
-  if(this.dir === true){
-    if(this.rotation > -78){
-      thrust += NOMINAL_RETRO/3
-    } else {thrust += NOMINAL_RETRO/2}
-  }
-  else {
-    if(this.rotation < 78){
-        thrust += NOMINAL_THRUST/3
-      } else {thrust += NOMINAL_THRUST/2}
-  }
+  //console.log(this.rotation);
+  if(this.cx + this.sprite.width/2 < g_canvas.width && this.cx - this.sprite.width/2 +10 > 0){
+    //heading upp a hill to the right
+    if(this.rotation < -50){
+
+    //if(this.dir === true){
+      if(this.rotation > -65){
+
+        thrust += NOMINAL_RETRO/4
+
+      }
+      else if (this.rotation > -75) {
+          thrust += NOMINAL_RETRO/3
+      }
+       else {thrust += NOMINAL_RETRO/2}
+    }
+    //hmmm
+    if(this.rotation > 50){
+      //heading upp a hill to the right
+      //if(this.dir === true){
+        if(this.rotation < 65){
+          thrust += NOMINAL_THRUST/4
+        } else if (this.rotation < 75) {
+            thrust += NOMINAL_THRUST/3;
+        } else {thrust += NOMINAL_THRUST/2}
+      }
+
+    }
 
   return thrust;
 

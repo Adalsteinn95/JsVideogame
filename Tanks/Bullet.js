@@ -52,18 +52,12 @@ Bullet.prototype.update = function (du) {
       this.velX += (this.showerIndex/100 );
       //console.log('THIS.SHOWERINDEX', this.showerIndex)
     }
-    //console.log(this)
 
     // TODO: YOUR STUFF HERE! --- Unregister and check for death
     //spatialManager.unregister(this);
 
-    if (this.lifeSpan === 0) {
-      //spatialManager.unregisterBullet(this);
-    /*    console.log(entityManager._bullets.length);
-      if(entityManager._bullets.length < 1){
-        console.log("ping");
-        gameplayManager.nextTurn();
-    }*/
+    if (this.lifeSpan === 0 || this.cy > g_canvas.height) {
+
       return entityManager.KILL_ME_NOW;
     }
 

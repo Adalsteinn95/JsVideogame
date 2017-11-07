@@ -224,6 +224,7 @@ Ship.prototype.maybeFireBullet = function() {
 
 
   if (keys[this.KEY_FIRE] && this.myTurn === true) {
+    console.log("hello")
 
     this.myTurn = false;
 
@@ -238,20 +239,21 @@ Ship.prototype.maybeFireBullet = function() {
     var startVelX = this.power * relVelX + this.velX * this.power;
     var startVelY = -this.power * this.velY + relVelY * (this.power / 2);
 
-    entityManager.fireBullet(this.cx + dX * launchDist, this.cy + dY * launchDist, startVelX, startVelY, this.spriteGunRotation);
+    //entityManager.fireBullet(this.cx + dX * launchDist, this.cy + dY * launchDist, startVelX, startVelY, this.spriteGunRotation);
 
 
     var volcanoMaster = this.weapon === weapons.volcano
-    console.log('THIS.WEAPON === WEAPONS.VOLCANO', this.weapon === weapons.volcano)
 
 
+    console.log('THIS.WEAPON ', this.weapon )
     if(this.weapon === weapons.shower) {
+      console.log('CONDITION PASSED')
       for (var i = -this.weapon.showerAmount/2; i < this.weapon.showerAmount/2; i++) {
-        entityManager.fireBullet(this.cx + dX * launchDist - this.offsetX, this.cy + dY * launchDist - this.offsetY, startVelX, startVelY, this.gunrotation,true,i,false);
+        entityManager.fireBullet(this.cx + dX * launchDist - this.offsetX, this.cy + dY * launchDist - this.offsetY, startVelX, startVelY, this.spriteGunRotation,true,i,false);
       }
     }
     else{
-      entityManager.fireBullet(this.cx + dX * launchDist - this.offsetX, this.cy + dY * launchDist - this.offsetY, startVelX, startVelY, this.gunrotation, false, 0, volcanoMaster);
+      entityManager.fireBullet(this.cx + dX * launchDist - this.offsetX, this.cy + dY * launchDist - this.offsetY, startVelX, startVelY, this.spriteGunRotation, false, 0, volcanoMaster);
 
     }
     volcanoMaster = false;

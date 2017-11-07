@@ -36,11 +36,6 @@ var toolbar = {
     playerIdSetup : [],
 
     init : function() {
-        var set = this._.landScapeSettings;
-        this._.previewLandScape = terrain.initlandScape(util.fun,
-                                                        set.bound,
-                                                        set.xShift,
-                                                        this._.previewBox);
         this.drawBackground(dash_ctx);
     },
 

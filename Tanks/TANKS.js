@@ -154,7 +154,7 @@ function preloadDone() {
     g_sprites.ship  = new Sprite(g_images.ship);
     g_sprites.tankgun = new Sprite(g_images.tankgun);
 
-    g_sprites.bullet = new Sprite(g_images.ship2);
+    g_sprites.bullet = new Sprite(g_images.ship);
     g_sprites.bullet.scale = 0.25;
     g_sprites.cloud1 = new Sprite(g_images.cloud1);
     g_sprites.cloud2 = new Sprite(g_images.cloud2);

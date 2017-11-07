@@ -94,12 +94,12 @@ Ship.prototype.update = function(du) {
 
   // Handle collisions
   //
-  /*var hitEntity = this.findHitEntity();
+  var hitEntity = this.findHitEntity();
     if (hitEntity) {
         var canTakeHit = hitEntity.takeBulletHit;
         if (canTakeHit) canTakeHit.call(hitEntity);
         this.takeBulletHit();
-    }*/
+    }
 
   // Perform movement substeps
   var steps = this.numSubSteps;
@@ -231,8 +231,8 @@ Ship.prototype.maybeFireBullet = function() {
 
 Ship.prototype.getRadius = function() {
 
-  //return (this.sprite.width / 2) * 0.9;
-  return (this.sprite.width / 2);
+  return (this.sprite.width / 2) * 0.98;
+  //return (this.sprite.width / 2);
 };
 
 Ship.prototype.reset = function() {

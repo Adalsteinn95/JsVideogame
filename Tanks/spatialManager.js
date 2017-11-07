@@ -61,7 +61,7 @@ unregister: function(entity) {
 },
 
 findEntityInRange: function(posX, posY, radius) {
-
+    console.log(this._entities);
     // TODO: YOUR STUFF HERE!
     var c1 = {xPos : posX , yPos : posY , radius : radius};
 

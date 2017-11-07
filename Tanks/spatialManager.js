@@ -74,7 +74,9 @@ findEntityInRange: function(posX, posY, radius) {
       }
       var c2 = {xPos : thing.cx, yPos : thing.cy, radius : thing.getRadius()};
 
-      if(spatialManager.collisioncheck(c1,c2)){
+      if(spatialManager.collisioncheck(c1,c2) && !thing.partOfShower){
+
+        console.log('THING', thing)
         return thing;
       }
     }

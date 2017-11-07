@@ -1,4 +1,4 @@
-"use strict";
+/*"use strict";
 
 var gameplayManager = {
 
@@ -12,3 +12,4 @@ var gameplayManager = {
 
     }
 }
+*/

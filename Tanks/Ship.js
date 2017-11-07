@@ -68,7 +68,7 @@ Ship.prototype.myTurn = false;
 Ship.prototype.offsetX = 0;
 Ship.prototype.offsetY = 0;
 
-Ship.prototype.warp = function() {
+/*Ship.prototype.warp = function() {
 
   this._isWarping = true;
   this._scaleDirn = -1;
@@ -77,7 +77,8 @@ Ship.prototype.warp = function() {
   // Unregister me from my old posistion
   // ...so that I can't be collided with while warping
   spatialManager.unregister(this);
-};
+};*/
+
 
 Ship.prototype.update = function(du) {
 
@@ -121,11 +122,7 @@ Ship.prototype.computeSubStep = function(du) {
     this.updateGunRotation(du);
   }
   this.updateRotation(du);
-  /*if(this.rotation > 70){
-    this.cx--;
-    return;
-  }
-*/
+
 
   var thrust = this.computeThrustMag();
 

@@ -53,7 +53,7 @@ register: function(entity) {
 
 unregister: function(entity) {
     var spatialID = entity.getSpatialID();
-
+    //console.log("ping");
     // TODO: YOUR STUFF HERE!
     spatialManager._entities[spatialID] = false;
     //spatialManager._entities.splice(spatialID,1);
@@ -68,7 +68,6 @@ findEntityInRange: function(posX, posY, radius) {
     for(var i = 1; i<spatialManager._entities.length; i++){
       //collison check
       var thing = spatialManager._entities[i];
-
       if(thing === false){
         continue;
       }
@@ -76,7 +75,7 @@ findEntityInRange: function(posX, posY, radius) {
 
       if(spatialManager.collisioncheck(c1,c2) && !thing.partOfShower){
 
-        console.log('THING', thing)
+        //console.log('THING', thing)
         return thing;
       }
     }
@@ -97,6 +96,7 @@ findEntityInRange: function(posX, posY, radius) {
 },
 
 render: function(ctx) {
+    //console.log(this._entities);
     var oldStyle = ctx.strokeStyle;
     ctx.strokeStyle = "red";
 

@@ -70,17 +70,9 @@ Ship.prototype.myTurn = false;
 Ship.prototype.offsetX = 0;
 Ship.prototype.offsetY = 0;
 
+//hitpoints
+Ship.prototype.health = 100;
 
-Ship.prototype.warp = function() {
-
-  this._isWarping = true;
-  this._scaleDirn = -1;
-  //this.warpSound.play();
-
-  // Unregister me from my old posistion
-  // ...so that I can't be collided with while warping
-  spatialManager.unregister(this);
-};
 
 Ship.prototype.update = function(du) {
   //update weapon if it has been changed
@@ -100,7 +92,7 @@ Ship.prototype.update = function(du) {
   // TODO: YOUR STUFF HERE! --- Unregister and check for death
   spatialManager.unregister(this);
 
-  // Handle collisions
+  // Handle collisions with other tank maybe
   //
   /*var hitEntity = this.findHitEntity();
     if (hitEntity) {
@@ -129,13 +121,7 @@ Ship.prototype.computeSubStep = function(du) {
     this.updateGunRotation(du);
   }
   this.updateRotation(du);
-  /*if(this.rotation > 70){
-    this.cx--;
-    return;
-  }
-*/
-  //
-//
+
 
   var thrust = this.computeThrustMag();
 
@@ -144,7 +130,6 @@ Ship.prototype.computeSubStep = function(du) {
 
     thrust = this.falldown(thrust);
   }
-
 
   // Apply thrust directionally, based on our rotation
   var accelX = thrust;
@@ -156,15 +141,9 @@ Ship.prototype.computeSubStep = function(du) {
 
   this.wrapPosition();
 
-//
-
 
 };
 
-
-Ship.prototype.direction = function () {
-    //óþarfi?
-};
 
 var NOMINAL_THRUST = +1;
 var NOMINAL_RETRO = -1;
@@ -224,7 +203,6 @@ Ship.prototype.maybeFireBullet = function() {
 
 
   if (keys[this.KEY_FIRE] && this.myTurn === true) {
-    console.log("hello")
 
     this.myTurn = false;
 
@@ -239,21 +217,19 @@ Ship.prototype.maybeFireBullet = function() {
     var startVelX = this.power * relVelX + this.velX * this.power;
     var startVelY = -this.power * this.velY + relVelY * (this.power / 2);
 
-    //entityManager.fireBullet(this.cx + dX * launchDist, this.cy + dY * launchDist, startVelX, startVelY, this.spriteGunRotation);
-
 
     var volcanoMaster = this.weapon === weapons.volcano
 
 
     console.log('THIS.WEAPON ', this.weapon )
     if(this.weapon === weapons.shower) {
-      console.log('CONDITION PASSED')
+      //console.log('CONDITION PASSED')
       for (var i = -this.weapon.showerAmount/2; i < this.weapon.showerAmount/2; i++) {
-        entityManager.fireBullet(this.cx + dX * launchDist - this.offsetX, this.cy + dY * launchDist - this.offsetY, startVelX, startVelY, this.spriteGunRotation,true,i,false);
+        entityManager.fireBullet((this.cx + dX * launchDist) - this.offsetX, (this.cy + dY * launchDist) - this.offsetY, startVelX, startVelY, this.spriteGunRotation,true,i,false);
       }
     }
     else{
-      entityManager.fireBullet(this.cx + dX * launchDist - this.offsetX, this.cy + dY * launchDist - this.offsetY, startVelX, startVelY, this.spriteGunRotation, false, 0, volcanoMaster);
+      entityManager.fireBullet((this.cx + dX * launchDist) - this.offsetX, (this.cy + dY * launchDist) - this.offsetY, startVelX, startVelY, this.spriteGunRotation, false, 0, volcanoMaster);
 
     }
     volcanoMaster = false;
@@ -437,6 +413,14 @@ if(this.myTurn === true){
   }
 }
 };
+
+Ship.prototype.takeBulletHit = function() {
+    console.log("áái")
+    //terrain.bombLandscape(this.cx, );
+    this.health -= g_weapon.damage;
+    console.log(this.health);
+};
+
 
 Ship.prototype.resetPower = function(du) {
   this.power = 2;

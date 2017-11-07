@@ -70,6 +70,7 @@ Entity.prototype.kill = function () {
 
 Entity.prototype.findHitEntity = function () {
     var pos = this.getPos();
+    console.log(this);
     return spatialManager.findEntityInRange(
         pos.posX, pos.posY, this.getRadius(),this
     );

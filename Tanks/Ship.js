@@ -133,7 +133,7 @@ Ship.prototype.computeSubStep = function(du) {
 
   //falling down from a hill
   if((this.rotation < -50 && this.dir === true) || (this.rotation > 50 && this.dir === false)){
-    console.log("ping");
+
     thrust = this.falldown(thrust);
   }
 

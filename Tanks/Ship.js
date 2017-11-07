@@ -78,7 +78,7 @@ Ship.prototype.update = function(du) {
   //update weapon if it has been changed
   if(this.weapon !== g_weapon){
     this.updateWeapon();
-    console.log(this.weapon)
+    //console.log(this.weapon)
   };
 
   if (this._isDeadNow === true) {
@@ -221,7 +221,7 @@ Ship.prototype.maybeFireBullet = function() {
     var volcanoMaster = this.weapon === weapons.volcano
 
 
-    console.log('THIS.WEAPON ', this.weapon )
+    //console.log('THIS.WEAPON ', this.weapon )
     if(this.weapon === weapons.shower) {
       //console.log('CONDITION PASSED')
       for (var i = -this.weapon.showerAmount/2; i < this.weapon.showerAmount/2; i++) {

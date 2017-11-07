@@ -57,7 +57,15 @@ Bullet.prototype.update = function (du) {
     // TODO: YOUR STUFF HERE! --- Unregister and check for death
     //spatialManager.unregister(this);
 
-    if (this.lifeSpan === 0) return entityManager.KILL_ME_NOW;
+    if (this.lifeSpan === 0) {
+      //spatialManager.unregisterBullet(this);
+    /*    console.log(entityManager._bullets.length);
+      if(entityManager._bullets.length < 1){
+        console.log("ping");
+        gameplayManager.nextTurn();
+    }*/
+      return entityManager.KILL_ME_NOW;
+    }
 
     this.cx += this.velX;
     this.cy += this.velY;
@@ -91,7 +99,6 @@ Bullet.prototype.update = function (du) {
 
 Bullet.prototype.terrainHit = function(x, y){
     var xIndex = util.clamp(Math.floor(x));
-    console.log("ping");
     if(g_landscape[xIndex] < y){
         this.checkForVolcano()
         terrain.bombLandscape(x, g_weapon.damage);

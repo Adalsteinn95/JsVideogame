@@ -33,6 +33,7 @@ _entities : [],
 
 getNewSpatialID : function() {
     // TODO: YOUR STUFF HERE!
+
     var tmp = spatialManager._nextSpatialID;
     spatialManager._nextSpatialID++;
     return tmp;
@@ -59,13 +60,22 @@ unregister: function(entity) {
     //spatialManager._entities.splice(spatialID,1);
 
 },
+//splice the bullets from the spatial manager
+unregisterBullet: function(entity) {
+    var spatialID = entity.getSpatialID();
+    //console.log("ping");
+    // TODO: YOUR STUFF HERE!
+    //spatialManager._entities[spatialID] = false;
+    spatialManager._entities.splice(spatialID,1);
+    spatialManager._nextSpatialID--;
+
+},
 
 findEntityInRange: function(posX, posY, radius) {
 
     // TODO: YOUR STUFF HERE!
     var c1 = {xPos : posX , yPos : posY , radius : radius};
-
-    for(var i = 1; i<spatialManager._entities.length; i++){
+    for(var i = 1; i<this._entities.length; i++){
       //collison check
       var thing = spatialManager._entities[i];
       if(thing === false){
@@ -96,7 +106,7 @@ findEntityInRange: function(posX, posY, radius) {
 },
 
 render: function(ctx) {
-    //console.log(this._entities);
+  //  console.log(this._entities);
     var oldStyle = ctx.strokeStyle;
     ctx.strokeStyle = "red";
 

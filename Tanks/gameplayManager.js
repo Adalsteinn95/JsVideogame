@@ -13,6 +13,8 @@ var gameplayManager = {
 
     players : [],
 
+    activePlayerIndex : 0,
+
     keyLock : function() {
         return this.lock;
     },
@@ -20,6 +22,7 @@ var gameplayManager = {
     init : function() {
         this.loadPlayers();
         this.setupReady = true;
+        entityManager._ships[0].myTurn = true;
     },
 
     setup : function() {
@@ -71,5 +74,24 @@ var gameplayManager = {
         }
 
 
-    }
+    },
+
+    clamp: function(i){
+      if(i >= this.players.length){
+        i -= this.players.length;
+      }
+      return i;
+    },
+
+      nextTurn: function (){
+        console.log(entityManager._ships[0]);
+        console.log(this.clamp(this.activePlayerIndex+1))
+
+        entityManager._ships[this.clamp(this.activePlayerIndex+1)].myTurn = true;
+        this.activePlayerIndex++;
+
+      }
+
+
+
 }

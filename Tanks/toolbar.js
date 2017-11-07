@@ -111,7 +111,7 @@ var toolbar = {
     pushPlayers(playerIds) {
         for (var i in playerIds) {
             gameplayManager.addPlayer({
-                nr : i,
+                nr : parseInt(i),
                 id : playerIds[i]
             });
         }

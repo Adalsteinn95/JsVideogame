@@ -417,11 +417,11 @@ Ship.prototype.updatePower = function(du) {
 if(this.myTurn === true){
   if (keys[this.KEY_POWER]) {
     this.power += this.POWER_INCREASE/* du*/;
-    this.offsettest++
+
   }
   if (keys[this.KEY_LESSPOWER]) {
     this.power -= this.POWER_INCREASE/* du*/;
-    this.offsettest--
+
   }
 }
 };
@@ -442,22 +442,17 @@ Ship.prototype.updateWeapon = function() {
   this.weapon = g_weapon;
 }
 
-Ship.prototype.offsettest = 0;
-
 
 Ship.prototype.render = function(ctx) {
   var origScale = this.sprite.scale;
   // pass my scale into the sprite, for drawing
   this.sprite.scale = this._scale;
 
-
   //console.log(this.rotation);
   var xOffset = (Math.cos((this.rotation  * Math.PI/180)+ 90)) * this.sprite.width/4;
   var yOffset = 0;
 
-
   yOffset = this.sprite.height / 2;
-  //console.log(this.sprite.height / 2);
 
   //ATHUGA gera / 3 frekar?
   yOffset -= 6;
@@ -472,12 +467,6 @@ Ship.prototype.render = function(ctx) {
   this.gunsprite.drawGunCentredAt(ctx, this.cx - (xOffset )  , this.cy - yOffset , this.spriteGunRotation);
 
   this.sprite.scale = origScale;
-
-  //test for rotation
-  ctx.beginPath();
-  ctx.moveTo(400,400);
-  ctx.lineTo(400,450);
-  ctx.stroke();
 
   //==================
   ///Projectile path

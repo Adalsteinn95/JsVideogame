@@ -45,6 +45,10 @@ randRange: function(min, max) {
     return (min + Math.random() * (max - min));
 },
 
+randInt: function(min, max) {
+    return Math.floor(this.randRange(min, max));
+},
+
 
 // MISC
 // ====
@@ -146,9 +150,11 @@ clamp: function(x){
 },
 
 // landscape function
-fun: function(x) {
-    return (x*x) * Math.sin(x);
-},
+fun: [
+    function(x) { return 100 + (-x*x); },
+    function(x) { return 100 * Math.cos(x); },
+    function(x) { return (x*x) * Math.sin(x); }
+],
 
 // destruction function
 sinAcos: function(ratio, radius) {

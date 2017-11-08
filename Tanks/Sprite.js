@@ -14,11 +14,12 @@
 
 // Construct a "sprite" from the given `image`,
 //
-function Sprite(image) {
+function Sprite(image, cx = 0, cy = 0, width = image.width, height = image.height) {
     this.image = image;
-
-    this.width = image.width;
-    this.height = image.height;
+    this.cx = cx;
+    this.cy = cy;
+    this.width = width;
+    this.height = height;
     this.scale = 1;
 }
 

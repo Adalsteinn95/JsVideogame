@@ -9,6 +9,7 @@ var toolbar = {
     KEY_MINUS : 'A'.charCodeAt(0),
     KEY_CONFIRM : '13', //'enter'-keycode
     KEY_BACK : '8', //'backspace'-keycode
+    KEY_REROLL : 'R'.charCodeAt(0),
 
     //various private variables
     _ : {
@@ -23,19 +24,14 @@ var toolbar = {
             cy : 40,
             width : g_canvas.width/5,
             height : g_canvas.height/5
-        },
-
-        landScapeSettings : {
-            bound : 15,
-            xShift : 0
-        },
-
-        previewLandScape : []
+        }
     },
 
     playerIdSetup : [],
 
     init : function() {
+        //global landscape initiated here
+        g_landscape = terrain.initlandScape(util.fun[2], bound, xShift, g_canvas);
         this.drawBackground(dash_ctx);
     },
 
@@ -138,6 +134,10 @@ var toolbar = {
 
         util.strokeBox(ctx, box.cx, box.cy, box.width, box.height, "black");
 
+        if (eatKey(this.KEY_REROLL)) {
+            this.rerollMap();
+        }
+
         if (eatKey(this.KEY_CONFIRM)) {
             this.setupReady = true;
             gameplayManager.init();
@@ -146,12 +146,33 @@ var toolbar = {
 
     },
 
+    rerollMap : function() {
+        var i =  util.randInt(0, util.fun.length);
+
+        g_landscape = terrain.initlandScape(util.fun[i], bound, xShift, g_canvas);
+    },
+
     //////////////////////////
     ///  SETUP READY STUFF ///
     //////////////////////////
 
     renderToolbar : function(ctx) {
-        this.renderMapPreview(ctx);
+        util.drawTextAt(ctx, 50, 30, "Courier", "25px", "black",
+        "Turn " + gameplayManager._.turn +
+        ": player " + parseInt(gameplayManager.activePlayerIndex+1));
+        this.renderWeapon(ctx);
+    },
+
+    renderWeapon : function(ctx) {
+        util.drawTextAt(ctx, 50, 75, "Courier", "20px", "black",
+                        "Weapon: " + g_weapon.constructor.name);
+
+        if (eatKey(this.KEY_PLUS)) {
+            //next weapon
+        }
+        if (eatKey(this.KEY_MINUS)) {
+            //previous weapon
+        }
     }
 
 

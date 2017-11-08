@@ -86,7 +86,6 @@ Ship.prototype.update = function(du) {
   //update weapon if it has been changed
   if(this.weapon !== g_weapon){
     this.updateWeapon();
-    console.log(this.weapon)
   };
 
   if (this._isDeadNow === true) {
@@ -224,8 +223,6 @@ Ship.prototype.maybeFireBullet = function() {
 
 
   if (keys[this.KEY_FIRE] && this.myTurn === true) {
-    console.log("hello")
-
     this.myTurn = false;
 
     var dX = +Math.sin(this.gunrotation);

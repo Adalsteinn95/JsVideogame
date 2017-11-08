@@ -13,6 +13,10 @@ var gameplayManager = {
 
     players : [],
 
+    _ : {
+        turn : 0
+    },
+
     activePlayerIndex : 0,
 
     keyLock : function() {
@@ -83,6 +87,8 @@ var gameplayManager = {
     },
 
       nextTurn: function (){
+
+        this._.turn++;
 
         console.log(this.clamp(this.activePlayerIndex+1))
 

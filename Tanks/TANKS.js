@@ -66,7 +66,7 @@ var KEY_AVE_VEL = keyCode('V');
 var KEY_SPATIAL = keyCode('X');
 
 var KEY_HALT  = keyCode('H');
-var KEY_RESET = keyCode('R');
+//var KEY_RESET = keyCode('R');
 
 var KEY_0 = keyCode('0');
 
@@ -141,8 +141,12 @@ function requestPreloads() {
         terrain : "http://i0.kym-cdn.com/entries/icons/mobile/000/013/564/doge.jpg",
         leftDoor : "../myndir/doorLeft.png",
         rightDoor : "../myndir/doorRight.png",
-        tankgun : "../myndir/guns/green.png"
+        tankgun : "../myndir/guns/green.png",
+        explosion : "../myndir/explosives/explosion/explosionSheet.png"
     };
+
+    requiredImages.explosion = spriteUtil.loadSheet(81,81,9,9,74,
+                                                    requiredImages.explosion);
 
     imagesPreload(requiredImages, g_images, preloadDone);
 }

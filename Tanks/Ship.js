@@ -139,7 +139,7 @@ Ship.prototype.computeSubStep = function(du) {
 
   this.applyAccel(accelX, accelY, du);
 
-  this.wrapPosition();
+  //this.wrapPosition();
 
 
 };
@@ -149,7 +149,7 @@ var NOMINAL_THRUST = +1;
 var NOMINAL_RETRO = -1;
 
 Ship.prototype.computeThrustMag = function() {
-  console.log(this.cx - this.sprite.width/2 +10);
+  //console.log(this.cx - this.sprite.width/2 +10);
 
   var thrust = 0;
   if(this.myTurn === true ){
@@ -276,15 +276,13 @@ var NOMINAL_ROTATE_RATE = 0.01;
 
 Ship.prototype.updateRotation = function(du) {
 
-
-
   //var xIndex1 = Math.floor(this.cx - w / 2);
   //var xIndex2 = Math.floor(this.cx + w / 2);
-  var xIndex1 = Math.floor(this.cx - 5);
-  var xIndex2 = Math.floor(this.cx + 5);
+  //ATHUGA
+  var xIndex1 = Math.floor(this.cx - 10);
+  var xIndex2 = Math.floor(this.cx + 10);
   xIndex1 = util.clamp(xIndex1);
   xIndex2 = util.clamp(xIndex2);
-
 
   //when it wraps we need to add canvas length so the tank doesnt spin
   var xLine = xIndex2;
@@ -398,26 +396,20 @@ Ship.prototype.updateGunRotation = function(du) {
 
 
 
-
-
-
 if(this.myTurn === true){
   if (keys[this.KEY_LEFT] && util.toDegrees(this.gunrotation) > -90) {
 
     this.gunrotation -= NOMINAL_ROTATE_RATE * 2;
-    //this.spriteGunRotation -= 1.15;
+
   }
   if (keys[this.KEY_RIGHT] && util.toDegrees(this.gunrotation) < 90) {
+
     this.gunrotation += NOMINAL_ROTATE_RATE * 2;
-    //this.spriteGunRotation += 1.15;
+
   }
 
   this.spriteGunRotation = util.toDegrees(this.gunrotation) - 90;
 }
-  //console.log(util.toDegrees(this.gunrotation));
-  //console.log(this.spriteGunRotation);
-
-
 
 };
 
@@ -465,7 +457,7 @@ Ship.prototype.render = function(ctx) {
 
   this.sprite.drawCentredAt(ctx, this.cx - (xOffset), this.cy - yOffset, this.rotation);
   //this.sprite.drawWrappedCentredAt(ctx, this.cx  , this.cy , this.rotation);
-
+  //this.spriteGunRotation += this.rotation
   this.gunsprite.drawGunCentredAt(ctx, this.cx - (xOffset )  , this.cy - yOffset , this.spriteGunRotation);
 
   this.sprite.scale = origScale;

@@ -127,7 +127,7 @@ Ship.prototype.computeSubStep = function(du) {
   //falling down from a hill
   if((this.rotation < -50 /*&& this.dir === true*/) || (this.rotation > 50 /*&& this.dir === false)*/)){
 
-    thrust = this.falldown(thrust);
+    //thrust = this.falldown(thrust);
   }
 
 
@@ -279,8 +279,8 @@ Ship.prototype.updateRotation = function(du) {
   //var xIndex1 = Math.floor(this.cx - w / 2);
   //var xIndex2 = Math.floor(this.cx + w / 2);
   //ATHUGA
-  var xIndex1 = Math.floor(this.cx - 10);
-  var xIndex2 = Math.floor(this.cx + 10);
+  var xIndex1 = Math.floor(this.cx - 5);
+  var xIndex2 = Math.floor(this.cx + 5);
   xIndex1 = util.clamp(xIndex1);
   xIndex2 = util.clamp(xIndex2);
 
@@ -417,9 +417,11 @@ Ship.prototype.updatePower = function(du) {
 if(this.myTurn === true){
   if (keys[this.KEY_POWER]) {
     this.power += this.POWER_INCREASE/* du*/;
+    this.offsettest++
   }
   if (keys[this.KEY_LESSPOWER]) {
     this.power -= this.POWER_INCREASE/* du*/;
+    this.offsettest--
   }
 }
 };
@@ -440,6 +442,9 @@ Ship.prototype.updateWeapon = function() {
   this.weapon = g_weapon;
 }
 
+Ship.prototype.offsettest = 0;
+
+
 Ship.prototype.render = function(ctx) {
   var origScale = this.sprite.scale;
   // pass my scale into the sprite, for drawing
@@ -448,19 +453,48 @@ Ship.prototype.render = function(ctx) {
   var xOffset = 0;
   var yOffset;
 
+  //console.log(this.rotation);
+  var xOffset = (Math.cos((this.rotation  * Math.PI/180)+ 90)) * this.sprite.width/4;
+  var yOffset = (Math.sin((this.rotation  * Math.PI/180)+ 90)) * this.sprite.height/2;
+  //console.log((this.rotation + 90 ) * Math.PI / 180);
+  //var xOffset = +(Math.sin((this.rotation +90) * Math.PI / 180));
+  //var yOffset = -(Math.cos((this.rotation ) * Math.PI / 180));
 
-  var xOffset = (Math.cos((this.rotation * Math.PI / 180) + 90)) * this.sprite.width / 2;
-  var yOffset = (Math.sin((this.rotation * Math.PI / 180) + 90)) * this.sprite.height / 2;
+  if(this.myTurn === true){
+    console.log(xOffset);
+    // console.log(yOffset);
+    //console.log(this.sprite.height / 2);
+    //console.log(this.rotation);
+    //console.log(this.rotation - 90);
+  }
+
+ //xOffset += this.offsettest;
+  //console.log(xOffset);
+  //console.log(yOffset);
+//  xOffset *= this.sprite.width / 2;
+//  yOffset *= this.sprite.height /2;
+  yOffset = this.sprite.height / 2;
+
+  //ATHUGA
+  yOffset -= 6;
+
 
   this.offsetX = xOffset;
   this.offsetY = yOffset;
 
-  this.sprite.drawCentredAt(ctx, this.cx - (xOffset), this.cy - yOffset, this.rotation);
+
+  this.sprite.drawWrappedCentredAt(ctx, this.cx - (xOffset), this.cy - yOffset, this.rotation);
   //this.sprite.drawWrappedCentredAt(ctx, this.cx  , this.cy , this.rotation);
   //this.spriteGunRotation += this.rotation
   this.gunsprite.drawGunCentredAt(ctx, this.cx - (xOffset )  , this.cy - yOffset , this.spriteGunRotation);
 
   this.sprite.scale = origScale;
+
+  //test for rotation
+  ctx.beginPath();
+  ctx.moveTo(400,400);
+  ctx.lineTo(400,450);
+  ctx.stroke();
 
   //==================
   ///Projectile path
@@ -478,5 +512,6 @@ Ship.prototype.render = function(ctx) {
   }
 
   ctx.stroke();
+  ctx.closePath();
 
 };

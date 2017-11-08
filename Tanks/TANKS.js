@@ -142,11 +142,8 @@ function requestPreloads() {
         leftDoor : "../myndir/doorLeft.png",
         rightDoor : "../myndir/doorRight.png",
         tankgun : "../myndir/guns/green.png",
-        explosion : "../myndir/explosives/explosion/explosionSheet.png"
+        explosion : "../myndir/explosives/explosionsheet.png"
     };
-
-    requiredImages.explosion = spriteUtil.loadSheet(81,81,9,9,74,
-                                                    requiredImages.explosion);
 
     imagesPreload(requiredImages, g_images, preloadDone);
 }
@@ -164,6 +161,7 @@ function preloadDone() {
     g_sprites.cloud2 = new Sprite(g_images.cloud2);
     g_sprites.cloud3 = new Sprite(g_images.cloud3);
     g_sprites.terrain = new Sprite(g_images.terrain);
+    g_sprites.xplode = spriteUtil.decomposeSheet(100,100,10,10,74, g_images.explosion);
 
     console.log(g_images);
 

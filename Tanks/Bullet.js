@@ -126,7 +126,8 @@ Bullet.prototype.checkForWeapon = function (weapon) {
 
 Bullet.prototype.render = function (ctx) {
 
-    g_sprites.bullet.drawWrappedCentredAt(
-        ctx, this.cx, this.cy, this.rotation
-    );
+    var sprite = g_sprites.xplode[0];
+
+    sprite.drawClippedCentredAt(
+        ctx, this.cx, this.cy, this.rotation, this.width, this.height);
 };

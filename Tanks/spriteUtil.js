@@ -2,7 +2,7 @@
 
 var spriteUtil = {
 
-    loadSheet : function(celWidth, celHeight, numCols, numRows, numCells, img) {
+    decomposeSheet : function(celWidth, celHeight, numCols, numRows, numCells, img) {
         var arr = [];
         var sprite;
 
@@ -13,7 +13,6 @@ var spriteUtil = {
                 arr.push(sprite);
             }
         }
-        console.log(arr);
         return arr;
     }
 }

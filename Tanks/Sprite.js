@@ -52,6 +52,24 @@ Sprite.prototype.drawCentredAt = function (ctx, cx, cy, rotation) {
     ctx.restore();
 };
 
+Sprite.prototype.drawClippedCentredAt = function (
+    ctx, cx, cy, rotation, w = this.width, h = this.height) {
+
+    if (rotation === undefined) rotation = 0;
+
+    //var w = this.width, h = this.height;
+
+    ctx.save();
+    ctx.translate(-w/2, -h/2);
+
+
+    //ctx.rotate((rotation * Math.PI/180));
+
+    ctx.drawImage(this.image, this.cx, this.cy, w, h, cx, cy, w, h);
+
+    ctx.restore();
+};
+
 
 Sprite.prototype.drawGunCentredAt = function (ctx, cx, cy, rotation) {
 

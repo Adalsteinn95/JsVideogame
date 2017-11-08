@@ -57,15 +57,10 @@ Sprite.prototype.drawClippedCentredAt = function (
 
     if (rotation === undefined) rotation = 0;
 
-    //var w = this.width, h = this.height;
-
     ctx.save();
-    ctx.translate(-w/2, -h/2);
+    ctx.translate(-w, -h);
 
-
-    //ctx.rotate((rotation * Math.PI/180));
-
-    ctx.drawImage(this.image, this.cx, this.cy, w, h, cx, cy, w, h);
+    ctx.drawImage(this.image, this.cx, this.cy, 2*w, 2*h, cx, cy, 2*w, 2*h);
 
     ctx.restore();
 };

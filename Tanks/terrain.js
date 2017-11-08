@@ -62,11 +62,11 @@ initlandScape: function(f, bound, xShift, frame) {
 
 bombLandscape: function(x, radius) {
 
-    /*entityManager._explosions.push(new Explosion({
+    entityManager._explosions.push(new Explosion({
             cx : x,
             cy : g_landscape[Math.floor(x)],
             radius : radius
-        }));*/
+        }));
 
     x = Math.floor(x);
     radius = Math.floor(radius);

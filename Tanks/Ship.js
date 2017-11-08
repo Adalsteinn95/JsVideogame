@@ -220,10 +220,7 @@ Ship.prototype.maybeFireBullet = function() {
 
 
   if (keys[this.KEY_FIRE] && this.myTurn === true) {
-<<<<<<< HEAD
-=======
 
->>>>>>> b4262bc448bf3a48e713d9175e6648175cb0ef27
     this.myTurn = false;
 
     var dX = +Math.sin(this.gunrotation);

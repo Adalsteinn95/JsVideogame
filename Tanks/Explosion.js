@@ -10,12 +10,14 @@ function Explosion(descr) {
 Explosion.prototype = new Entity();
 
 Explosion.prototype.render = function(ctx) {
-    var cell = this.sprite[index];
-
-    console.log(cell);
+    var cell = this.sprite[this.index];
 
     cell.drawClippedCentredAt(
-        ctx, this,cx, this.cy, this.rotation, this.radius, this.radius);
+        ctx, this.cx, this.cy, this.rotation, this.radius, this.radius);
+}
 
-    this.index++;
+Explosion.prototype.update = function(du) {
+    if (++this.index >= this.sprite.length) {
+        return entityManager.KILL_ME_NOW;
+    }
 }

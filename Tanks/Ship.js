@@ -298,8 +298,28 @@ Ship.prototype.updateRotation = function(du) {
 
 };
 
-Ship.prototype.updateGunRotation = function(du) {
+Ship.prototype.updateGunRotation = function() {
 
+  this.calculatePath();
+
+  if(this.myTurn === true){
+    if (keys[this.KEY_LEFT] && util.toDegrees(this.gunrotation) > -90) {
+
+      this.gunrotation -= NOMINAL_ROTATE_RATE * 2;
+
+    }
+    if (keys[this.KEY_RIGHT] && util.toDegrees(this.gunrotation) < 90) {
+
+      this.gunrotation += NOMINAL_ROTATE_RATE * 2;
+
+    }
+
+    this.spriteGunRotation = util.toDegrees(this.gunrotation) - 90;
+  }
+
+};
+
+Ship.prototype.calculatePath = function(){
   /*bullet trail prediction */
   this.predictCord = [];
 
@@ -394,24 +414,7 @@ Ship.prototype.updateGunRotation = function(du) {
   }*/
 
 
-
-
-if(this.myTurn === true){
-  if (keys[this.KEY_LEFT] && util.toDegrees(this.gunrotation) > -90) {
-
-    this.gunrotation -= NOMINAL_ROTATE_RATE * 2;
-
-  }
-  if (keys[this.KEY_RIGHT] && util.toDegrees(this.gunrotation) < 90) {
-
-    this.gunrotation += NOMINAL_ROTATE_RATE * 2;
-
-  }
-
-  this.spriteGunRotation = util.toDegrees(this.gunrotation) - 90;
 }
-
-};
 
 Ship.prototype.updatePower = function(du) {
 if(this.myTurn === true){
@@ -435,6 +438,7 @@ Ship.prototype.takeBulletHit = function() {
 
 
 Ship.prototype.resetPower = function(du) {
+
   this.power = 2;
 };
 
@@ -462,28 +466,15 @@ Ship.prototype.render = function(ctx) {
 
 
   this.sprite.drawWrappedCentredAt(ctx, this.cx - (xOffset), this.cy - yOffset, this.rotation);
-  //this.sprite.drawWrappedCentredAt(ctx, this.cx  , this.cy , this.rotation);
+
   //this.spriteGunRotation += this.rotation
   this.gunsprite.drawGunCentredAt(ctx, this.cx - (xOffset )  , this.cy - yOffset , this.spriteGunRotation);
 
   this.sprite.scale = origScale;
 
-  //==================
   ///Projectile path
-  //===================
 
-  ctx.beginPath();
-  for (var i = 0; i < this.predictCord.length - 1; i++) {
-    ctx.strokeStyle = '#ff0000';
-    if (this.predictCord[i].testX - this.predictCord[i + 1].testX > 100 || this.predictCord[i + 1].testX - this.predictCord[i].testX > 100) {} else {
-      ctx.moveTo(this.predictCord[i].testX, this.predictCord[i].testY);
+  util.projectilePath(this.predictCord);
 
-      ctx.lineTo(this.predictCord[i + 1].testX, this.predictCord[i + 1].testY);
-      ctx.lineWidth = 2;
-    }
-  }
-
-  ctx.stroke();
-  ctx.closePath();
 
 };

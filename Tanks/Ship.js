@@ -449,35 +449,18 @@ Ship.prototype.render = function(ctx) {
   var origScale = this.sprite.scale;
   // pass my scale into the sprite, for drawing
   this.sprite.scale = this._scale;
-  //if rotation is big enough then translate by the x-axis
-  var xOffset = 0;
-  var yOffset;
+
 
   //console.log(this.rotation);
   var xOffset = (Math.cos((this.rotation  * Math.PI/180)+ 90)) * this.sprite.width/4;
-  var yOffset = (Math.sin((this.rotation  * Math.PI/180)+ 90)) * this.sprite.height/2;
-  //console.log((this.rotation + 90 ) * Math.PI / 180);
-  //var xOffset = +(Math.sin((this.rotation +90) * Math.PI / 180));
-  //var yOffset = -(Math.cos((this.rotation ) * Math.PI / 180));
+  var yOffset = 0;
 
-  if(this.myTurn === true){
-    console.log(xOffset);
-    // console.log(yOffset);
-    //console.log(this.sprite.height / 2);
-    //console.log(this.rotation);
-    //console.log(this.rotation - 90);
-  }
 
- //xOffset += this.offsettest;
-  //console.log(xOffset);
-  //console.log(yOffset);
-//  xOffset *= this.sprite.width / 2;
-//  yOffset *= this.sprite.height /2;
   yOffset = this.sprite.height / 2;
+  //console.log(this.sprite.height / 2);
 
-  //ATHUGA
+  //ATHUGA gera / 3 frekar?
   yOffset -= 6;
-
 
   this.offsetX = xOffset;
   this.offsetY = yOffset;

@@ -54,14 +54,11 @@ Ship.prototype.cx = 200;
 Ship.prototype.cy = 200;
 Ship.prototype.velX = 0;
 Ship.prototype.velY = 0;
-Ship.prototype.launchVel = 2;
+Ship.prototype.launchVel = 4;
 Ship.prototype.numSubSteps = 1;
 Ship.prototype.power = 2;
 Ship.prototype.POWER_INCREASE = 0.085;
 //Ship.prototype.weapon =  weapon.normal;
-
-//true = heading right, false heading left
-Ship.prototype.dir = true;
 
 //is it this players turn?
 Ship.prototype.myTurn = false;
@@ -75,7 +72,7 @@ Ship.prototype.health = 100;
 
 
 Ship.prototype.update = function(du) {
-  //update weapon if it has been changed
+  //update weapon if it has been changed ÞARF AÐ BREYTA
   if(this.weapon !== g_weapon){
     this.updateWeapon();
     //console.log(this.weapon)
@@ -86,10 +83,8 @@ Ship.prototype.update = function(du) {
     return entityManager.KILL_ME_NOW;
   }
 
-
   this.updatePower(du);
 
-  // TODO: YOUR STUFF HERE! --- Unregister and check for death
   spatialManager.unregister(this);
 
   // Handle collisions with other tank maybe
@@ -127,9 +122,8 @@ Ship.prototype.computeSubStep = function(du) {
   //falling down from a hill
   if((this.rotation < -50 /*&& this.dir === true*/) || (this.rotation > 50 /*&& this.dir === false)*/)){
 
-    //thrust = this.falldown(thrust);
+    thrust = this.falldown(thrust);
   }
-
 
   // Apply thrust directionally, based on our rotation
   var accelX = thrust;
@@ -138,9 +132,6 @@ Ship.prototype.computeSubStep = function(du) {
   //accelY += this.computeGravity();
 
   this.applyAccel(accelX, accelY, du);
-
-  //this.wrapPosition();
-
 
 };
 
@@ -219,7 +210,6 @@ Ship.prototype.falldown = function(thrust) {
 
 Ship.prototype.maybeFireBullet = function() {
 
-
   if (keys[this.KEY_FIRE] && this.myTurn === true) {
 
     this.myTurn = false;
@@ -228,26 +218,19 @@ Ship.prototype.maybeFireBullet = function() {
     var dY = -Math.cos(this.gunrotation);
     var launchDist = this.getRadius();
 
-    var relVel = this.launchVel;
-    var relVelX = dX * relVel;
-    var relVelY = dY * relVel;
-
-    var startVelX = this.power * relVelX + this.velX * this.power;
-    var startVelY = -this.power * this.velY + relVelY * (this.power / 2);
-
+    var startVel = this.getStartVel(dX, dY);
 
     var volcanoMaster = this.weapon === weapons.volcano
-
 
     //console.log('THIS.WEAPON ', this.weapon )
     if(this.weapon === weapons.shower) {
       //console.log('CONDITION PASSED')
       for (var i = -this.weapon.showerAmount/2; i < this.weapon.showerAmount/2; i++) {
-        entityManager.fireBullet((this.cx + dX * launchDist) - this.offsetX, (this.cy + dY * launchDist) - this.offsetY, startVelX, startVelY, this.spriteGunRotation,true,i,false);
+        entityManager.fireBullet((this.cx + dX * launchDist) - this.offsetX, (this.cy + dY * launchDist) - this.offsetY, startVel[0], startVel[1], this.spriteGunRotation,true,i,false);
       }
     }
     else{
-      entityManager.fireBullet((this.cx + dX * launchDist) - this.offsetX, (this.cy + dY * launchDist) - this.offsetY, startVelX, startVelY, this.spriteGunRotation, false, 0, volcanoMaster);
+      entityManager.fireBullet((this.cx + dX * launchDist) - this.offsetX, (this.cy + dY * launchDist) - this.offsetY, startVel[0], startVel[1], this.spriteGunRotation, false, 0, volcanoMaster);
 
     }
     volcanoMaster = false;
@@ -255,48 +238,44 @@ Ship.prototype.maybeFireBullet = function() {
 };
 
 Ship.prototype.getRadius = function() {
-
   //return (this.sprite.width / 2) * 0.9;
   return (this.sprite.width / 2);
 };
-
+//óþarfi?
 Ship.prototype.reset = function() {
   this.setPos(this.reset_cx, this.reset_cy);
   this.rotation = this.reset_rotation;
 
-  this.halt();
-};
-
-Ship.prototype.halt = function() {
-  this.velX = 0;
-  this.velY = 0;
 };
 
 var NOMINAL_ROTATE_RATE = 0.01;
 
 Ship.prototype.updateRotation = function(du) {
 
-  //var xIndex1 = Math.floor(this.cx - w / 2);
-  //var xIndex2 = Math.floor(this.cx + w / 2);
   //ATHUGA
   var xIndex1 = Math.floor(this.cx - 5);
   var xIndex2 = Math.floor(this.cx + 5);
   xIndex1 = util.clamp(xIndex1);
   xIndex2 = util.clamp(xIndex2);
 
-  //when it wraps we need to add canvas length so the tank doesnt spin
-  var xLine = xIndex2;
-  if (xLine < this.cx) {
-    xLine = -1;
-  } else {
-    xLine = 1;
-  }
-
-
-  this.rotation = util.toDegrees(Math.atan2(g_landscape[xIndex2] - this.cy, (xIndex2 - this.cx) * xLine));
-  //console.log(this.rotation);
+  this.rotation = util.toDegrees(Math.atan2(g_landscape[xIndex2] - this.cy, (xIndex2 - this.cx) /** xLine*/));
 
 };
+
+//calculates teh starting velocity and returnas an array with index 0 = x and 1 = y
+Ship.prototype.getStartVel = function(dX,dY){
+
+  var relVel = this.launchVel;
+  var relVelX = dX * relVel;
+  var relVelY = dY * relVel;
+
+  var startVelX = this.power * relVelX + this.velX * this.power;
+  var startVelY = -this.power * this.velY + relVelY * (this.power / 2);
+
+  var startVel = [startVelX , startVelY];
+  return startVel;
+
+}
 
 Ship.prototype.updateGunRotation = function() {
 
@@ -304,19 +283,13 @@ Ship.prototype.updateGunRotation = function() {
 
   if(this.myTurn === true){
     if (keys[this.KEY_LEFT] && util.toDegrees(this.gunrotation) > -90) {
-
       this.gunrotation -= NOMINAL_ROTATE_RATE * 2;
-
     }
     if (keys[this.KEY_RIGHT] && util.toDegrees(this.gunrotation) < 90) {
-
       this.gunrotation += NOMINAL_ROTATE_RATE * 2;
-
     }
-
     this.spriteGunRotation = util.toDegrees(this.gunrotation) - 90;
   }
-
 };
 
 Ship.prototype.calculatePath = function(){
@@ -327,21 +300,17 @@ Ship.prototype.calculatePath = function(){
   var dY = -Math.cos(this.gunrotation);
   var launchDist = this.getRadius();
 
-  var relVel = this.launchVel;
-  var relVelX = dX * relVel;
-  var relVelY = dY * relVel;
+  var startVel = this.getStartVel(dX,dY);
 
-  var startVelX = this.power * relVelX + this.velX * this.power;
-  var startVelY = -this.power * this.velY + relVelY * (this.power / 2);
 
   var testX = this.cx - this.offsetX + dX * launchDist;
   var testY = this.cy - this.offsetY + dY * launchDist;
-  var veltestY = startVelY;
+  var veltestY = startVel[1];
 
 
   while (testX < g_canvas.width || testX > g_canvas.width) {
 
-    testX += startVelX;
+    testX += startVel[0];
     testY += veltestY;
 
     testX = util.clamp(testX);
@@ -350,7 +319,6 @@ Ship.prototype.calculatePath = function(){
     if (g_landscape[Math.floor(testX)] < testY) {
       break;
     };
-
 
     this.predictCord.push({testX, testY});
 
@@ -436,12 +404,7 @@ Ship.prototype.takeBulletHit = function() {
     console.log(this.health);
 };
 
-
-Ship.prototype.resetPower = function(du) {
-
-  this.power = 2;
-};
-
+//ATHUGA
 Ship.prototype.updateWeapon = function() {
   this.weapon = g_weapon;
 }
@@ -464,8 +427,7 @@ Ship.prototype.render = function(ctx) {
   this.offsetX = xOffset;
   this.offsetY = yOffset;
 
-
-  this.sprite.drawWrappedCentredAt(ctx, this.cx - (xOffset), this.cy - yOffset, this.rotation);
+  this.sprite.drawCentredAt(ctx, this.cx - (xOffset), this.cy - yOffset, this.rotation);
 
   //this.spriteGunRotation += this.rotation
   this.gunsprite.drawGunCentredAt(ctx, this.cx - (xOffset )  , this.cy - yOffset , this.spriteGunRotation);
@@ -475,6 +437,5 @@ Ship.prototype.render = function(ctx) {
   ///Projectile path
 
   util.projectilePath(this.predictCord);
-
 
 };

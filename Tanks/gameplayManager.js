@@ -90,6 +90,7 @@ var gameplayManager = {
 
         this._.turn++;
 
+        console.log(this.players);
         console.log(this.clamp(this.activePlayerIndex+1))
 
         entityManager._ships[this.clamp(this.activePlayerIndex+1)].myTurn = true;

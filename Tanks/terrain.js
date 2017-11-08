@@ -81,7 +81,7 @@ bombLandscape: function(x, radius) {
         ratio += step;
     }
 
-    gameplayManager.nextTurn();
+    //gameplayManager.nextTurn();
 }
 
 

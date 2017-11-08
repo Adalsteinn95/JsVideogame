@@ -141,7 +141,7 @@ haltShips: function() {
 },
 
 update: function(du) {
-
+    //console.log(this._bullets);
     for (var c = 0; c < this._categories.length; ++c) {
 
         var aCategory = this._categories[c];
@@ -156,6 +156,9 @@ update: function(du) {
                 // remove the dead guy, and shuffle the others down to
                 // prevent a confusing gap from appearing in the array
                 aCategory.splice(i,1);
+                if(this._bullets.length < 1){
+                  gameplayManager.nextTurn();
+                }
             }
             else {
                 ++i;

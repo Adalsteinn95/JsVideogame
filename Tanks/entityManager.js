@@ -31,12 +31,13 @@ var entityManager = {
 _bullets : [],
 _ships   : [],
 _clouds : [],
+_explosions : [],
 
 // "PRIVATE" METHODS
 
 _generateClouds : function() {
     var i,
-    NUM_CLOUDS = 4;Zz
+    NUM_CLOUDS = 4;
 
     for (i = 0; i < NUM_CLOUDS; ++i) {
 
@@ -87,7 +88,7 @@ KILL_ME_NOW : -1,
 // i.e. thing which need `this` to be defined.
 //
 deferredSetup : function () {
-    this._categories = [this._clouds, this._bullets, this._ships ];
+    this._categories = [this._clouds, this._bullets, this._ships, this._explosions ];
 },
 
 init: function() {

@@ -5,8 +5,8 @@ var toolbar = {
     setupReady : false,
     setupIndex : 0,
 
-    KEY_PLUS : 'D'.charCodeAt(0),
-    KEY_MINUS : 'A'.charCodeAt(0),
+    KEY_PLUS : '8'.charCodeAt(0),
+    KEY_MINUS : '7'.charCodeAt(0),
     KEY_CONFIRM : '13', //'enter'-keycode
     KEY_BACK : '8', //'backspace'-keycode
     KEY_REROLL : 'R'.charCodeAt(0),

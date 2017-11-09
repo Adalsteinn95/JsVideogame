@@ -79,6 +79,7 @@ Bullet.prototype.update = function (du) {
         console.log("this " + canTakeHit)
         if (canTakeHit) canTakeHit.call(hitEntity);
         terrain.bombLandscape(this.cx, g_weapon.damage/2, true);
+        this.checkForVolcano();
         console.log("eh");
         this.lifeSpan = 0;
         return;
@@ -104,7 +105,7 @@ Bullet.prototype.terrainHit = function(x, y){
 };
 
 Bullet.prototype.checkForVolcano = function() {
-  if(g_weapon === weapons.volcano && this.volcanoMaster) {
+  if(g_weapon.name === "volcano" && this.volcanoMaster) {
     for (var i = -g_weapon.volcanoAmount/2; i < g_weapon.volcanoAmount/2; i++) {
       var randVelX = util.randRange(-2,2)
       var randVelY = util.randRange(-2,-4)

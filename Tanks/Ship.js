@@ -58,7 +58,7 @@ Ship.prototype.launchVel = 4;
 Ship.prototype.numSubSteps = 1;
 Ship.prototype.power = 2;
 Ship.prototype.POWER_INCREASE = 0.085;
-//Ship.prototype.weapon =  weapon.normal;
+Ship.prototype.weaponId =  0;
 
 //is it this players turn?
 Ship.prototype.myTurn = false;
@@ -218,10 +218,10 @@ Ship.prototype.maybeFireBullet = function() {
 
     var startVel = this.getStartVel(dX, dY);
 
-    var volcanoMaster = this.weapon === weapons.volcano
+    var volcanoMaster = this.weapon.name === "volcano";
 
-    //console.log('THIS.WEAPON ', this.weapon )
-    if(this.weapon === weapons.shower) {
+    console.log('THIS.WEAPON ', this.weapon )
+    if(this.weapon.name === "shower") {
       //console.log('CONDITION PASSED')
       for (var i = -this.weapon.showerAmount/2; i < this.weapon.showerAmount/2; i++) {
         entityManager.fireBullet((this.cx + dX * launchDist) - this.offsetX, (this.cy + dY * launchDist) - this.offsetY, startVel[0], startVel[1], this.spriteGunRotation,true,i,false);

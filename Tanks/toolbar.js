@@ -24,7 +24,7 @@ var toolbar = {
             cy : 40,
             width : g_canvas.width/5,
             height : g_canvas.height/5
-        }
+        },
     },
 
     playerIdSetup : [],
@@ -161,6 +161,7 @@ var toolbar = {
         "Turn " + gameplayManager._.turn +
         ": player " + parseInt(gameplayManager.activePlayerIndex+1));
         this.renderWeapon(ctx);
+        this.renderPower(ctx);
     },
 
     renderWeapon : function(ctx) {
@@ -173,6 +174,14 @@ var toolbar = {
         if (eatKey(this.KEY_MINUS)) {
             //previous weapon
         }
+    },
+
+    renderPower : function(ctx) {
+        util.drawTextAt(ctx, 300, 75, "Courier", "25px", "black",
+                        "POWER");
+        toolbarUtil.drawPowerBar(ctx, 300, 75);
+
+        //console.log(entityManager._ships[gameplayManager.activePlayerIndex].power);
     }
 
 

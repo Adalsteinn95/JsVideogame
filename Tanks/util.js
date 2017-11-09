@@ -149,7 +149,7 @@ clamp: function(x){
   return num;
 },
 
-// landscape function
+// landscape functions
 fun: [
     function(x) { return 100 + (-x*x); },
     function(x) { return 100 * Math.cos(x); },
@@ -167,7 +167,7 @@ sinAcos: function(ratio, radius) {
 
   //draws the predicted shot path
   projectilePath: function (predictCord){
-  
+
     ctx.beginPath();
     for (var i = 0; i < predictCord.length - 1; i++) {
       ctx.strokeStyle = '#ff0000';

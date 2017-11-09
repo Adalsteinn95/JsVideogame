@@ -31,13 +31,12 @@ var entityManager = {
 _bullets : [],
 _ships   : [],
 _clouds : [],
-_explosions : [],
 
 // "PRIVATE" METHODS
 
 _generateClouds : function() {
     var i,
-    NUM_CLOUDS = 4;
+    NUM_CLOUDS = 4;Zz
 
     for (i = 0; i < NUM_CLOUDS; ++i) {
 
@@ -88,7 +87,7 @@ KILL_ME_NOW : -1,
 // i.e. thing which need `this` to be defined.
 //
 deferredSetup : function () {
-    this._categories = [this._clouds, this._bullets, this._ships, this._explosions ];
+    this._categories = [this._clouds, this._bullets, this._ships ];
 },
 
 init: function() {
@@ -156,6 +155,8 @@ update: function(du) {
                 // remove the dead guy, and shuffle the others down to
                 // prevent a confusing gap from appearing in the array
                 aCategory.splice(i,1);
+                console.log(this._categories);
+                console.log(this._ships);
                 if(this._bullets.length < 1){
                   gameplayManager.nextTurn();
                 }

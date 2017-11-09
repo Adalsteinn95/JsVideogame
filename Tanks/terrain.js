@@ -60,7 +60,10 @@ initlandScape: function(f, bound, xShift, frame) {
     return ls;
 },
 
-bombLandscape: function(x, radius) {
+bombLandscape: function(x, radius, tankhit) {
+    if(tankhit){
+      radius *= 2;
+    }
 
     entityManager._explosions.push(new Explosion({
             cx : x,

@@ -36,7 +36,7 @@ _clouds : [],
 
 _generateClouds : function() {
     var i,
-    NUM_CLOUDS = 4;
+    NUM_CLOUDS = 4;Zz
 
     for (i = 0; i < NUM_CLOUDS; ++i) {
 

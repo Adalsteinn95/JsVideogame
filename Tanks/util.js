@@ -45,6 +45,10 @@ randRange: function(min, max) {
     return (min + Math.random() * (max - min));
 },
 
+randInt: function(min, max) {
+    return Math.floor(this.randRange(min, max));
+},
+
 
 // MISC
 // ====
@@ -146,14 +150,38 @@ clamp: function(x){
 },
 
 // landscape function
-fun: function(x) {
-    return (x*x) * Math.sin(x);
-},
+fun: [
+    function(x) { return 100 + (-x*x); },
+    function(x) { return 100 * Math.cos(x); },
+    function(x) { return (x*x) * Math.sin(x); }
+],
 
 // destruction function
 sinAcos: function(ratio, radius) {
     return Math.sin(Math.acos(ratio)) * radius;
-}
+},
+
+//===============
+//Projectile / AI
+//=================
+
+  //draws the predicted shot path
+  projectilePath: function (predictCord){
+  
+    ctx.beginPath();
+    for (var i = 0; i < predictCord.length - 1; i++) {
+      ctx.strokeStyle = '#ff0000';
+      if (predictCord[i].testX - predictCord[i + 1].testX > 100 || predictCord[i + 1].testX - predictCord[i].testX > 100) {} else {
+        ctx.moveTo(predictCord[i].testX, predictCord[i].testY);
+
+        ctx.lineTo(predictCord[i + 1].testX, predictCord[i + 1].testY);
+        ctx.lineWidth = 2;
+      }
+    }
+
+    ctx.stroke();
+    ctx.closePath();
+  }
 
 
 };

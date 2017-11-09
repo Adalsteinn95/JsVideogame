@@ -52,12 +52,14 @@ Bullet.prototype.update = function (du) {
       this.velX += (this.showerIndex/100 );
       //console.log('THIS.SHOWERINDEX', this.showerIndex)
     }
-    //console.log(this)
 
     // TODO: YOUR STUFF HERE! --- Unregister and check for death
-    spatialManager.unregister(this);
+    //spatialManager.unregister(this);
 
-    if (this.lifeSpan === 0) return entityManager.KILL_ME_NOW;
+    if (this.lifeSpan === 0 || this.cy > g_canvas.height) {
+
+      return entityManager.KILL_ME_NOW;
+    }
 
     this.cx += this.velX;
     this.cy += this.velY;
@@ -74,20 +76,23 @@ Bullet.prototype.update = function (du) {
     var hitEntity = this.findHitEntity();
     if (hitEntity) {
         var canTakeHit = hitEntity.takeBulletHit;
+        console.log("this " + canTakeHit)
         if (canTakeHit) canTakeHit.call(hitEntity);
-        return entityManager.KILL_ME_NOW;
+        terrain.bombLandscape(this.cx, g_weapon.damage, true);
+        console.log("eh");
+        this.lifeSpan = 0;
+        return;
     };
 
     //terrain hit first edition
     this.terrainHit(this.cx, this.cy);
 
     //(Re-)Register
-    spatialManager.register(this);
+    //spatialManager.register(this);
 };
 
 Bullet.prototype.terrainHit = function(x, y){
     var xIndex = util.clamp(Math.floor(x));
-
     if(g_landscape[xIndex] < y){
         this.checkForVolcano()
         terrain.bombLandscape(x, g_weapon.damage);

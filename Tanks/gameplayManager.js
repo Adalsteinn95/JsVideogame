@@ -13,6 +13,10 @@ var gameplayManager = {
 
     players : [],
 
+    _ : {
+        turn : 0
+    },
+
     activePlayerIndex : 0,
 
     keyLock : function() {
@@ -85,11 +89,19 @@ var gameplayManager = {
 
       nextTurn: function (){
 
+        this._.turn++;
+        console.log(this.players);
         console.log(this.clamp(this.activePlayerIndex+1))
 
         entityManager._ships[this.clamp(this.activePlayerIndex+1)].myTurn = true;
         this.activePlayerIndex++;
         this.activePlayerIndex %= this.players.length;
+
+      },
+
+      updateWeapon: function(){
+
+
 
       }
 

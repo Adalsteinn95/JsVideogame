@@ -106,7 +106,6 @@ Ship.prototype.update = function(du) {
   this.maybeFireBullet();
 
   spatialManager.register(this);
-
 };
 
 Ship.prototype.computeSubStep = function(du) {

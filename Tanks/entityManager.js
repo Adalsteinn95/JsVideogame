@@ -88,7 +88,7 @@ KILL_ME_NOW : -1,
 // i.e. thing which need `this` to be defined.
 //
 deferredSetup : function () {
-    this._categories = [this._clouds, this._bullets, this._ships, this._explosions ];
+    this._categories = [this._clouds, this._ships, this._explosions,  this._bullets ];
 },
 
 init: function() {
@@ -158,7 +158,7 @@ update: function(du) {
                 aCategory.splice(i,1);
                 console.log(this._categories);
                 console.log(this._ships);
-                if(this._bullets.length < 1){
+                if(this._bullets.length < 1 && this._explosions.length <  1){
                   gameplayManager.nextTurn();
                 }
             }

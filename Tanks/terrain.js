@@ -61,14 +61,15 @@ initlandScape: function(f, bound, xShift, frame) {
 },
 
 bombLandscape: function(x, radius, tankhit) {
+    var explosionRadius = radius
     if(tankhit){
-      radius *= 2;
+      explosionRadius *= 2;
     }
 
     entityManager._explosions.push(new Explosion({
             cx : x,
             cy : g_landscape[Math.floor(x)],
-            radius : radius
+            radius : explosionRadius
         }));
 
     x = Math.floor(x);

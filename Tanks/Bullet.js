@@ -78,7 +78,7 @@ Bullet.prototype.update = function (du) {
         var canTakeHit = hitEntity.takeBulletHit;
         console.log("this " + canTakeHit)
         if (canTakeHit) canTakeHit.call(hitEntity);
-        terrain.bombLandscape(this.cx, g_weapon.damage, true);
+        terrain.bombLandscape(this.cx, g_weapon.damage/2, true);
         console.log("eh");
         this.lifeSpan = 0;
         return;

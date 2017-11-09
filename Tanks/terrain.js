@@ -10,6 +10,7 @@
 0        1         2         3         4         5         6         7         8
 12345678901234567890123456789012345678901234567890123456789012345678901234567890
 */
+//initial landscape values
 var g_landscape = [];
 var bound = 15;
 var xShift = 0;
@@ -24,40 +25,48 @@ rememberResets: function () {
 },
 
 
-render: function(ctx) {
+render: function(ctx, ls, frame) {
 
     ctx.fillStyle = "#228B22";
     var i = 0;
     ctx.beginPath();
-    ctx.moveTo(0, g_landscape[0]);
+    ctx.moveTo(0, ls[0]);
 
-    for (i in g_landscape) {
-        ctx.lineTo(i, g_landscape[i]);
+    for (i in ls) {
+        ctx.lineTo(i, ls[i]);
     }
 
-    ctx.lineTo(g_canvas.width, g_canvas.height);
-    ctx.lineTo(0, g_canvas.height);
+    ctx.lineTo(frame.width, frame.height);
+    ctx.lineTo(0, frame.height);
 
     ctx.closePath();
     ctx.fill();
 },
 
-initlandScape: function(ls, f, bound, xShift) {
+initlandScape: function(f, bound, xShift, frame) {
+
+    var ls = [];
 
     var x = -bound + xShift;
 
-    for (var i = 0; i < g_canvas.width; i++) {
+    for (var i = 0; i < frame.width; i++) {
         var y = f(x);
-        y += g_canvas.height/2;
+        y += frame.height/2;
         ls.push(y);
 
-        x += ((2*bound)/g_canvas.width);
+        x += ((2*bound)/frame.width);
     }
 
     return ls;
 },
 
 bombLandscape: function(x, radius) {
+
+    entityManager._explosions.push(new Explosion({
+            cx : x,
+            cy : g_landscape[Math.floor(x)],
+            radius : radius
+        }));
 
     x = Math.floor(x);
     radius = Math.floor(radius);
@@ -77,6 +86,3 @@ bombLandscape: function(x, radius) {
 
 
 }
-
-
-g_landscape = terrain.initlandScape(g_landscape, util.fun,bound,xShift);

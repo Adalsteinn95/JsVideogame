@@ -14,11 +14,12 @@
 
 // Construct a "sprite" from the given `image`,
 //
-function Sprite(image) {
+function Sprite(image, cx = 0, cy = 0, width = image.width, height = image.height) {
     this.image = image;
-
-    this.width = image.width;
-    this.height = image.height;
+    this.cx = cx;
+    this.cy = cy;
+    this.width = width;
+    this.height = height;
     this.scale = 1;
 }
 
@@ -47,6 +48,19 @@ Sprite.prototype.drawCentredAt = function (ctx, cx, cy, rotation) {
     // coords accordingly, to draw our sprite centred at the origin
     ctx.drawImage(this.image,
                   -w/2, -h/2);
+
+    ctx.restore();
+};
+
+Sprite.prototype.drawClippedCentredAt = function (
+    ctx, cx, cy, rotation, w = this.width, h = this.height) {
+
+    if (rotation === undefined) rotation = 0;
+
+    ctx.save();
+    ctx.translate(-w, -h);
+
+    ctx.drawImage(this.image, this.cx, this.cy, 100, 100, cx, cy, 2*w, 2*h);
 
     ctx.restore();
 };

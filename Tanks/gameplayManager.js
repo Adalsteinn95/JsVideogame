@@ -13,6 +13,10 @@ var gameplayManager = {
 
     players : [],
 
+    _ : {
+        turn : 0
+    },
+
     activePlayerIndex : 0,
 
     keyLock : function() {
@@ -21,6 +25,7 @@ var gameplayManager = {
 
     init : function() {
         this.loadPlayers();
+        entityManager._generateClouds();
         this.setupReady = true;
         entityManager._ships[0].myTurn = true;
     },
@@ -72,8 +77,6 @@ var gameplayManager = {
                  playerId : this.players[i].id
              });
         }
-
-
     },
 
     clamp: function(i){
@@ -84,6 +87,9 @@ var gameplayManager = {
     },
 
       nextTurn: function (){
+
+        this._.turn++;
+
         console.log(this.players);
         console.log(this.clamp(this.activePlayerIndex+1))
 
@@ -92,7 +98,4 @@ var gameplayManager = {
         this.activePlayerIndex %= this.players.length;
 
       }
-
-
-
 }

@@ -42,7 +42,7 @@ function gatherInputs() {
 function updateSimulation(du) {
 
     processDiagnostics();
-    terrain.render(ctx);
+    terrain.render(ctx, g_landscape, g_canvas);
     entityManager.update(du);
 
     // Prevent perpetual firing!
@@ -66,7 +66,7 @@ var KEY_AVE_VEL = keyCode('V');
 var KEY_SPATIAL = keyCode('X');
 
 var KEY_HALT  = keyCode('H');
-var KEY_RESET = keyCode('R');
+//var KEY_RESET = keyCode('R');
 
 var KEY_0 = keyCode('0');
 
@@ -109,7 +109,7 @@ function renderSimulation(ctx) {
 
     if (gameplayManager.setupReady) {
         //graphicsManager.render(ctx);
-        terrain.render(ctx);
+        terrain.render(ctx, g_landscape, g_canvas);
         entityManager.render(ctx);
 
         if (g_renderSpatialDebug) spatialManager.render(ctx);
@@ -135,15 +135,14 @@ function requestPreloads() {
 
     var requiredImages = {
         ship   : "../myndir/tanks/green.png",
-        ship2  : "https://notendur.hi.is/~pk/308G/images/ship_2.png",
-        rock   : "https://notendur.hi.is/~pk/308G/images/rock.png",
         cloud1  : "../cloudsimg/cloud1.PNG",
         cloud2  : "../cloudsimg/cloud2.PNG",
         cloud3  : "../cloudsimg/cloud3.PNG",
         terrain : "http://i0.kym-cdn.com/entries/icons/mobile/000/013/564/doge.jpg",
         leftDoor : "../myndir/doorLeft.png",
         rightDoor : "../myndir/doorRight.png",
-        tankgun : "../myndir/guns/green.png"
+        tankgun : "../myndir/guns/green.png",
+        explosion : "../myndir/explosives/explosionsheet.png"
     };
 
     imagesPreload(requiredImages, g_images, preloadDone);
@@ -154,16 +153,15 @@ var g_sprites = {};
 function preloadDone() {
 
     g_sprites.ship  = new Sprite(g_images.ship);
-    g_sprites.ship2 = new Sprite(g_images.ship2);
     g_sprites.tankgun = new Sprite(g_images.tankgun);
-    //g_sprites.rock  = new Sprite(g_images.rock);
 
-    g_sprites.bullet = new Sprite(g_images.ship2);
+    g_sprites.bullet = new Sprite(g_images.ship);
     g_sprites.bullet.scale = 0.25;
     g_sprites.cloud1 = new Sprite(g_images.cloud1);
     g_sprites.cloud2 = new Sprite(g_images.cloud2);
     g_sprites.cloud3 = new Sprite(g_images.cloud3);
     g_sprites.terrain = new Sprite(g_images.terrain);
+    g_sprites.xplode = spriteUtil.decomposeSheet(100,100,10,10,74, g_images.explosion);
 
     console.log(g_images);
 

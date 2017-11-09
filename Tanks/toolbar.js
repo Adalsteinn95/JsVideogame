@@ -2,7 +2,6 @@
 
 var toolbar = {
 
-    infoString : "testing hello",
     setupReady : false,
     setupIndex : 0,
 
@@ -10,6 +9,7 @@ var toolbar = {
     KEY_MINUS : 'A'.charCodeAt(0),
     KEY_CONFIRM : '13', //'enter'-keycode
     KEY_BACK : '8', //'backspace'-keycode
+    KEY_REROLL : 'R'.charCodeAt(0),
 
     //various private variables
     _ : {
@@ -17,12 +17,21 @@ var toolbar = {
         maxPlayers : 4,
         minPlayers : 2,
         playerIndex : 0,
-        humanOrAI : false
+        humanOrAI : false,
+
+        previewBox : {
+            cx : 360,
+            cy : 40,
+            width : g_canvas.width/5,
+            height : g_canvas.height/5
+        }
     },
 
     playerIdSetup : [],
 
     init : function() {
+        //global landscape initiated here
+        g_landscape = terrain.initlandScape(util.fun[2], bound, xShift, g_canvas);
         this.drawBackground(dash_ctx);
     },
 
@@ -31,18 +40,9 @@ var toolbar = {
         ctx.fillRect(0,0, g_dash.width, g_dash.height);
     },
 
-    drawInfo : function(ctx) {
-        ctx.save();
-        ctx.font = "30px Courier";
-        ctx.fillStyle = "black";
-        ctx.fillText(this.infoString, 50, 50);
-        ctx.restore();
-    },
-
     render : function(ctx) {
         this.drawBackground(ctx);
         this.setupReady ? this.renderToolbar(ctx) : this.renderSetup(ctx);
-        this.drawInfo(ctx);
     },
 
     ////////////////////
@@ -70,13 +70,13 @@ var toolbar = {
         util.drawTextAt(ctx, 50, 100, "Courier", "20px", "black",
                         this._.numPlayers);
 
-        if (keys[this.KEY_PLUS] && this._.numPlayers < this._.maxPlayers) {
+        if (eatKey(this.KEY_PLUS) && this._.numPlayers < this._.maxPlayers) {
             this._.numPlayers++;
         }
-        if (keys[this.KEY_MINUS] && this._.numPlayers > this._.minPlayers) {
+        if (eatKey(this.KEY_MINUS) && this._.numPlayers > this._.minPlayers) {
             this._.numPlayers--;
         }
-        if (keys[this.KEY_CONFIRM]) {
+        if (eatKey(this.KEY_CONFIRM)) {
             this.setupIndex++;
         }
     },
@@ -90,11 +90,11 @@ var toolbar = {
         util.drawTextAt(ctx, 50, 100, "Courier", "20px", "black",
                         id);
 
-        if (keys[this.KEY_PLUS] || keys[this.KEY_MINUS]) {
+        if (eatKey(this.KEY_PLUS) || eatKey(this.KEY_MINUS)) {
             this._.humanOrAI = !this._.humanOrAI;
         }
 
-        if (keys[this.KEY_CONFIRM]) {
+        if (eatKey(this.KEY_CONFIRM)) {
             if (this.playerIdSetup.length < this._.numPlayers) {
 
                 this.playerIdSetup[this._.playerIndex] = id;
@@ -105,7 +105,6 @@ var toolbar = {
                 this.setupIndex++;
             }
         }
-        //if (keys[this.KEY_BACK]) { this.setupIndex--; }
     },
 
     pushPlayers(playerIds) {
@@ -118,20 +117,28 @@ var toolbar = {
     },
 
     renderMapPreview : function(ctx) {
-        //if (keys[this.KEY_BACK]) { this.setupIndex--; }
+
+        var box = this._.previewBox;
 
         util.drawTextAt(ctx, 50, 75, "Courier", "20px", "black",
                         "Map preview:");
 
-        util.fillBox(ctx, 360, 40, 180, 120, "#ADD8E6");
+        util.fillBox(ctx, box.cx, box.cy, box.width, box.height, "#ADD8E6");
 
         ctx.save();
-        // draw landscape preview
+        ctx.translate(box.cx, box.cy);
+        ctx.scale(0.2, 0.2);
+        terrain.render(ctx, g_landscape, g_canvas);
+
         ctx.restore();
 
-        util.strokeBox(ctx, 360, 40, 180, 120, "black");
+        util.strokeBox(ctx, box.cx, box.cy, box.width, box.height, "black");
 
-        if (keys[this.KEY_CONFIRM]) {
+        if (eatKey(this.KEY_REROLL)) {
+            this.rerollMap();
+        }
+
+        if (eatKey(this.KEY_CONFIRM)) {
             this.setupReady = true;
             gameplayManager.init();
             gameplayManager.isDoorLocked = false;
@@ -139,12 +146,33 @@ var toolbar = {
 
     },
 
+    rerollMap : function() {
+        var i =  util.randInt(0, util.fun.length);
+
+        g_landscape = terrain.initlandScape(util.fun[i], bound, xShift, g_canvas);
+    },
+
     //////////////////////////
     ///  SETUP READY STUFF ///
     //////////////////////////
 
     renderToolbar : function(ctx) {
+        util.drawTextAt(ctx, 50, 30, "Courier", "25px", "black",
+        "Turn " + gameplayManager._.turn +
+        ": player " + parseInt(gameplayManager.activePlayerIndex+1));
+        this.renderWeapon(ctx);
+    },
 
+    renderWeapon : function(ctx) {
+        util.drawTextAt(ctx, 50, 75, "Courier", "20px", "black",
+                        "Weapon: " + g_weapon.constructor.name);
+
+        if (eatKey(this.KEY_PLUS)) {
+            //next weapon
+        }
+        if (eatKey(this.KEY_MINUS)) {
+            //previous weapon
+        }
     }
 
 

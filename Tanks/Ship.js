@@ -75,7 +75,6 @@ Ship.prototype.update = function(du) {
   //update weapon if it has been changed ÞARF AÐ BREYTA
   if(this.weapon !== g_weapon){
     this.updateWeapon();
-    //console.log(this.weapon)
   };
 
   if (this._isDeadNow === true) {

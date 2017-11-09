@@ -60,7 +60,7 @@ Sprite.prototype.drawClippedCentredAt = function (
     ctx.save();
     ctx.translate(-w, -h);
 
-    ctx.drawImage(this.image, this.cx, this.cy, 2*w, 2*h, cx, cy, 2*w, 2*h);
+    ctx.drawImage(this.image, this.cx, this.cy, 100, 100, cx, cy, 2*w, 2*h);
 
     ctx.restore();
 };

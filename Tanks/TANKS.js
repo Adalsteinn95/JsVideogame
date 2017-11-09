@@ -56,7 +56,7 @@ function updateSimulation(du) {
 var g_allowMixedActions = true;
 var g_useGravity = false;
 var g_useAveVel = true;
-var g_weapon = weapons.normal;
+var g_weapon = weapons[0];
 
 var g_renderSpatialDebug = true;
 
@@ -77,7 +77,8 @@ var KEY_K = keyCode('K');
 var button = document.getElementById("weaponbutton");
 button.addEventListener("click", function() {
   var e = document.getElementById("weaponSelect");
-  g_weapon = weapons[e.options[e.selectedIndex].text];
+  console.log(e.selectedIndex);
+  g_weapon = weapons[e.selectedIndex];
 
 
 });

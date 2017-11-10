@@ -58,7 +58,7 @@ Ship.prototype.launchVel = 4;
 Ship.prototype.numSubSteps = 1;
 Ship.prototype.power = 2;
 Ship.prototype.POWER_INCREASE = 0.085;
-//Ship.prototype.weapon =  weapon.normal;
+Ship.prototype.weaponId =  0;
 
 //is it this players turn?
 Ship.prototype.myTurn = false;
@@ -221,7 +221,7 @@ Ship.prototype.maybeFireBullet = function() {
 
     var startVel = this.getStartVel(dX, dY);
 
-    var volcanoMaster = this.weapon === weapons.volcano
+    var volcanoMaster = this.weapon.name === "volcano";
 
     //console.log('THIS.WEAPON ', this.weapon )
     if (this.weapon === weapons.shower) {

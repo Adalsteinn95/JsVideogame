@@ -25,6 +25,9 @@ var toolbar = {
             width : g_canvas.width/5,
             height : g_canvas.height/5
         },
+
+        powWidth : 150,
+        powHeight : 30
     },
 
     playerIdSetup : [],
@@ -157,11 +160,14 @@ var toolbar = {
     //////////////////////////
 
     renderToolbar : function(ctx) {
+
+        var tank = entityManager._ships[gameplayManager.activePlayerIndex];
+
         util.drawTextAt(ctx, 50, 30, "Courier", "25px", "black",
         "Turn " + gameplayManager._.turn +
-        ": player " + parseInt(gameplayManager.activePlayerIndex+1));
+        ": player " + parseInt(tank.playerNr+1));
         this.renderWeapon(ctx);
-        this.renderPower(ctx);
+        this.renderStats(ctx, tank);
     },
 
     renderWeapon : function(ctx) {
@@ -177,12 +183,24 @@ var toolbar = {
         }
     },
 
-    renderPower : function(ctx) {
+    renderStats : function(ctx, tank) {
         util.drawTextAt(ctx, 300, 75, "Courier", "25px", "black",
                         "POWER");
-        toolbarUtil.drawPowerBar(ctx, 300, 75);
+        util.fillBox(ctx, 300, 80, this._.powWidth, this._.powHeight, "#B0E0E6");
 
-        //console.log(entityManager._ships[gameplayManager.activePlayerIndex].power);
+        var gradient = ctx.createLinearGradient(300,80,300+this._.powWidth,80);
+        gradient.addColorStop(0,"#7CFC00");
+        gradient.addColorStop(0.5, "#FFD700");
+        gradient.addColorStop(1, "#FF3030");
+
+        var x = (tank.power / 5) * this._.powWidth;
+
+        util.fillBox(ctx, 300, 80, x, this._.powHeight, gradient);
+
+        //ctx.lineWidth = 5;
+
+        //util.strokeBox(ctx, 300, 80, this.powWidth, this._.powHeight, "black")
+
     }
 
 

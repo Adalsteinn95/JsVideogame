@@ -77,7 +77,6 @@ var KEY_K = keyCode('K');
 var button = document.getElementById("weaponbutton");
 button.addEventListener("click", function() {
   var e = document.getElementById("weaponSelect");
-  console.log(e.selectedIndex);
   g_weapon = weapons[e.selectedIndex];
 
 
@@ -139,7 +138,7 @@ function requestPreloads() {
         cloud1  : "../cloudsimg/cloud1.PNG",
         cloud2  : "../cloudsimg/cloud2.PNG",
         cloud3  : "../cloudsimg/cloud3.PNG",
-        terrain : "http://i0.kym-cdn.com/entries/icons/mobile/000/013/564/doge.jpg",
+        //terrain : "http://i0.kym-cdn.com/entries/icons/mobile/000/013/564/doge.jpg",
         leftDoor : "../myndir/doorLeft.png",
         rightDoor : "../myndir/doorRight.png",
         tankgun : "../myndir/guns/green.png",
@@ -161,12 +160,12 @@ function preloadDone() {
     g_sprites.cloud1 = new Sprite(g_images.cloud1);
     g_sprites.cloud2 = new Sprite(g_images.cloud2);
     g_sprites.cloud3 = new Sprite(g_images.cloud3);
-    g_sprites.terrain = new Sprite(g_images.terrain);
+    //g_sprites.terrain = new Sprite(g_images.terrain);
     g_sprites.xplode = spriteUtil.decomposeSheet(100,100,10,10,74, g_images.explosion);
 
     console.log(g_images);
 
-    //entityManager.init();
+    entityManager.init();
     //gameplayManager.init();
     toolbar.init();
     //createInitialShips();

@@ -33,7 +33,7 @@ Cloud.prototype.randomisePosition = function () {
 Cloud.prototype.randomiseScale = function () {
   this.scale = util.randRange(.2,.4);
 
-}
+};
 
 Cloud.prototype.randomiseVelocity = function () {
     var MIN_SPEED = 20,

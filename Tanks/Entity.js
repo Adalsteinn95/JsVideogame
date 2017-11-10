@@ -56,8 +56,7 @@ Entity.prototype.getPos = function () {
 };
 
 Entity.prototype.getRadius = function () {
-    console.log("ping");
-    return 0;
+    //return 0.1;
 };
 
 Entity.prototype.getSpatialID = function () {

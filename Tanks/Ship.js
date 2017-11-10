@@ -165,6 +165,7 @@ Ship.prototype.applyAccel = function(accelX, accelY, du) {
   this.cy = g_landscape[xIndex];
   if (this.cy > 600) {
     this.cy = 600;
+    this.rotation = 0;
   }
 };
 
@@ -221,7 +222,7 @@ Ship.prototype.maybeFireBullet = function() {
 
     var volcanoMaster = this.weapon.name === "volcano";
 
-    console.log('THIS.WEAPON ', this.weapon )
+    //console.log('THIS.WEAPON ', this.weapon )
     if(this.weapon.name === "shower") {
       //console.log('CONDITION PASSED')
       for (var i = -this.weapon.showerAmount/2; i < this.weapon.showerAmount/2; i++) {
@@ -251,13 +252,16 @@ var NOMINAL_ROTATE_RATE = 0.01;
 
 Ship.prototype.updateRotation = function(du) {
 
-  //ATHUGA
+  if(this.cy < g_canvas.height){
+
+    //ATHUGA
   var xIndex1 = Math.floor(this.cx - 5);
   var xIndex2 = Math.floor(this.cx + 5);
   xIndex1 = util.clamp(xIndex1);
   xIndex2 = util.clamp(xIndex2);
 
   this.rotation = util.toDegrees(Math.atan2(g_landscape[xIndex2] - this.cy, (xIndex2 - this.cx) /** xLine*/));
+} else { this.rotation = 0}
 
 };
 
@@ -401,6 +405,13 @@ Ship.prototype.takeBulletHit = function() {
     //terrain.bombLandscape(this.cx, );
     this.health -= g_weapon.damage;
     console.log(this.health);
+};
+
+Ship.prototype.takeExplosionHit = function() {
+    console.log("exp")
+    //terrain.bombLandscape(this.cx, );
+    this.health -= g_weapon.damage / 3;
+
 };
 
 //ATHUGA

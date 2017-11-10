@@ -102,7 +102,10 @@ Ship.prototype.update = function(du) {
   }
 
   // Handle firing
-  this.maybeFireBullet();
+
+  if (this.playerId === "Human") {
+    this.maybeFireBullet();
+  }
 
   spatialManager.register(this);
 
@@ -208,7 +211,7 @@ Ship.prototype.falldown = function(thrust) {
 
 Ship.prototype.maybeFireBullet = function() {
 
-  if (keys[this.KEY_FIRE] && this.myTurn === true) {
+  if (keys[this.KEY_FIRE] && this.myTurn === true || this.myTurn === true && this.playerId === "AI") {
 
     this.myTurn = false;
 
@@ -331,12 +334,11 @@ Ship.prototype.calculatePath = function() {
   targetx %= entityManager._ships.length;
   targetx = entityManager._ships[targetx].cx
 
-
-
-
-  if (this.myTurn === true) {
-    if (Math.floor(destX) < targetx && targetx -20 < Math.floor(destX)) {} else {
-      if (Math.floor(destX) > targetx || targetx -20 > Math.floor(destX)) {
+  if (this.playerId === "AI") {
+    if (this.myTurn === true) {
+      if (Math.floor(destX) < targetx && targetx - 20 < Math.floor(destX)) {
+        this.maybeFireBullet();
+      } else {
         destX += startVel[0];
         destX = util.clamp(destX);
 
@@ -394,6 +396,7 @@ Ship.prototype.calculatePath = function() {
         }*/
 
       }
+
     }
   }
 

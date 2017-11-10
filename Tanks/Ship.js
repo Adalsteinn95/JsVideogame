@@ -291,6 +291,7 @@ Ship.prototype.updateGunRotation = function() {
   }
 };
 
+Ship.prototype.AIdirection = "right";
 Ship.prototype.calculatePath = function(){
   /*bullet trail prediction */
   this.predictCord = [];
@@ -326,20 +327,38 @@ Ship.prototype.calculatePath = function(){
 
   }
 
-/*
+
   //this.power = 5;
   var destX = util.clamp(testX);
   var fakePower = this.power;
 
-
+  if(this.myTurn === true){
   if(Math.floor(destX) === 400){
   } else {
     if (Math.floor(destX) > 400 || 380 > Math.floor(destX)) {
-        this.gunrotation += NOMINAL_ROTATE_RATE * 2;
-        this.spriteGunRotation += 1.15;
-        destX += startVelX;
+        destX += startVel[0];
         destX = util.clamp(destX);
 
+        console.log(Math.floor(util.toDegrees(this.gunrotation)));
+
+        if(Math.floor(util.toDegrees(this.gunrotation)) === 90){
+          this.AIdirection = "left";
+        }
+
+        if(Math.floor(util.toDegrees(this.gunrotation)) === -90){
+          this.AIdirection = "right";
+        }
+
+        if(this.AIdirection === "left"){
+          this.gunrotation -= NOMINAL_ROTATE_RATE * 2;
+        }
+
+        if(this.AIdirection === "right"){
+          this.gunrotation += NOMINAL_ROTATE_RATE * 2;
+        }
+
+
+/*
         while(fakePower > 0){
           fakePower -= this.POWER_INCREASE;
 
@@ -374,11 +393,11 @@ Ship.prototype.calculatePath = function(){
           if(fakePower > 10){
             break;
           }
-        }
+        }*/
 
-
+      }
     }
-  }*/
+  }
 
 
 }

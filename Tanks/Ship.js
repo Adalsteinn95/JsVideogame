@@ -294,6 +294,12 @@ Ship.prototype.updateGunRotation = function() {
 
 Ship.prototype.AIdirection = "right";
 Ship.prototype.calculatePath = function() {
+  if(this.playerId === 'AI'){
+    /*random power test for AI*/
+    var x = (Math.random() * 10);
+    this.power = x;
+
+  }
   /*bullet trail prediction */
   this.predictCord = [];
 
@@ -325,9 +331,8 @@ Ship.prototype.calculatePath = function() {
 
   }
 
-  //this.power = 5;
+
   var destX = util.clamp(testX);
-  var fakePower = this.power;
 
   var targetx = this.playerNr + 1;
 
@@ -336,12 +341,12 @@ Ship.prototype.calculatePath = function() {
 
   if (this.playerId === "AI") {
     if (this.myTurn === true) {
-      if (Math.floor(destX) < targetx && targetx - 20 < Math.floor(destX)) {
+      if (Math.floor(destX) < targetx && targetx - 10 < Math.floor(destX) || Math.floor(destX) < targetx && targetx + 10 < Math.floor(destX)) {
         this.maybeFireBullet();
       } else {
         destX += startVel[0];
         destX = util.clamp(destX);
-
+        /*Rotation of the AI*/
         if (Math.floor(util.toDegrees(this.gunrotation)) === 90) {
           this.AIdirection = "left";
         }
@@ -358,6 +363,10 @@ Ship.prototype.calculatePath = function() {
           this.gunrotation += NOMINAL_ROTATE_RATE * 2;
         }
 
+        /*movement of the AI */
+        var accel = Math.floor((Math.random() * -1) + 2);
+        this.cx += accel;
+        this.cx = util.clamp(this.cx);
         /*
         while(fakePower > 0){
           fakePower -= this.POWER_INCREASE;

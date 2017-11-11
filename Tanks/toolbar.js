@@ -19,15 +19,20 @@ var toolbar = {
         playerIndex : 0,
         humanOrAI : false,
 
-        previewBox : {
+        mapBox : {
             cx : 360,
             cy : 40,
-            width : g_canvas.width/5,
-            height : g_canvas.height/5
+            w : g_canvas.width/5,
+            h : g_canvas.height/5
         },
 
-        powWidth : 150,
-        powHeight : 30
+        powBox : {
+            cx : 300,
+            cy : 80,
+            w : 150,
+            h : 30
+        },
+
     },
 
     playerIdSetup : [],
@@ -120,22 +125,19 @@ var toolbar = {
     },
 
     renderMapPreview : function(ctx) {
+        var box = this._.mapBox;
 
-        var box = this._.previewBox;
+        util.drawTextAt(ctx, 50, 75, "Courier", "20px", "black", "Map preview:");
 
-        util.drawTextAt(ctx, 50, 75, "Courier", "20px", "black",
-                        "Map preview:");
-
-        util.fillBox(ctx, box.cx, box.cy, box.width, box.height, "#ADD8E6");
+        util.fillBox(ctx, box.cx, box.cy, box.w, box.h, "#ADD8E6");
 
         ctx.save();
         ctx.translate(box.cx, box.cy);
         ctx.scale(0.2, 0.2);
         terrain.render(ctx, g_landscape, g_canvas);
-
         ctx.restore();
 
-        util.strokeBox(ctx, box.cx, box.cy, box.width, box.height, "black");
+        util.strokeBox(ctx, box.cx, box.cy, box.w, box.h, "black");
 
         if (eatKey(this.KEY_REROLL)) {
             this.rerollMap();
@@ -146,12 +148,10 @@ var toolbar = {
             gameplayManager.init();
             gameplayManager.isDoorLocked = false;
         }
-
     },
 
     rerollMap : function() {
         var i =  util.randInt(0, util.fun.length);
-
         g_landscape = terrain.initlandScape(util.fun[i], bound, xShift, g_canvas);
     },
 
@@ -172,8 +172,7 @@ var toolbar = {
 
     renderWeapon : function(ctx) {
       //console.log(weapons);
-        util.drawTextAt(ctx, 50, 75, "Courier", "20px", "black",
-                        "Weapon: " + g_weapon.name);
+        util.drawTextAt(ctx, 50, 75, "Courier", "20px", "black", "Weapon: " + g_weapon.name);
 
         if (eatKey(this.KEY_PLUS)) {
             //next weapon
@@ -184,22 +183,21 @@ var toolbar = {
     },
 
     renderStats : function(ctx, tank) {
-        util.drawTextAt(ctx, 300, 75, "Courier", "25px", "black",
-                        "POWER");
-        util.fillBox(ctx, 300, 80, this._.powWidth, this._.powHeight, "#B0E0E6");
 
-        var gradient = ctx.createLinearGradient(300,80,300+this._.powWidth,80);
+        var box = this._.powBox;
+        util.drawTextAt(ctx, box.cx, box.cy-5, "Courier", "25px", "black", "POWER");
+        util.fillBox(ctx, box.cx, box.cy, box.w, box.h, "#B0E0E6");
+
+        var gradient = ctx.createLinearGradient(box.cx,box.cy,box.cx+box.w,box.h);
         gradient.addColorStop(0,"#7CFC00");
         gradient.addColorStop(0.5, "#FFD700");
         gradient.addColorStop(1, "#FF3030");
 
-        var x = (tank.power / 5) * this._.powWidth;
+        var x = (tank.power / 10) * box.w;
 
-        util.fillBox(ctx, 300, 80, x, this._.powHeight, gradient);
+        util.fillBox(ctx, box.cx, box.cy, x, box.h, gradient);
 
-        //ctx.lineWidth = 5;
-
-        //util.strokeBox(ctx, 300, 80, this.powWidth, this._.powHeight, "black")
+        util.strokeBox(ctx, box.cx, box.cy, box.w, box.h, "black")
 
     }
 

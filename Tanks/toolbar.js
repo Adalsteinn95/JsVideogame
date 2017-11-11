@@ -161,6 +161,8 @@ var toolbar = {
         "Turn " + gameplayManager._.turn +
         ": player " + parseInt(gameplayManager.activePlayerIndex+1));
         this.renderWeapon(ctx);
+        util.drawTextAt(ctx,50, 100, "Courier", "20px", "black",
+        "Wind " + g_wind + " " + (g_wind < 0 ? "to the left" : "to the right"));
     },
 
     renderWeapon : function(ctx) {

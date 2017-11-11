@@ -27,6 +27,7 @@ var gameplayManager = {
         this.loadPlayers();
         this.setupReady = true;
         entityManager._ships[0].myTurn = true;
+        entityManager._generateClouds();
     },
 
     setup : function() {
@@ -96,6 +97,7 @@ var gameplayManager = {
         entityManager._ships[this.clamp(this.activePlayerIndex+1)].myTurn = true;
         this.activePlayerIndex++;
         this.activePlayerIndex %= this.players.length;
+        g_wind = util.randRange(-0.1,0.1);
 
       },
 

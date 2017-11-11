@@ -63,7 +63,9 @@ Bullet.prototype.update = function (du) {
 
     this.cx += this.velX;
     this.cy += this.velY;
+    this.velX += g_wind;
     this.velY += NOMINAL_GRAVITY;
+
 
 
     this.rotation += 1 * du;

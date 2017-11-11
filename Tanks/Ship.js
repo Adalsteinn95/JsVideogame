@@ -312,10 +312,11 @@ Ship.prototype.calculatePath = function() {
   var testX = this.cx - this.offsetX + dX * launchDist;
   var testY = this.cy - this.offsetY + dY * launchDist;
   var veltestY = startVel[1];
+  var veltestX = startVel[0]
 
   while (testX < g_canvas.width || testX > g_canvas.width) {
 
-    testX += startVel[0];
+    testX += veltestX;
     testY += veltestY;
 
     testX = util.clamp(testX);
@@ -328,6 +329,7 @@ Ship.prototype.calculatePath = function() {
     this.predictCord.push({testX, testY});
 
     veltestY += NOMINAL_GRAVITY;
+    veltestX += g_wind;
 
   }
 

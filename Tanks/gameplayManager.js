@@ -26,6 +26,7 @@ var gameplayManager = {
     init : function() {
         this.loadPlayers();
         this.setupReady = true;
+        entityManager._generateClouds();
         entityManager._ships[0].myTurn = true;
     },
 

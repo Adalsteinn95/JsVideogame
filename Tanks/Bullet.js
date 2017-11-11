@@ -76,7 +76,6 @@ Bullet.prototype.update = function (du) {
     var hitEntity = this.findHitEntity();
     if (hitEntity) {
         var canTakeHit = hitEntity.takeBulletHit;
-        console.log("this " + canTakeHit)
         if (canTakeHit) canTakeHit.call(hitEntity);
         terrain.bombLandscape(this.cx, g_weapon.damage/2, true);
         this.checkForVolcano();

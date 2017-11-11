@@ -33,6 +33,14 @@ var toolbar = {
             h : 30
         },
 
+        rotBox : {
+            tx : 500,
+            ty : 75,
+            r : 50,
+            cx : 555,
+            cy : 140
+        }
+
     },
 
     playerIdSetup : [],
@@ -167,7 +175,8 @@ var toolbar = {
         "Turn " + gameplayManager._.turn +
         ": player " + parseInt(tank.playerNr+1));
         this.renderWeapon(ctx);
-        this.renderStats(ctx, tank);
+        this.renderPower(ctx, tank);
+        this.renderRotation(ctx, tank);
     },
 
     renderWeapon : function(ctx) {
@@ -182,7 +191,7 @@ var toolbar = {
         }
     },
 
-    renderStats : function(ctx, tank) {
+    renderPower : function(ctx, tank) {
 
         var box = this._.powBox;
         util.drawTextAt(ctx, box.cx, box.cy-5, "Courier", "25px", "black", "POWER");
@@ -194,11 +203,41 @@ var toolbar = {
         gradient.addColorStop(1, "#FF3030");
 
         var x = (tank.power / 10) * box.w;
-
         util.fillBox(ctx, box.cx, box.cy, x, box.h, gradient);
-
+        ctx.lineWidth = 2;
         util.strokeBox(ctx, box.cx, box.cy, box.w, box.h, "black")
+    },
 
+    renderRotation : function(ctx, tank) {
+        ctx.save();
+        var box = this._.rotBox;
+        util.drawTextAt(ctx, box.tx, box.ty, "Courier", "25px", "black", "Rotation");
+
+        ctx.fillStyle = "#FFF";
+        util.fillCircle(ctx, box.cx, box.cy, box.r, Math.PI, 0);
+
+        //draw arrow
+        ctx.save();
+        ctx.strokeStyle = "#F00";
+        ctx.lineWidth = 3;
+        ctx.translate(box.cx, box.cy);
+        ctx.rotate(tank.gunrotation);
+        ctx.translate(-box.cx, -box.cy);
+        ctx.beginPath();
+        ctx.moveTo(box.cx,box.cy);
+        ctx.lineTo(box.cx, box.cy - box.r);
+        ctx.stroke();
+        ctx.closePath();
+        ctx.rotate(-tank.gunrotation);
+        ctx.restore();
+
+        ctx.strokeStyle = "#000";
+        ctx.lineWidth = 2;
+        util.strokeCircle(ctx, box.cx, box.cy, box.r, Math.PI, 0);
+        ctx.fillStyle = "#000";
+        util.fillCircle(ctx, box.cx, box.cy, box.r/5, Math.PI,0);
+
+        ctx.restore();
     }
 
 

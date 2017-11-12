@@ -77,6 +77,11 @@ wrappedDistSq: function(x1, y1, x2, y2, xWrap, yWrap) {
     return this.square(dx) + this.square(dy);
 },
 
+distCircles: function(x1,y1,x2,y2,r1,r2){
+  var dist = this.distFromExplosion(x1,y1,x2,y2);
+    return dist - (r1+r2);
+},
+
 
 // CANVAS OPS
 // ==========
@@ -129,9 +134,7 @@ drawTextAt : function(ctx, x, y, font, size, style, msg) {
 
     var angle1 = Math.atan2((line1[1] - line1[3]),(line1[0] - line1[2]));
     var angle2 = Math.atan2((line2[1] - line2[3]),(line2[0] - line2[2]));
-    //console.log(angle1-angle2);
     return angle1-angle2;
-    //return 2;
 },
 
  toDegrees: function (angle) {
@@ -167,7 +170,7 @@ sinAcos: function(ratio, radius) {
 
   //draws the predicted shot path
   projectilePath: function (predictCord){
-  
+
     ctx.beginPath();
     for (var i = 0; i < predictCord.length - 1; i++) {
       ctx.strokeStyle = '#ff0000';
@@ -181,6 +184,17 @@ sinAcos: function(ratio, radius) {
 
     ctx.stroke();
     ctx.closePath();
+  },
+
+
+  //=====================
+  // damage
+  //=====================
+  //calculates the distance from the center of a circle
+  distFromExplosion: function( x1, y1, x2, y2 ){
+    var dist = this.distSq(x1,y1,x2,y2);
+    return Math.sqrt(dist);
+
   }
 
 

@@ -69,6 +69,8 @@ Ship.prototype.offsetY = 0;
 
 //hitpoints
 Ship.prototype.health = 100;
+//becomes true when hit, so the explosion doenst hit multiple times
+Ship.prototype.isHit = false;
 
 
 Ship.prototype.update = function(du) {
@@ -143,15 +145,15 @@ Ship.prototype.computeThrustMag = function() {
 
   var thrust = 0;
   if(this.myTurn === true ){
-  if (keys[this.KEY_THRUST] && this.rotation > -85 && this.cx + this.sprite.width/2 < g_canvas.width){
-    thrust += NOMINAL_THRUST;
-    this.dir = true;
+    if (keys[this.KEY_THRUST] && this.rotation > -85 && this.cx + this.sprite.width/2 < g_canvas.width){
+      thrust += NOMINAL_THRUST;
+      this.dir = true;
+    }
+    if (keys[this.KEY_RETRO] && this.rotation < 85 && this.cx - this.sprite.width/2 +10 > 0){
+      thrust += NOMINAL_RETRO;
+      this.dir = false;
+    }
   }
-  if (keys[this.KEY_RETRO] && this.rotation < 85 && this.cx - this.sprite.width/2 +10 > 0){
-    thrust += NOMINAL_RETRO;
-    this.dir = false;
-  }
-}
 
   return thrust;
 };
@@ -407,10 +409,22 @@ Ship.prototype.takeBulletHit = function() {
     console.log(this.health);
 };
 
-Ship.prototype.takeExplosionHit = function() {
-    console.log("exp")
-    //terrain.bombLandscape(this.cx, );
-    this.health -= g_weapon.damage / 3;
+Ship.prototype.takeExplosionHit = function(bombX, bombY) {
+  if(!this.isHit){
+      console.log("exp")
+      //terrain.bombLandscape(this.cx, );
+      //console.log(bombX);
+      //console.log(bombY);
+      //console.log(this.cx);
+      //console.log(this.cy);
+      var test = util.distCircles(this.cx, this.cy , bombX, bombY, this.getRadius(), 50)
+      console.log(test);
+      var range = util.distFromExplosion(this.cx, this.cy , bombX, bombY);
+      console.log("fjarlægð frá sprengju " + range);
+      this.health -= g_weapon.damage / range;
+      console.log("lífið " + this.health);
+      this.isHit = true;
+    }
 
 };
 

@@ -216,7 +216,10 @@ var toolbar = {
         ctx.fillStyle = "#FFF";
         util.fillCircle(ctx, box.cx, box.cy, box.r, Math.PI, 0);
 
-        //draw arrow
+        var rotText = (Math.abs(util.toDegrees(tank.gunrotation) - 90).toFixed(2) + "°");
+        ctx.textAlign = "center";
+        util.drawTextAt(ctx, box.cx, box.cy-20, "Courier", "14px", "black", rotText);
+
         ctx.save();
         ctx.strokeStyle = "#F00";
         ctx.lineWidth = 3;
@@ -236,6 +239,12 @@ var toolbar = {
         util.strokeCircle(ctx, box.cx, box.cy, box.r, Math.PI, 0);
         ctx.fillStyle = "#000";
         util.fillCircle(ctx, box.cx, box.cy, box.r/5, Math.PI,0);
+
+        ctx.beginPath();
+        ctx.moveTo(box.cx - box.r, box.cy+1);
+        ctx.lineTo(box.cx + box.r, box.cy+1);
+        ctx.stroke();
+        ctx.closePath();
 
         ctx.restore();
     }

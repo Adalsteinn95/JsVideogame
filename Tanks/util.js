@@ -62,7 +62,15 @@ square: function(x) {
 // =========
 
 distSq: function(x1, y1, x2, y2) {
-    return this.square(x2-x1) + this.square(y2-y1);
+    var x = 0, y = 0;
+    if(x1 < x2){
+      x = x2 - x1;
+    }else{ x = x1 - x2}
+
+    if(y1 < y2){
+      y = y2 - y1;
+    }else{ y = y1 - y2}
+    return this.square(x) + this.square(y);
 },
 
 wrappedDistSq: function(x1, y1, x2, y2, xWrap, yWrap) {

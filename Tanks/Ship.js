@@ -228,7 +228,7 @@ Ship.prototype.maybeFireBullet = function() {
     if(this.weapon.name === "shower") {
       //console.log('CONDITION PASSED')
       for (var i = -this.weapon.showerAmount/2; i < this.weapon.showerAmount/2; i++) {
-        entityManager.fireBullet((this.cx + dX * launchDist) - this.offsetX, (this.cy + dY * launchDist) - this.offsetY, startVel[0], startVel[1], this.spriteGunRotation,true,i,false);
+        entityManager.fireBullet((this.cx + dX * launchDist) - this.offsetX, (this.cy + dY * launchDist) - this.offsetY + 100, startVel[0], startVel[1], this.spriteGunRotation,true,i,false);
       }
     }
     else{
@@ -406,7 +406,7 @@ Ship.prototype.takeBulletHit = function() {
     console.log("áái")
     //terrain.bombLandscape(this.cx, );
     this.health -= g_weapon.damage;
-    console.log(this.health);
+    //console.log(this.health);
 };
 
 Ship.prototype.takeExplosionHit = function(bombX, bombY) {
@@ -419,9 +419,11 @@ Ship.prototype.takeExplosionHit = function(bombX, bombY) {
       //console.log(this.cy);
       var test = util.distCircles(this.cx, this.cy , bombX, bombY, this.getRadius(), 50)
       console.log(test);
-      var range = util.distFromExplosion(this.cx, this.cy , bombX, bombY);
+      var range = Math.abs(util.distFromExplosion(this.cx, this.cy , bombX, bombY));
       console.log("fjarlægð frá sprengju " + range);
-      this.health -= g_weapon.damage / range;
+      //this.health -= (g_weapon.damage - range);
+
+      this.health += test;
       console.log("lífið " + this.health);
       this.isHit = true;
     }

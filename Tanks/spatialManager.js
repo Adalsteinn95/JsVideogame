@@ -73,9 +73,7 @@ unregisterBullet: function(entity) {
 
 findEntityInRange: function(posX, posY, radius) {
 
-    // TODO: YOUR STUFF HERE!
     var c1 = {xPos : posX , yPos : posY , radius : radius};
-    console.log(this._entities);
     for(var i = 1; i<this._entities.length; i++){
       //collison check
       var thing = spatialManager._entities[i];
@@ -96,11 +94,28 @@ findEntityInRange: function(posX, posY, radius) {
 
 //detects collision between 2 circles
 //c1 and c2 must contain x and y coordinates and radius
- collisioncheck: function(c1, c2){
+/* collisioncheck: function(c1, c2){
    var distance = util.wrappedDistSq(c1.xPos, c1.yPos, c2.xPos,c2.yPos, g_canvas.width, g_canvas.height);
    var limit = c1.radius + c2.radius;
    limit = util.square(limit);
    if(distance < limit){
+     return true;
+   } else {return false;}
+
+},*/
+
+//detects collision between 2 circles
+//c1 and c2 must contain x and y coordinates and radius
+ collisioncheck: function(c1, c2){
+   //console.log("c1   " + c1);
+   //console.log("c2    " + c2);
+   var distance = util.distFromExplosion(c1.xPos, c1.yPos, c2.xPos,c2.yPos);
+   //console.log("dist     " + distance);
+   var limit = c1.radius + c2.radius;
+
+   //limit = util.square(limit);
+     //console.log("æimit   " + limit)
+   if(distance <= limit){
      return true;
    } else {return false;}
 

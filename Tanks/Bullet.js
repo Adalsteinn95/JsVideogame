@@ -74,8 +74,9 @@ Bullet.prototype.update = function (du) {
 
     // Handle collisions
     var hitEntity = this.findHitEntity();
-    console.log(hitEntity);
+    //console.log(hitEntity);
     if (hitEntity) {
+        console.log("ping1")
         var canTakeHit = hitEntity.takeBulletHit();
         if (canTakeHit) canTakeHit.call(hitEntity);
         terrain.bombLandscape(this.cx, g_weapon.damage/2, true);
@@ -93,6 +94,8 @@ Bullet.prototype.update = function (du) {
 
 Bullet.prototype.terrainHit = function(x, y){
     var xIndex = util.clamp(Math.floor(x));
+  //  console.log(x)
+  //  console.log(y);
     if(g_landscape[xIndex] < y){
 
         this.checkForVolcano();
@@ -118,9 +121,9 @@ Bullet.prototype.findExplosionHitEntity = function() {
 
   //get explosion parameters, mainly radius!!
   var pos = this.getPos();
-  console.log(pos.posX + " " + pos.posY + " " + g_weapon.damage + " " + this);
+  //console.log(pos.posX + " " + pos.posY + " " + g_weapon.damage + " " + this);
   return spatialManager.findEntityInRange(
-      pos.posX, pos.posY, g_weapon,this
+      pos.posX, pos.posY, g_weapon.damage
   );
 }
 

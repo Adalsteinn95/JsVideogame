@@ -24,6 +24,7 @@ function handleMouse(evt) {
     if (!button) return;
 
     //entityManager.yoinkNearestShip(g_mouseX, g_mouseY);
+    console.log( "X " + g_mouseX + " Y " + g_mouseY);
 }
 
 // Handle "down" and "move" events the same way.

@@ -69,6 +69,8 @@ Ship.prototype.offsetY = 0;
 
 //hitpoints
 Ship.prototype.health = 100;
+//becomes true when hit, so the explosion doenst hit multiple times
+Ship.prototype.isHit = false;
 
 Ship.prototype.update = function(du) {
   //update weapon if it has been changed ÞARF AÐ BREYTA
@@ -143,6 +145,7 @@ Ship.prototype.computeThrustMag = function() {
   //console.log(this.cx - this.sprite.width/2 +10);
 
   var thrust = 0;
+
   if (this.myTurn === true) {
     if (keys[this.KEY_THRUST] && this.rotation > -85 && this.cx + this.sprite.width / 2 < g_canvas.width) {
       thrust += NOMINAL_THRUST;
@@ -166,6 +169,7 @@ Ship.prototype.applyAccel = function(accelX, accelY, du) {
   this.cy = g_landscape[xIndex];
   if (this.cy > 600) {
     this.cy = 600;
+    this.rotation = 0;
   }
 };
 
@@ -224,10 +228,12 @@ Ship.prototype.maybeFireBullet = function() {
     var volcanoMaster = this.weapon.name === "volcano";
 
     //console.log('THIS.WEAPON ', this.weapon )
-    if (this.weapon === weapons.shower) {
+
+    if(this.weapon.name === "shower") {
       //console.log('CONDITION PASSED')
-      for (var i = -this.weapon.showerAmount / 2; i < this.weapon.showerAmount / 2; i++) {
-        entityManager.fireBullet((this.cx + dX * launchDist) - this.offsetX, (this.cy + dY * launchDist) - this.offsetY, startVel[0], startVel[1], this.spriteGunRotation, true, i, false);
+      for (var i = -this.weapon.showerAmount/2; i < this.weapon.showerAmount/2; i++) {
+        entityManager.fireBullet((this.cx + dX * launchDist) - this.offsetX, (this.cy + dY * launchDist) - this.offsetY + 100, startVel[0], startVel[1], this.spriteGunRotation,true,i,false);
+
       }
     } else {
       entityManager.fireBullet((this.cx + dX * launchDist) - this.offsetX, (this.cy + dY * launchDist) - this.offsetY, startVel[0], startVel[1], this.spriteGunRotation, false, 0, volcanoMaster);
@@ -252,13 +258,18 @@ var NOMINAL_ROTATE_RATE = 0.01;
 
 Ship.prototype.updateRotation = function(du) {
 
-  //ATHUGA
+  if(this.cy < g_canvas.height){
+
+    //ATHUGA
   var xIndex1 = Math.floor(this.cx - 5);
   var xIndex2 = Math.floor(this.cx + 5);
   xIndex1 = util.clamp(xIndex1);
   xIndex2 = util.clamp(xIndex2);
 
-  this.rotation = util.toDegrees(Math.atan2(g_landscape[xIndex2] - this.cy, (xIndex2 - this.cx)/** xLine*/));
+
+  this.rotation = util.toDegrees(Math.atan2(g_landscape[xIndex2] - this.cy, (xIndex2 - this.cx) /** xLine*/));
+} else { this.rotation = 0}
+
 
 };
 
@@ -427,10 +438,33 @@ Ship.prototype.updatePower = function(du) {
 };
 
 Ship.prototype.takeBulletHit = function() {
-  console.log("áái")
-  //terrain.bombLandscape(this.cx, );
-  this.health -= g_weapon.damage;
-  console.log(this.health);
+
+    console.log("áái")
+    //terrain.bombLandscape(this.cx, );
+    this.health -= g_weapon.damage;
+    //console.log(this.health);
+};
+
+Ship.prototype.takeExplosionHit = function(bombX, bombY) {
+  if(!this.isHit){
+      console.log("exp")
+      //terrain.bombLandscape(this.cx, );
+      //console.log(bombX);
+      //console.log(bombY);
+      //console.log(this.cx);
+      //console.log(this.cy);
+      var test = util.distCircles(this.cx, this.cy , bombX, bombY, this.getRadius(), 50)
+      console.log(test);
+      var range = Math.abs(util.distFromExplosion(this.cx, this.cy , bombX, bombY));
+      console.log("fjarlægð frá sprengju " + range);
+      //this.health -= (g_weapon.damage - range);
+
+      this.health += test;
+      console.log("lífið " + this.health);
+      this.isHit = true;
+    }
+
+
 };
 
 //ATHUGA

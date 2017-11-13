@@ -32,7 +32,7 @@ Cloud.prototype.randomisePosition = function () {
 Cloud.prototype.randomiseScale = function () {
   this.scale = util.randRange(.2,.4);
 
-}
+};
 
 
 

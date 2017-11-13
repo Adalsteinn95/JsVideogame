@@ -3,7 +3,9 @@
 function Explosion(descr) {
     this.setup(descr);
 
-    this.sprite = g_sprites.xplode;
+
+      this.sprite = g_sprites.xplode;
+
     this.index = 0;
 }
 
@@ -11,9 +13,10 @@ Explosion.prototype = new Entity();
 
 Explosion.prototype.render = function(ctx) {
     var cell = this.sprite[this.index];
-
+    console.log(cell);
     cell.drawClippedCentredAt(
-        ctx, this.cx, this.cy, this.rotation, this.radius, this.radius);
+        ctx, this.cx + 500, this.cy + 500, this.rotation, this.radius, this.radius);
+        console.log("ping");
 }
 
 Explosion.prototype.update = function(du) {

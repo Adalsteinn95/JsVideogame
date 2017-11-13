@@ -135,7 +135,7 @@ function renderSimulation(ctx) {
 var g_images = {};
 
 function requestPreloads() {
-
+    console.log("1");
     var requiredImages = {
         ship   : "../myndir/tanks/green.png",
         cloud1  : "../cloudsimg/cloud1.PNG",
@@ -145,7 +145,9 @@ function requestPreloads() {
         leftDoor : "../myndir/doorLeft.png",
         rightDoor : "../myndir/doorRight.png",
         tankgun : "../myndir/guns/green.png",
-        explosion : "../myndir/explosives/explosionsheet.png"
+        explosion : "../myndir/explosives/explosionsheet.png",
+        tankDeath : "../myndir/tankexplode/tankexplodesheet.png"
+
     };
 
     imagesPreload(requiredImages, g_images, preloadDone);
@@ -154,7 +156,7 @@ function requestPreloads() {
 var g_sprites = {};
 
 function preloadDone() {
-
+    console.log(2);
     g_sprites.ship  = new Sprite(g_images.ship);
     g_sprites.tankgun = new Sprite(g_images.tankgun);
 
@@ -165,6 +167,8 @@ function preloadDone() {
     g_sprites.cloud3 = new Sprite(g_images.cloud3);
 
     g_sprites.xplode = spriteUtil.decomposeSheet(100,100,10,10,74, g_images.explosion);
+    g_sprites.tankDeath = spriteUtil.decomposeSheet(82,40,6,2,11, g_images.tankDeath);
+    console.log(g_sprites.tankDeath);
 
     console.log(g_images);
 

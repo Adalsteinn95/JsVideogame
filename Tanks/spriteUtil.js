@@ -16,5 +16,32 @@ var spriteUtil = {
             }
         }
         return arr;
-    }
+    },
+
+    pushImgUrl : function(url, length) {
+        var arr = [];
+        var sprite;
+
+        for (var i = 1; i < length + 1; ++i) {
+            var img = url + "expl" + i + ".png";
+            sprite = new Sprite(img)
+            arr.push(sprite);
+        }
+
+        return arr;
+    },
+
+    pushImg : function(imgs) {
+        var arr = [];
+        var sprite;
+
+        for (var i = 0; i < imgs.length ; ++i) {
+
+            sprite = new Sprite(imgs[i])
+            console.log(sprite);
+            arr.push(sprite);
+        }
+
+        return arr;
+    },
 }

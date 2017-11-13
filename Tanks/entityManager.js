@@ -148,6 +148,9 @@ update: function(du) {
         var i = 0;
 
         while (i < aCategory.length) {
+          //console.log(aCategory[i]);
+
+
 
             var status = aCategory[i].update(du);
 
@@ -155,6 +158,11 @@ update: function(du) {
             if (status === this.KILL_ME_NOW) {
                 // remove the dead guy, and shuffle the others down to
                 // prevent a confusing gap from appearing in the array
+                if(aCategory === this._ships){
+                  //death animation og splicea tank
+                  console.log("ping");
+
+                }
                 aCategory.splice(i,1);
                 //console.log(this._categories);
                 //console.log(this._ships);

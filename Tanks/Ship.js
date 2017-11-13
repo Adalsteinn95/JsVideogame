@@ -68,7 +68,7 @@ Ship.prototype.offsetX = 0;
 Ship.prototype.offsetY = 0;
 
 //hitpoints
-Ship.prototype.health = 100;
+Ship.prototype.health = 1;
 //becomes true when hit, so the explosion doenst hit multiple times
 Ship.prototype.isHit = false;
 
@@ -441,6 +441,7 @@ Ship.prototype.takeBulletHit = function() {
     console.log("áái")
     //terrain.bombLandscape(this.cx, );
     this.health -= g_weapon.damage;
+    this.checkForDeath();
     //console.log(this.health);
 };
 
@@ -461,6 +462,29 @@ Ship.prototype.takeExplosionHit = function(bombX, bombY) {
       this.health += test;
       console.log("lífið " + this.health);
       this.isHit = true;
+      this.checkForDeath();
+    }
+
+
+};
+
+Ship.prototype.checkForDeath = function() {
+
+    if (this.health <= 0){
+      /*entityManager._explosions.push(new Death({
+              cx : this.cx,
+              cy : this.cy,
+              radius : this.getRadius(),
+              rotation : this.rotation
+          }) );*/
+          entityManager._ships[1] = new Death({
+                  cx : this.cx,
+                  cy : this.cy,
+                  radius : this.getRadius(),
+                  rotation : this.rotation
+              });
+
+      this._isDeadNow === true;
     }
 
 

@@ -17,7 +17,7 @@ var toolbar = {
         maxPlayers : 4,
         minPlayers : 2,
         playerIndex : 0,
-        humanOrAI : false,
+        humanOrAI : true,
 
         mapBox : {
             cx : 360,

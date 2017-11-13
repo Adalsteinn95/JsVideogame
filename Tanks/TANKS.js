@@ -57,8 +57,11 @@ var g_allowMixedActions = true;
 var g_useGravity = false;
 var g_useAveVel = true;
 var g_weapon = weapons[0];
+var g_wind = util.randRange(-0.1,0.1)
 
 var g_renderSpatialDebug = true;
+
+
 
 var KEY_MIXED   = keyCode('M');;
 var KEY_GRAVITY = keyCode('G');

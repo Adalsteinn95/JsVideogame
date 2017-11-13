@@ -9,13 +9,13 @@ function Death(descr) {
 
 }
 
-var delay = 2
+var delay = 50
 Death.prototype = new Entity();
 
 Death.prototype.render = function(ctx) {
-    console.log(this.sprite);
+  //  console.log(this.sprite);
     var cell = this.sprite[this.index];
-    console.log(cell);
+  //  console.log(cell);
     cell.drawClippedCentredAt(
         ctx, this.cx, this.cy, this.rotation, this.radius, this.radius);
 }
@@ -28,7 +28,7 @@ Death.prototype.update = function(du) {
 
     this.delay++;
 
-    if (++this.index >= this.sprite.length) {
+    if (this.index >= this.sprite.length) {
         return entityManager.KILL_ME_NOW;
     }
 

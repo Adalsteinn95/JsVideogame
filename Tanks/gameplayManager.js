@@ -94,10 +94,23 @@ var gameplayManager = {
         this._.turn++;
         this.resetIsHit();
 
+        console.log("1 " +this.activePlayerIndex);
+
+        //if(this.checkIfAlive()){
+        console.log(entityManager._ships);
+        if(entityManager._ships[this.clamp(this.activePlayerIndex+1)]._isDeadNow){
+          ++this.activePlayerIndex;
+        }
+
+        console.log("2 " +this.activePlayerIndex);
+
         entityManager._ships[this.clamp(this.activePlayerIndex+1)].myTurn = true;
         this.activePlayerIndex++;
         this.activePlayerIndex %= this.players.length;
         g_wind = util.randRange(-0.1,0.1);
+
+        console.log("3 " +this.activePlayerIndex);
+      //}
 
       },
 
@@ -106,6 +119,24 @@ var gameplayManager = {
           entityManager._ships[i].isHit = false;
         }
       },
+
+      /*checkIfAlive: function (){
+        var cnt = this.players.length;
+        var i = this.activePlayerIndex;
+        console.log("hér " + entityManager._ships);
+        while(entityManager._ships[i]){
+          i++;
+          cnt--;
+          if(cnt === 0){
+            //allir nema einn dauður
+            return false;
+          }
+        }
+
+        this.activePlayerIndex = i;
+        return true;
+
+      },*/
 
       updateWeapon: function(){
 

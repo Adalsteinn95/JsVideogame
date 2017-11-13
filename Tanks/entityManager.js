@@ -158,15 +158,16 @@ update: function(du) {
             if (status === this.KILL_ME_NOW) {
                 // remove the dead guy, and shuffle the others down to
                 // prevent a confusing gap from appearing in the array
-                if(aCategory === this._ships){
-                  //death animation og splicea tank
-                  console.log("ping");
+                if(aCategory !== this._ships){
+                  //we need the tank in the entitymanager despite death
+                  aCategory.splice(i,1);
+                  gameplayManager.nextTurn();
 
                 }
-                aCategory.splice(i,1);
+              //  aCategory.splice(i,1);
                 //console.log(this._categories);
                 //console.log(this._ships);
-                if(this._bullets.length < 1 && this._explosions.length <  1){
+                else if(this._bullets.length < 1 && this._explosions.length <  1){
                   gameplayManager.nextTurn();
                 }
             }

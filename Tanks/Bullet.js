@@ -104,9 +104,7 @@ Bullet.prototype.terrainHit = function(x, y){
 
         //check if the radius of the explosion hits a tank
         var hitEntity = this.findExplosionHitEntity();
-        console.log(hitEntity);
         if (hitEntity) {
-            console.log("ping");
             var canTakeHit = hitEntity.takeExplosionHit(this.cx, this.cy);
             if (canTakeHit) canTakeHit.call(hitEntity);
         };

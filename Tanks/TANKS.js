@@ -168,9 +168,9 @@ function preloadDone() {
 
     g_sprites.xplode = spriteUtil.decomposeSheet(100,100,10,10,74, g_images.explosion);
     g_sprites.tankDeath = spriteUtil.decomposeSheet(82,40,6,2,11, g_images.tankDeath);
-    console.log(g_sprites.tankDeath);
+    //7/console.log(g_sprites.tankDeath);
 
-    console.log(g_images);
+//    console.log(g_images);
 
     entityManager.init();
     //gameplayManager.init();

@@ -73,15 +73,18 @@ Ship.prototype.health = 1;
 Ship.prototype.isHit = false;
 
 Ship.prototype.update = function(du) {
+
+
+  if (this._isDeadNow === true) {
+    console.log("pingdeath");
+    spatialManager.unregister(this);
+    return entityManager.KILL_ME_NOW;
+  }
+
   //update weapon if it has been changed ÞARF AÐ BREYTA
   if (this.weapon !== g_weapon) {
     this.updateWeapon();
   };
-
-  if (this._isDeadNow === true) {
-    spatialManager.unregister(this);
-    return entityManager.KILL_ME_NOW;
-  }
 
   this.updatePower(du);
 
@@ -471,20 +474,21 @@ Ship.prototype.takeExplosionHit = function(bombX, bombY) {
 Ship.prototype.checkForDeath = function() {
 
     if (this.health <= 0){
-      /*entityManager._explosions.push(new Death({
+      entityManager._explosions.push(new Death({
               cx : this.cx,
               cy : this.cy,
               radius : this.getRadius(),
               rotation : this.rotation
-          }) );*/
-          entityManager._ships[1] = new Death({
+          }) );
+        /*  entityManager._ships[1] = new Death({
                   cx : this.cx,
                   cy : this.cy,
                   radius : this.getRadius(),
                   rotation : this.rotation
-              });
+              });*/
+              //this.sprite = g_sprites.cloud1;
 
-      this._isDeadNow === true;
+      this._isDeadNow = true;
     }
 
 

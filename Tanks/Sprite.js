@@ -57,8 +57,6 @@ Sprite.prototype.drawClippedCentredAt = function (
 
     if (rotation === undefined) rotation = 0;
 
-    console.log(w + "  " + h)
-
     ctx.save();
     ctx.translate(-w, -h);
 

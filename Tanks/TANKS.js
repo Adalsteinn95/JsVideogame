@@ -145,7 +145,8 @@ function requestPreloads() {
         leftDoor : "../myndir/doorLeft.png",
         rightDoor : "../myndir/doorRight.png",
         tankgun : "../myndir/guns/green.png",
-        explosion : "../myndir/explosives/explosionsheet.png"
+        explosion : "../myndir/explosives/explosionsheet.png",
+        atom : "../myndir/explosives/atomsheet.png"
     };
 
     imagesPreload(requiredImages, g_images, preloadDone);
@@ -165,6 +166,7 @@ function preloadDone() {
     g_sprites.cloud3 = new Sprite(g_images.cloud3);
 
     g_sprites.xplode = spriteUtil.decomposeSheet(100,100,10,10,74, g_images.explosion);
+    g_sprites.atom = spriteUtil.decomposeSheet(96, 96, 5, 3, 14, g_images.atom);
 
     console.log(g_images);
 

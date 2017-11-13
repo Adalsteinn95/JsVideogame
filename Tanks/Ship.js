@@ -354,17 +354,22 @@ Ship.prototype.calculatePath = function() {
 
   if (this.playerId === "AI") {
     if (this.myTurn === true) {
-      if (Math.floor(destX) < targetx && targetx - 10 < Math.floor(destX) || Math.floor(destX) < targetx && targetx + 10 < Math.floor(destX)) {
+      if (Math.floor(destX) < targetx && targetx - 20 < Math.floor(destX) || Math.floor(destX) < targetx && targetx + 20 < Math.floor(destX)) {
         //&& targetx - this.cx > 50 || this.cx - targetx > 50
         //console.log(targetx);
         //console.log(this.cx);
+        console.log(Math.abs(targetx - this.cx));
+        if(Math.abs(targetx - this.cx) < 50){
+          console.log("dont shoot")
+        } else {
+          this.AIpath = 0;
+          this.maybeFireBullet();
+        }
 
-        this.AIpath = 0;
-        this.maybeFireBullet();
       } else {
         destX += startVel[0];
         destX = util.clamp(destX);
-        /*Rotation of the AI*/
+        /*Rotation of the AI gun*/
         if (Math.floor(util.toDegrees(this.gunrotation)) === 90) {
           this.AIdirection = "left";
         }
@@ -385,14 +390,14 @@ Ship.prototype.calculatePath = function() {
         if(this.AIpath === 0){
           /*generate 1 from 50*/
           //var num = Math.floor(Math.random()*100) + 1;
-          var num = 0;
-          if(targetx > this.cx){
-            num = -200;
+          var num = 100;
+          /*if(targetx > this.cx){
+            num = -100;
           } else {
-            num = 200;
-          }
+            num = 100;
+          }*/
           /*50-50 that it will be a minus*/
-          //num *= Math.floor(Math.random()*2) == 1 ? 1 : -1
+          num *= Math.floor(Math.random()*2) == 1 ? 1 : -1
           this.AIpath = num;
 
 
@@ -454,13 +459,25 @@ Ship.prototype.calculatePath = function() {
 
 Ship.prototype.updatePower = function(du) {
   if (this.myTurn === true) {
-    if (keys[this.KEY_POWER]) {
-      this.power += this.POWER_INCREASE/* du*/;
+    if(this.power < 0.3){
+      if (keys[this.KEY_POWER]) {
+        this.power += this.POWER_INCREASE/* du*/;
 
-    }
-    if (keys[this.KEY_LESSPOWER]) {
-      this.power -= this.POWER_INCREASE/* du*/;
+      }
+    } else if(this.power > 10){
+      if (keys[this.KEY_LESSPOWER]) {
+        this.power -= this.POWER_INCREASE/* du*/;
 
+      }
+    } else {
+      if (keys[this.KEY_POWER]) {
+        this.power += this.POWER_INCREASE/* du*/;
+
+      }
+      if (keys[this.KEY_LESSPOWER]) {
+        this.power -= this.POWER_INCREASE/* du*/;
+
+      }
     }
   }
 };

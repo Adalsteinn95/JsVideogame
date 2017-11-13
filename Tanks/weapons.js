@@ -31,5 +31,3 @@ var weapons = [
     name: "volcano"
   }
 ]
-
-console.log(weapons[0]);

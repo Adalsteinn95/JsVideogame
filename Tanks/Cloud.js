@@ -1,7 +1,6 @@
 function Cloud(descr) {
 
     this.randomisePosition();
-    this.randomiseVelocity();
     this.randomiseScale();
 
     //set random cloud image
@@ -33,21 +32,13 @@ Cloud.prototype.randomisePosition = function () {
 Cloud.prototype.randomiseScale = function () {
   this.scale = util.randRange(.2,.4);
 
-}
-
-Cloud.prototype.randomiseVelocity = function () {
-    var MIN_SPEED = 20,
-        MAX_SPEED = 70;
-
-    var speed = util.randRange(MIN_SPEED, MAX_SPEED) / SECS_TO_NOMINALS;
-
-    this.velX = speed
 };
+
 
 
 Cloud.prototype.update = function (du) {
 
-    this.cx += this.velX * du;
+    this.cx += (g_wind * 10) * du;
 
     this.wrapPosition();
 

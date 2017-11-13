@@ -109,8 +109,8 @@ fireBullet: function(cx, cy, velX, velY, rotation,partOfShower, i,volcanoMaster)
     }));
 },
 
-generateClouds : function (descr) {
-    this._clouds.push(new Cloud(descr));
+generateClouds : function () {
+    this._clouds.push(new Cloud());
 },
 
 generateShip : function(descr) {
@@ -180,13 +180,14 @@ render: function(ctx) {
 
         var aCategory = this._categories[c];
 
-        if (!this._bShowRocks &&
+        /*if (!this._bShowRocks &&
             aCategory == this._rocks)
-            continue;
+            continue;*/
 
         for (var i = 0; i < aCategory.length; ++i) {
 
             aCategory[i].render(ctx);
+
 
             //debug.text(".", debugX + i * 10, debugY);
 

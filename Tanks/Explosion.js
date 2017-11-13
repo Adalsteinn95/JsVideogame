@@ -17,7 +17,19 @@ Explosion.prototype.render = function(ctx) {
 }
 
 Explosion.prototype.update = function(du) {
+/*  var hitEntity = this.findHitEntity();
+  if (hitEntity) {
+      var canTakeHit = hitEntity.takeExplosionHit( this.cx, this.cy);
+      if (canTakeHit) canTakeHit.call(hitEntity);
+  };
+*/
+
+
     if (++this.index >= this.sprite.length) {
         return entityManager.KILL_ME_NOW;
     }
+
+Explosion.prototype.getRadius = function(){
+  return g_weapon.damage;
+}
 }

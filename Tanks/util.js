@@ -62,7 +62,15 @@ square: function(x) {
 // =========
 
 distSq: function(x1, y1, x2, y2) {
-    return this.square(x2-x1) + this.square(y2-y1);
+    var x = 0, y = 0;
+    if(x1 < x2){
+      x = x2 - x1;
+    }else{ x = x1 - x2}
+
+    if(y1 < y2){
+      y = y2 - y1;
+    }else{ y = y1 - y2}
+    return this.square(x) + this.square(y);
 },
 
 wrappedDistSq: function(x1, y1, x2, y2, xWrap, yWrap) {
@@ -75,6 +83,11 @@ wrappedDistSq: function(x1, y1, x2, y2, xWrap, yWrap) {
 	dy = yWrap - dy;
     }
     return this.square(dx) + this.square(dy);
+},
+
+distCircles: function(x1,y1,x2,y2,r1,r2){
+  var dist = this.distFromExplosion(x1,y1,x2,y2);
+    return dist - (r1+r2);
 },
 
 
@@ -128,9 +141,7 @@ drawTextAt : function(ctx, x, y, font, size, style, msg) {
 
     var angle1 = Math.atan2((line1[1] - line1[3]),(line1[0] - line1[2]));
     var angle2 = Math.atan2((line2[1] - line2[3]),(line2[0] - line2[2]));
-    //console.log(angle1-angle2);
     return angle1-angle2;
-    //return 2;
 },
 
  toDegrees: function (angle) {
@@ -180,6 +191,17 @@ sinAcos: function(ratio, radius) {
 
     ctx.stroke();
     ctx.closePath();
+  },
+
+
+  //=====================
+  // damage
+  //=====================
+  //calculates the distance from the center of a circle
+  distFromExplosion: function( x1, y1, x2, y2 ){
+    var dist = this.distSq(x1,y1,x2,y2);
+    return Math.sqrt(dist);
+
   }
 
 

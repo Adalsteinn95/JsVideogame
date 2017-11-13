@@ -177,6 +177,8 @@ var toolbar = {
         this.renderWeapon(ctx);
         this.renderPower(ctx, tank);
         this.renderRotation(ctx, tank);
+        util.drawTextAt(ctx,50, 100, "Courier", "20px", "black",
+        "Wind " + g_wind + " " + (g_wind < 0 ? "to the left" : "to the right"));
     },
 
     renderWeapon : function(ctx) {

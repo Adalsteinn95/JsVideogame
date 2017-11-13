@@ -28,6 +28,7 @@ var gameplayManager = {
         this.setupReady = true;
         entityManager._generateClouds();
         entityManager._ships[0].myTurn = true;
+        entityManager._generateClouds();
     },
 
     setup : function() {
@@ -91,13 +92,19 @@ var gameplayManager = {
       nextTurn: function (){
 
         this._.turn++;
-        //console.log(this.players);
-        //console.log(this.clamp(this.activePlayerIndex+1))
+        this.resetIsHit();
 
         entityManager._ships[this.clamp(this.activePlayerIndex+1)].myTurn = true;
         this.activePlayerIndex++;
         this.activePlayerIndex %= this.players.length;
+        g_wind = util.randRange(-0.1,0.1);
 
+      },
+
+      resetIsHit: function (){
+        for(var i = 0; i< entityManager._ships.length; i++){
+          entityManager._ships[i].isHit = false;
+        }
       },
 
       updateWeapon: function(){

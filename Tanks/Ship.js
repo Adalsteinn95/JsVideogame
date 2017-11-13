@@ -303,10 +303,11 @@ Ship.prototype.updateGunRotation = function() {
 };
 
 Ship.prototype.AIdirection = "right";
+Ship.prototype.AIpath = 0;
 Ship.prototype.calculatePath = function() {
   if(this.playerId === 'AI'){
     /*random power test for AI*/
-    var x = (Math.random() * 10);
+    var x = Math.floor(Math.random() * 6) + 1
     this.power = x;
 
   }
@@ -354,6 +355,11 @@ Ship.prototype.calculatePath = function() {
   if (this.playerId === "AI") {
     if (this.myTurn === true) {
       if (Math.floor(destX) < targetx && targetx - 10 < Math.floor(destX) || Math.floor(destX) < targetx && targetx + 10 < Math.floor(destX)) {
+        //&& targetx - this.cx > 50 || this.cx - targetx > 50
+        //console.log(targetx);
+        //console.log(this.cx);
+
+        this.AIpath = 0;
         this.maybeFireBullet();
       } else {
         destX += startVel[0];
@@ -376,9 +382,32 @@ Ship.prototype.calculatePath = function() {
         }
 
         /*movement of the AI */
-        var accel = Math.floor((Math.random() * -1) + 2);
-        this.cx += accel;
-        this.cx = util.clamp(this.cx);
+        if(this.AIpath === 0){
+          /*generate 1 from 50*/
+          //var num = Math.floor(Math.random()*100) + 1;
+          var num = 0;
+          if(targetx > this.cx){
+            num = -200;
+          } else {
+            num = 200;
+          }
+          /*50-50 that it will be a minus*/
+          //num *= Math.floor(Math.random()*2) == 1 ? 1 : -1
+          this.AIpath = num;
+
+
+        } else if(this.AIpath < 0){
+
+          this.cx--;
+          this.cx = util.clamp(this.cx);
+          this.AIpath++;
+        } else if(this.AIpath > 0){
+
+          this.cx++;
+          this.cx = util.clamp(this.cx);
+          this.AIpath--;
+        }
+
         /*
         while(fakePower > 0){
           fakePower -= this.POWER_INCREASE;

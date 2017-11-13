@@ -19,12 +19,28 @@ var toolbar = {
         playerIndex : 0,
         humanOrAI : false,
 
-        previewBox : {
+        mapBox : {
             cx : 360,
             cy : 40,
-            width : g_canvas.width/5,
-            height : g_canvas.height/5
+            w : g_canvas.width/5,
+            h : g_canvas.height/5
+        },
+
+        powBox : {
+            cx : 300,
+            cy : 80,
+            w : 150,
+            h : 30
+        },
+
+        rotBox : {
+            tx : 500,
+            ty : 75,
+            r : 50,
+            cx : 555,
+            cy : 140
         }
+
     },
 
     playerIdSetup : [],
@@ -117,22 +133,19 @@ var toolbar = {
     },
 
     renderMapPreview : function(ctx) {
+        var box = this._.mapBox;
 
-        var box = this._.previewBox;
+        util.drawTextAt(ctx, 50, 75, "Courier", "20px", "black", "Map preview:");
 
-        util.drawTextAt(ctx, 50, 75, "Courier", "20px", "black",
-                        "Map preview:");
-
-        util.fillBox(ctx, box.cx, box.cy, box.width, box.height, "#ADD8E6");
+        util.fillBox(ctx, box.cx, box.cy, box.w, box.h, "#ADD8E6");
 
         ctx.save();
         ctx.translate(box.cx, box.cy);
         ctx.scale(0.2, 0.2);
         terrain.render(ctx, g_landscape, g_canvas);
-
         ctx.restore();
 
-        util.strokeBox(ctx, box.cx, box.cy, box.width, box.height, "black");
+        util.strokeBox(ctx, box.cx, box.cy, box.w, box.h, "black");
 
         if (eatKey(this.KEY_REROLL)) {
             this.rerollMap();
@@ -143,12 +156,10 @@ var toolbar = {
             gameplayManager.init();
             gameplayManager.isDoorLocked = false;
         }
-
     },
 
     rerollMap : function() {
         var i =  util.randInt(0, util.fun.length);
-
         g_landscape = terrain.initlandScape(util.fun[i], bound, xShift, g_canvas);
     },
 
@@ -157,18 +168,22 @@ var toolbar = {
     //////////////////////////
 
     renderToolbar : function(ctx) {
+
+        var tank = entityManager._ships[gameplayManager.activePlayerIndex];
+
         util.drawTextAt(ctx, 50, 30, "Courier", "25px", "black",
         "Turn " + gameplayManager._.turn +
-        ": player " + parseInt(gameplayManager.activePlayerIndex+1));
+        ": player " + parseInt(tank.playerNr+1));
         this.renderWeapon(ctx);
+        this.renderPower(ctx, tank);
+        this.renderRotation(ctx, tank);
         util.drawTextAt(ctx,50, 100, "Courier", "20px", "black",
         "Wind " + g_wind + " " + (g_wind < 0 ? "to the left" : "to the right"));
     },
 
     renderWeapon : function(ctx) {
       //console.log(weapons);
-        util.drawTextAt(ctx, 50, 75, "Courier", "20px", "black",
-                        "Weapon: " + g_weapon.name);
+        util.drawTextAt(ctx, 50, 75, "Courier", "20px", "black", "Weapon: " + g_weapon.name);
 
         if (eatKey(this.KEY_PLUS)) {
             //next weapon
@@ -176,6 +191,64 @@ var toolbar = {
         if (eatKey(this.KEY_MINUS)) {
             //previous weapon
         }
+    },
+
+    renderPower : function(ctx, tank) {
+
+        var box = this._.powBox;
+        util.drawTextAt(ctx, box.cx, box.cy-5, "Courier", "25px", "black", "POWER");
+        util.fillBox(ctx, box.cx, box.cy, box.w, box.h, "#B0E0E6");
+
+        var gradient = ctx.createLinearGradient(box.cx,box.cy,box.cx+box.w,box.h);
+        gradient.addColorStop(0,"#7CFC00");
+        gradient.addColorStop(0.5, "#FFD700");
+        gradient.addColorStop(1, "#FF3030");
+
+        var x = (tank.power / 10) * box.w;
+        util.fillBox(ctx, box.cx, box.cy, x, box.h, gradient);
+        ctx.lineWidth = 2;
+        util.strokeBox(ctx, box.cx, box.cy, box.w, box.h, "black")
+    },
+
+    renderRotation : function(ctx, tank) {
+        ctx.save();
+        var box = this._.rotBox;
+        util.drawTextAt(ctx, box.tx, box.ty, "Courier", "25px", "black", "Rotation");
+
+        ctx.fillStyle = "#FFF";
+        util.fillCircle(ctx, box.cx, box.cy, box.r, Math.PI, 0);
+
+        var rotText = (Math.abs(util.toDegrees(tank.gunrotation) - 90).toFixed(2) + "°");
+        ctx.textAlign = "center";
+        util.drawTextAt(ctx, box.cx, box.cy-20, "Courier", "14px", "black", rotText);
+
+        ctx.save();
+        ctx.strokeStyle = "#F00";
+        ctx.lineWidth = 3;
+        ctx.translate(box.cx, box.cy);
+        ctx.rotate(tank.gunrotation);
+        ctx.translate(-box.cx, -box.cy);
+        ctx.beginPath();
+        ctx.moveTo(box.cx,box.cy);
+        ctx.lineTo(box.cx, box.cy - box.r);
+        ctx.stroke();
+        ctx.closePath();
+        ctx.rotate(-tank.gunrotation);
+        ctx.restore();
+
+        ctx.strokeStyle = "#000";
+        ctx.lineWidth = 2;
+        util.strokeCircle(ctx, box.cx, box.cy, box.r, Math.PI, 0);
+        ctx.fillStyle = "#000";
+        util.fillCircle(ctx, box.cx, box.cy, box.r/5, Math.PI,0);
+
+        ctx.beginPath();
+        ctx.moveTo(box.cx - box.r, box.cy+1);
+        ctx.lineTo(box.cx + box.r, box.cy+1);
+        ctx.stroke();
+        ctx.closePath();
+
+        ctx.restore();
     }
 
 

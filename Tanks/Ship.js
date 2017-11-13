@@ -110,7 +110,6 @@ Ship.prototype.update = function(du) {
   }
 
   spatialManager.register(this);
-
 };
 
 Ship.prototype.computeSubStep = function(du) {

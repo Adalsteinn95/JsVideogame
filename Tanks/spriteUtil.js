@@ -6,11 +6,13 @@ var spriteUtil = {
         var arr = [];
         var sprite;
 
-        for (var row = 0; row < numRows; row++) {
-            for (var col = 0; col < numCols - 1; col++) {
-                sprite = new Sprite(img, col * celWidth, row * celHeight,
-                                    celWidth, celHeight)
-                arr.push(sprite);
+        for (var row = 0; row < numRows - 1; ++row) {
+            for (var col = 0; col < numCols - 1; ++col) {
+                if (arr.length <= numCells) {
+                    sprite = new Sprite(img, col * celWidth, row * celHeight,
+                        celWidth, celHeight)
+                        arr.push(sprite);
+                }
             }
         }
         return arr;

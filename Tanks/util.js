@@ -101,16 +101,15 @@ clearCanvas: function (ctx) {
     ctx.fillStyle = prevfillStyle;
 },
 
-strokeCircle: function (ctx, x, y, r) {
+strokeCircle: function (ctx, x, y, r, p1 = 0, p2 = Math.PI * 2) {
     ctx.beginPath();
-    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.arc(x, y, r, p1, p2);
     ctx.stroke();
 },
 
-fillCircle: function (ctx, x, y, r) {
-    ctx.fillStyle = "YELLOW";
+fillCircle: function (ctx, x, y, r, p1 = 0, p2 = Math.PI * 2) {
     ctx.beginPath();
-    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.arc(x, y, r, p1, p2);
     ctx.fill();
 },
 
@@ -160,7 +159,7 @@ clamp: function(x){
   return num;
 },
 
-// landscape function
+// landscape functions
 fun: [
     function(x) { return 100 + (-x*x); },
     function(x) { return 100 * Math.cos(x); },

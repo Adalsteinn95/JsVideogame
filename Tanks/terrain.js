@@ -61,9 +61,9 @@ initlandScape: function(f, bound, xShift, frame) {
 },
 
 bombLandscape: function(x, radius, tankhit) {
-    var explosionRadius = radius
-    if(tankhit){
-      explosionRadius *= 2;
+    var explosionRadius = radius;
+    if (tankhit) {
+        explosionRadius *= 2;
     }
 
     entityManager._explosions.push(new Explosion({
@@ -89,8 +89,6 @@ bombLandscape: function(x, radius, tankhit) {
         g_landscape[util.clamp(i)] += util.sinAcos(ratio, radius);
         ratio += step;
     }
-
-    //gameplayManager.nextTurn();
 }
 
 

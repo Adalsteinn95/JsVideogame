@@ -163,7 +163,7 @@ function preloadDone() {
     g_sprites.cloud1 = new Sprite(g_images.cloud1);
     g_sprites.cloud2 = new Sprite(g_images.cloud2);
     g_sprites.cloud3 = new Sprite(g_images.cloud3);
-    //g_sprites.terrain = new Sprite(g_images.terrain);
+
     g_sprites.xplode = spriteUtil.decomposeSheet(100,100,10,10,74, g_images.explosion);
 
     console.log(g_images);

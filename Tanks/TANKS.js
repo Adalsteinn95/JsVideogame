@@ -7,7 +7,7 @@ var g_ctx = g_canvas.getContext("2d");
 // ====================
 // CREATE INITIAL SHIPS
 // ====================
-
+/*
 function createInitialShips() {
 
     entityManager.generateShip({
@@ -23,7 +23,7 @@ function createInitialShips() {
         id : 2
     });
 }
-
+*/
 
 // =============
 // GATHER INPUTS

@@ -86,14 +86,15 @@ Ship.prototype.update = function(du) {
     spatialManager.unregister(this);
     return entityManager.KILL_ME_NOW;
   }
-  console.log(g_weapon);
-  console.log(this.weapon);
+
+  this.updateWeapon();
   //update weapon if it has been changed ÞARF AÐ BREYTA
   if (this.weapon !== g_weapon) {
     //önnur föll kalla á g_weapon
     g_weapon = this.weapon;
-    this.updateWeapon();
+
   };
+
 
   this.updatePower(du);
 
@@ -243,11 +244,11 @@ Ship.prototype.maybeFireBullet = function() {
     if(this.weapon.name === "shower") {
       //console.log('CONDITION PASSED')
       for (var i = -this.weapon.showerAmount/2; i < this.weapon.showerAmount/2; i++) {
-        entityManager.fireBullet((this.cx + dX * launchDist) - this.offsetX, (this.cy + dY * launchDist) - this.offsetY + 100, startVel[0], startVel[1], this.spriteGunRotation,true,i,false);
+        entityManager.fireBullet((this.cx + dX * launchDist) - this.offsetX, (this.cy + dY * launchDist) - this.offsetY + 100, startVel[0], startVel[1], this.spriteGunRotation,true,i,false, this.weapon);
 
       }
     } else {
-      entityManager.fireBullet((this.cx + dX * launchDist) - this.offsetX, (this.cy + dY * launchDist) - this.offsetY, startVel[0], startVel[1], this.spriteGunRotation, false, 0, volcanoMaster);
+      entityManager.fireBullet((this.cx + dX * launchDist) - this.offsetX, (this.cy + dY * launchDist) - this.offsetY, startVel[0], startVel[1], this.spriteGunRotation, false, 0, volcanoMaster, this.weapon);
 
     }
     volcanoMaster = false;
@@ -503,16 +504,19 @@ Ship.prototype.updateWeapon = function() {
   if (this.myTurn === true) {
     if (keys[this.KEY_NEXTGUN]) {
       ++this.weaponId;
-      this.weaponId = util.clampMinMax(this.weaponId,0,weapons.length)
+      this.weaponId = util.clampRange(this.weaponId,0,weapons.length-1)
 
     }
     if (keys[this.KEY_PREVGUN]) {
       --this.weaponId;
-      this.weaponId = util.clampMinMax(this.weaponId,0,weapons.length)
+      this.weaponId = util.clampRange(this.weaponId,0,weapons.length-1)
 
     }
+    console.log(this.weapon.name);
   }
-  this.weapons = weapons[this.weaponId];
+
+  this.weapon = weapons[this.weaponId];
+
 }
 
 

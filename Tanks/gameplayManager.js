@@ -80,7 +80,8 @@ var gameplayManager = {
                  cx : util.randRange(0, g_canvas.width),
                  cy: 200,
                  playerNr : this.players[i].nr,
-                 playerId : this.players[i].id
+                 playerId : this.players[i].id,
+                 weapon : weapons[0]
              });
         }
 

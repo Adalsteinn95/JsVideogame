@@ -95,7 +95,7 @@ init: function() {
     this._generateClouds();
 },
 
-fireBullet: function(cx, cy, velX, velY, rotation,partOfShower, i,volcanoMaster) {
+fireBullet: function(cx, cy, velX, velY, rotation,partOfShower, i,volcanoMaster, weapon) {
     this._bullets.push(new Bullet({
         cx   : cx,
         cy   : cy,
@@ -105,7 +105,8 @@ fireBullet: function(cx, cy, velX, velY, rotation,partOfShower, i,volcanoMaster)
         rotation : rotation,
         partOfShower: partOfShower,
         showerIndex : i,
-        volcanoMaster : volcanoMaster
+        volcanoMaster : volcanoMaster,
+        weapon : weapon
     }));
 },
 
@@ -118,6 +119,7 @@ _generateArrow : function () {
 },
 
 generateShip : function(descr) {
+    console.log("ping");
     this._ships.push(new Ship(descr));
 },
 

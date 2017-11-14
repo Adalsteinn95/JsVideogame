@@ -18,7 +18,6 @@ var spriteUtil = {
         return arr;
     },
 
-
     pushImgUrl : function(url, length) {
         var arr = [];
         var sprite;

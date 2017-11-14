@@ -95,38 +95,13 @@ var gameplayManager = {
     },
 
       nextTurn: function (){
-      /*  var died = 0;
-        var winner = this.activePlayerIndex+1;
-        //this._.turn++;
-        //this.resetIsHit();
-
-        //if(this.checkIfAlive()){
-        while(entityManager._ships[this.clamp(this.activePlayerIndex+1)]._isDeadNow){
-          ++this.activePlayerIndex;
-          this.activePlayerIndex = this.clamp(this.activePlayerIndex);
-          ++died;
-          //shitty winner check notað fyrir debugging
-          if(died >= this.players.length -1){
-            console.log("player number " + winner + " won the game" );
-            this.hasWinner = true;
-            entityManager._ships[this.clamp(winner-1)].myTurn = true;
-            this.activePlayerIndex++;
-            this.activePlayerIndex %= this.players.length;
-            //this.activePlayerIndex = this.clamp(this.activePlayerIndex);
-
-          }
-        }
-        if(this.hasWinner){
-
-          return;
-        }*/
+        console.log(this.activePlayerIndex);
         if(this.checkForWinner()){
-          console.log("we have a winner, player nr: " + this.activePlayerIndex );
+          console.log("we have a winner, player nr: " + (this.activePlayerIndex+1) );
           entityManager._ships[this.activePlayerIndex].myTurn = true;
           return;
 
-        }//else{
-          console.log("ping");
+        }
           this._.turn++;
           this.resetIsHit();
           this.updateNextPlayer();
@@ -141,7 +116,6 @@ var gameplayManager = {
         //  this.activePlayerIndex++;
         //  this.activePlayerIndex %= this.players.length;
           g_wind = util.randRange(-0.1,0.1);
-        //}
 
       },
 
@@ -154,8 +128,6 @@ var gameplayManager = {
       checkForWinner: function(){
           var cnt = 0;
           var target = this.players.length -1;
-          console.log(target);
-          console.log(entityManager._ships);
         for(var i = 0; i< this.players.length; i++){
           if(entityManager._ships[i]._isDeadNow){
             console.log("pingiddead");
@@ -176,7 +148,7 @@ var gameplayManager = {
       },
 
       checkIfAlive: function(num){
-        if(entityManager._ships[num].isDeadNow){
+        if(entityManager._ships[num]._isDeadNow){
           return true;
         }else return false;
 

@@ -169,7 +169,8 @@ function preloadDone() {
 
     g_sprites.xplode = spriteUtil.decomposeSheet(100,100,9,9,81, g_images.explosion);
     g_sprites.tankDeath = spriteUtil.decomposeSheet(81,40,6,2,12, g_images.tankDeath);
-    g_sprites.arrows = spriteUtil.decomposeSheet(49,47,3,1,3, g_images.pointer);
+    //g_sprites.arrows = spriteUtil.decomposeSheet(49,47,3,1,3, g_images.pointer);
+    g_sprites.arrows = new Sprite(g_images.pointer);
     console.log(g_sprites.arrows);
 
     g_sprites.flag = new Sprite(g_images.flagtest);

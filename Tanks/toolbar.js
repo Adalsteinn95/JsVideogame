@@ -182,7 +182,8 @@ var toolbar = {
     },
 
     renderWeapon : function(ctx) {
-      //console.log(weapons);
+      console.log(weapons);
+      console.log(g_weapon);
         util.drawTextAt(ctx, 50, 75, "Courier", "20px", "black", "Weapon: " + g_weapon.name);
 
         if (eatKey(this.KEY_PLUS)) {

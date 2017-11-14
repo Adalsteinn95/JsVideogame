@@ -12,7 +12,7 @@ function Arrow(descr) {
 Arrow.prototype = new Entity();
 
 Arrow.prototype.render = function(ctx) {
-    var cell = this.sprite[0];
+    var cell = this.sprite;
     //athuga
     cell.drawClippedCentredAt(
         ctx, this.cx , this.cy , this.rotation,24.5 , 23.5 );

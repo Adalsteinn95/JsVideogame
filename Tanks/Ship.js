@@ -45,6 +45,9 @@ Ship.prototype.KEY_LEFT = 'A'.charCodeAt(0);
 Ship.prototype.KEY_RIGHT = 'D'.charCodeAt(0);
 Ship.prototype.KEY_POWER = '5'.charCodeAt(0);
 Ship.prototype.KEY_LESSPOWER = '4'.charCodeAt(0);
+Ship.prototype.KEY_PREVGUN = 'Z'.charCodeAt(0);
+Ship.prototype.KEY_NEXTGUN = 'X'.charCodeAt(0);
+
 
 Ship.prototype.KEY_FIRE = ' '.charCodeAt(0);
 
@@ -83,9 +86,12 @@ Ship.prototype.update = function(du) {
     spatialManager.unregister(this);
     return entityManager.KILL_ME_NOW;
   }
-
+  console.log(g_weapon);
+  console.log(this.weapon);
   //update weapon if it has been changed ÞARF AÐ BREYTA
   if (this.weapon !== g_weapon) {
+    //önnur föll kalla á g_weapon
+    g_weapon = this.weapon;
     this.updateWeapon();
   };
 
@@ -454,12 +460,7 @@ Ship.prototype.takeBulletHit = function() {
 
 Ship.prototype.takeExplosionHit = function(bombX, bombY) {
   if(!this.isHit){
-      console.log("exp")
-      //terrain.bombLandscape(this.cx, );
-      //console.log(bombX);
-      //console.log(bombY);
-      //console.log(this.cx);
-      //console.log(this.cy);
+
       var test = util.distCircles(this.cx, this.cy , bombX, bombY, this.getRadius(), 50)
       console.log(test);
       var range = Math.abs(util.distFromExplosion(this.cx, this.cy , bombX, bombY));
@@ -471,7 +472,6 @@ Ship.prototype.takeExplosionHit = function(bombX, bombY) {
       this.isHit = true;
       this.checkForDeath();
     }
-
 
 };
 
@@ -500,7 +500,19 @@ Ship.prototype.checkForDeath = function() {
 
 //ATHUGA
 Ship.prototype.updateWeapon = function() {
-  this.weapon = g_weapon;
+  if (this.myTurn === true) {
+    if (keys[this.KEY_NEXTGUN]) {
+      ++this.weaponId;
+      this.weaponId = util.clampMinMax(this.weaponId,0,weapons.length)
+
+    }
+    if (keys[this.KEY_PREVGUN]) {
+      --this.weaponId;
+      this.weaponId = util.clampMinMax(this.weaponId,0,weapons.length)
+
+    }
+  }
+  this.weapons = weapons[this.weaponId];
 }
 
 

@@ -12,6 +12,7 @@ var toolbar = {
     KEY_REROLL : 'R'.charCodeAt(0),
 
     //various private variables
+    //mætti lesa þetta inn úr JSON
     _ : {
         numPlayers : 2,
         maxPlayers : 4,
@@ -24,6 +25,15 @@ var toolbar = {
             cy : 40,
             w : g_canvas.width/5,
             h : g_canvas.height/5
+        },
+
+        windBox : {
+            tx : 50,
+            ty : 100,
+            cx : 50,
+            cy : 105,
+            w : 50,
+            h : 50
         },
 
         powBox : {
@@ -175,10 +185,9 @@ var toolbar = {
         "Turn " + gameplayManager._.turn +
         ": player " + parseInt(tank.playerNr+1));
         this.renderWeapon(ctx);
+        this.renderWind(ctx);
         this.renderPower(ctx, tank);
         this.renderRotation(ctx, tank);
-        util.drawTextAt(ctx,50, 100, "Courier", "20px", "black",
-        "Wind " + g_wind + " " + (g_wind < 0 ? "to the left" : "to the right"));
     },
 
     renderWeapon : function(ctx) {
@@ -191,6 +200,30 @@ var toolbar = {
         if (eatKey(this.KEY_MINUS)) {
             //previous weapon
         }
+    },
+
+    renderWind : function(ctx) {
+        var box = this._.windBox;
+        var wind = g_wind;
+        var dir = (g_wind < 0) ? -1 : 1;
+        wind = Math.abs(g_wind * 1000);
+
+        util.drawTextAt(ctx, box.tx, box.ty, "Courier", "20px", "black",
+        "Wind " + wind.toFixed(2));
+
+        util.fillBox(ctx, box.cx, box.cy, box.w, box.h, "#FFF");
+        ctx.save();
+        ctx.strokeStyle = "#222";
+        ctx.beginPath();
+        ctx.moveTo(box.cx + box.w/2, box.cy);
+        var point = wind/100 * (box.w/2) * dir;
+        ctx.lineTo(box.cx + box.w/2 + point, box.cy + box.h/2);
+        ctx.lineTo(box.cx + box.w/2, box.cy + box.h);
+        ctx.stroke();
+        ctx.closePath();
+        ctx.restore();
+
+        util.strokeBox(ctx, box.cx, box.cy, box.w, box.h, "#000");
     },
 
     renderPower : function(ctx, tank) {

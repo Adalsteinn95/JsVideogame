@@ -148,9 +148,13 @@ function requestPreloads() {
         rightDoor : "../myndir/doorRight.png",
         tankgun : "../myndir/guns/green.png",
         explosion : "../myndir/explosives/explosionsheet.png",
+
         tankDeath : "../myndir/tankexplode/tankDeath.png",
         flagtest : "../myndir/flags/sw.png",
         pointer : "../myndir/pointer/arrowSmall.png"
+
+
+        atom : "../myndir/explosives/atomsheet.png"
 
     };
 
@@ -169,15 +173,14 @@ function preloadDone() {
     g_sprites.cloud2 = new Sprite(g_images.cloud2);
     g_sprites.cloud3 = new Sprite(g_images.cloud3);
 
+
     g_sprites.xplode = spriteUtil.decomposeSheet(100,100,9,9,81, g_images.explosion);
     g_sprites.tankDeath = spriteUtil.decomposeSheet(81,40,6,2,12, g_images.tankDeath);
-    //g_sprites.arrows = spriteUtil.decomposeSheet(49,47,3,1,0, g_images.pointer);
+     g_sprites.atom = spriteUtil.decomposeSheet(96, 96, 5, 3, 14, g_images.atom);
     g_sprites.arrows = new Sprite(g_images.pointer);
 
     g_sprites.flag = new Sprite(g_images.flagtest);
-    //7/console.log(g_sprites.tankDeath);
 
-//    console.log(g_images);
 
     entityManager.init();
     //gameplayManager.init();

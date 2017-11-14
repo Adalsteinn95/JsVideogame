@@ -21,6 +21,7 @@ function Sprite(image, cx = 0, cy = 0, width = image.width, height = image.heigh
     this.width = width;
     this.height = height;
     this.scale = 1;
+
 }
 
 Sprite.prototype.drawAt = function (ctx, x, y) {
@@ -88,7 +89,7 @@ Sprite.prototype.drawClippedCentredAt = function (
     ctx.save();
     ctx.translate(-w, -h);
 
-    ctx.drawImage(this.image, this.cx, this.cy, 2*w, 2*h, cx, cy, 2*w, 2*h);
+    ctx.drawImage(this.image, this.cx, this.cy, this.width, this.height, cx, cy, 2*w, 2*h);
 
     ctx.restore();
 };

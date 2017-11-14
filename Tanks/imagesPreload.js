@@ -38,7 +38,7 @@ Image.prototype.asyncLoad = function(src, asyncCallback) {
     // in-cache, but will most likely happen some time later when the load has
     // occurred and the resulting event is processesd in the queue.
 
-    console.log("requesting image src of ", src);
+    //console.log("requesting image src of ", src);
     this.src = src;
 };
 
@@ -80,7 +80,7 @@ function imagesPreload(requiredImages,
     //
     preloadHandler = function () {
 
-        console.log("preloadHandler called with this=", this);
+        //console.log("preloadHandler called with this=", this);
         loadedImages[this.name] = this;
 
         if (0 === this.width) {
@@ -94,10 +94,10 @@ function imagesPreload(requiredImages,
         numImagesHandled += 1;
 
         if (numImagesHandled === numImagesRequired) {
-            console.log("all preload images handled");
+            /*console.log("all preload images handled");
             console.log("loadedImages=", loadedImages);
             console.log("");
-            console.log("performing completion callback");
+            console.log("performing completion callback");*/
 
             completionCallback();
 
@@ -120,7 +120,7 @@ function imagesPreload(requiredImages,
 
         if (requiredImages.hasOwnProperty(currentName)) {
 
-            console.log("preloading image", currentName);
+            //console.log("preloading image", currentName);
             currentImage = new Image();
             currentImage.name = currentName;
 

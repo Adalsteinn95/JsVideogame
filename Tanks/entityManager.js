@@ -119,7 +119,7 @@ _generateArrow : function () {
 },
 
 generateShip : function(descr) {
-    console.log("ping");
+
     this._ships.push(new Ship(descr));
 },
 

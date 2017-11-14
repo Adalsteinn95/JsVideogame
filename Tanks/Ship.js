@@ -73,7 +73,7 @@ Ship.prototype.offsetX = 0;
 Ship.prototype.offsetY = 0;
 
 //hitpoints
-Ship.prototype.health = 10000000000000;
+Ship.prototype.health = 10000000000;
 
 //becomes true when hit, so the explosion doesnt hit multiple times
 //færa í bullet ?
@@ -517,7 +517,7 @@ Ship.prototype.updateWeapon = function() {
       this.weaponId = util.clampRange(this.weaponId,0,weapons.length-1)
 
     }
-    console.log(this.weapon.name);
+
   }
 
   this.weapon = weapons[this.weaponId];

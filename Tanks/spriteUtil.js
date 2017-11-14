@@ -2,7 +2,7 @@
 
 var spriteUtil = {
 
-    decomposeSheet : function(celWidth, celHeight, numCols, numRows, numCells, img) {
+    decomposeSheet : function(celWidth, celHeight, numCols, numRows, numCells, img,) {
         var arr = [];
         var sprite;
 
@@ -15,26 +15,8 @@ var spriteUtil = {
                 }
             }
         }
-
         return arr;
     },
-
-  /*  decomposeSheet : function(celWidth, celHeight, numCols, numRows, numCells, img, startRow, startCol) {
-        var arr = [];
-        var sprite;
-
-        for (var row = startRow; row < numRows; ++row) {
-            for (var col = startCol; col < numCols; ++col) {
-                if (arr.length <= numCells) {
-                    sprite = new Sprite(img, col * celWidth, row * celHeight,
-                        celWidth, celHeight)
-                        arr.push(sprite);
-                }
-            }
-        }
-        console.log(arr);
-        return arr;
-    },*/
 
 
     pushImgUrl : function(url, length) {

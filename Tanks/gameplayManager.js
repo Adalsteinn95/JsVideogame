@@ -96,7 +96,6 @@ var gameplayManager = {
     },
 
       nextTurn: function (){
-        console.log(this.activePlayerIndex);
         if(this.checkForWinner()){
           console.log("we have a winner, player nr: " + (this.activePlayerIndex+1) );
           entityManager._ships[this.activePlayerIndex].myTurn = true;

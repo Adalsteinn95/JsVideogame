@@ -132,7 +132,7 @@ Bullet.prototype.checkForVolcano = function() {
     for (var i = -this.weapon.volcanoAmount/2; i < this.weapon.volcanoAmount/2; i++) {
       var randVelX = util.randRange(-2,2)
       var randVelY = util.randRange(-2,-4)
-      console.log(randVelY)
+
       entityManager.fireBullet(this.cx, this.cy, randVelX, randVelY, this.gunrotation,true,i,false, this.weapon);
     }
   }

@@ -10,7 +10,7 @@ var consts = {
     // WEAPONS
     // ======
 
-    var weapons = [
+   weapons : [
        {
         damage: 50,
         name: "normal"

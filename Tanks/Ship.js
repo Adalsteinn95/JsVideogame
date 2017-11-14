@@ -555,18 +555,18 @@ Ship.prototype.updateWeapon = function() {
   if (this.myTurn === true) {
     if (keys[this.KEY_NEXTGUN]) {
       ++this.weaponId;
-      this.weaponId = util.clampRange(this.weaponId,0,weapons.length-1)
+      this.weaponId = util.clampRange(this.weaponId,0,consts.weapons.length-1)
 
     }
     if (keys[this.KEY_PREVGUN]) {
       --this.weaponId;
-      this.weaponId = util.clampRange(this.weaponId,0,weapons.length-1)
+      this.weaponId = util.clampRange(this.weaponId,0,consts.weapons.length-1)
 
     }
 
   }
 
-  this.weapon = weapons[this.weaponId];
+  this.weapon = consts.weapons[this.weaponId];
 
 }
 

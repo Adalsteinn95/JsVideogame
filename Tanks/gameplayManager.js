@@ -81,7 +81,7 @@ var gameplayManager = {
                  cy: 200,
                  playerNr : this.players[i].nr,
                  playerId : this.players[i].id,
-                 weapon : weapons[0]
+                 weapon : consts.weapons[0]
              });
         }
 

@@ -78,7 +78,6 @@ Bullet.prototype.update = function (du) {
     var hitEntity = this.findHitEntity();
     //console.log(hitEntity);
     if (hitEntity) {
-        console.log("ping1")
         var canTakeHit = hitEntity.takeBulletHit();
         if (canTakeHit) canTakeHit.call(hitEntity);
         terrain.bombLandscape(this.cx, g_weapon.damage/2, true);

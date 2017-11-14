@@ -22,6 +22,8 @@ function Ship(descr) {
   // Default sprite, if not otherwise specified
   this.sprite = this.sprite || g_sprites.ship;
   this.gunsprite = g_sprites.tankgun;
+  this.flagsprite = g_sprites.flag;
+  this.arrowSprite = g_sprites.arrows;
 
   // Set normal drawing scale, and warp state off
   this._scale = 1;
@@ -43,6 +45,9 @@ Ship.prototype.KEY_LEFT = 'A'.charCodeAt(0);
 Ship.prototype.KEY_RIGHT = 'D'.charCodeAt(0);
 Ship.prototype.KEY_POWER = '5'.charCodeAt(0);
 Ship.prototype.KEY_LESSPOWER = '4'.charCodeAt(0);
+Ship.prototype.KEY_PREVGUN = 'Z'.charCodeAt(0);
+Ship.prototype.KEY_NEXTGUN = 'X'.charCodeAt(0);
+
 
 Ship.prototype.KEY_FIRE = ' '.charCodeAt(0);
 
@@ -68,20 +73,33 @@ Ship.prototype.offsetX = 0;
 Ship.prototype.offsetY = 0;
 
 //hitpoints
-Ship.prototype.health = 100;
-//becomes true when hit, so the explosion doenst hit multiple times
+Ship.prototype.health = 10000000000;
+
+//becomes true when hit, so the explosion doesnt hit multiple times
+//færa í bullet ?
 Ship.prototype.isHit = false;
 
 Ship.prototype.update = function(du) {
-  //update weapon if it has been changed ÞARF AÐ BREYTA
-  if (this.weapon !== g_weapon) {
-    this.updateWeapon();
-  };
 
   if (this._isDeadNow === true) {
+
     spatialManager.unregister(this);
     return entityManager.KILL_ME_NOW;
   }
+
+  //update weapon if it has been changed ÞARF AÐ BREYTA
+  //used to check for dmg, need to know what weapon is being fired
+  //can be fixed by getting the damage for the explosion entity or Bullet
+  //ATHUGA
+  if (this.weapon !== g_weapon) {
+    //önnur föll kalla á g_weapon
+    g_weapon = this.weapon;
+
+  };
+
+  this.updateWeapon();
+
+
 
   this.updatePower(du);
 
@@ -218,8 +236,8 @@ Ship.prototype.maybeFireBullet = function() {
 
     this.myTurn = false;
 
-    var dX = +Math.sin(this.gunrotation);
-    var dY = -Math.cos(this.gunrotation);
+    var dX = +Math.sin(util.toRadian(this.spriteGunRotation));
+    var dY = -Math.cos(util.toRadian(this.spriteGunRotation));
     var launchDist = this.getRadius();
 
     var startVel = this.getStartVel(dX, dY);
@@ -231,11 +249,11 @@ Ship.prototype.maybeFireBullet = function() {
     if(this.weapon.name === "shower") {
       //console.log('CONDITION PASSED')
       for (var i = -this.weapon.showerAmount/2; i < this.weapon.showerAmount/2; i++) {
-        entityManager.fireBullet((this.cx + dX * launchDist) - this.offsetX, (this.cy + dY * launchDist) - this.offsetY + 100, startVel[0], startVel[1], this.spriteGunRotation,true,i,false);
+        entityManager.fireBullet((this.cx + dX * launchDist) - this.offsetX, (this.cy + dY * launchDist) - this.offsetY , startVel[0], startVel[1], this.spriteGunRotation,true,i,false, this.weapon);
 
       }
     } else {
-      entityManager.fireBullet((this.cx + dX * launchDist) - this.offsetX, (this.cy + dY * launchDist) - this.offsetY, startVel[0], startVel[1], this.spriteGunRotation, false, 0, volcanoMaster);
+      entityManager.fireBullet((this.cx + dX * launchDist) - this.offsetX, (this.cy + dY * launchDist) - this.offsetY, startVel[0], startVel[1], this.spriteGunRotation, false, 0, volcanoMaster, this.weapon);
 
     }
     volcanoMaster = false;
@@ -292,13 +310,14 @@ Ship.prototype.updateGunRotation = function() {
   this.calculatePath();
 
   if (this.myTurn === true) {
-    if (keys[this.KEY_LEFT] && util.toDegrees(this.gunrotation) > -90) {
+    if (keys[this.KEY_LEFT] && util.toDegrees(this.gunrotation) > 0) {
       this.gunrotation -= NOMINAL_ROTATE_RATE * 2;
     }
-    if (keys[this.KEY_RIGHT] && util.toDegrees(this.gunrotation) < 90) {
+    if (keys[this.KEY_RIGHT] && util.toDegrees(this.gunrotation) < 180) {
       this.gunrotation += NOMINAL_ROTATE_RATE * 2;
     }
     this.spriteGunRotation = util.toDegrees(this.gunrotation) - 90;
+    this.spriteGunRotation += this.rotation;
   }
 };
 
@@ -314,8 +333,8 @@ Ship.prototype.calculatePath = function() {
   /*bullet trail prediction */
   this.predictCord = [];
 
-  var dX = +Math.sin(this.gunrotation);
-  var dY = -Math.cos(this.gunrotation);
+  var dX = +Math.sin(util.toRadian(this.spriteGunRotation ));
+  var dY = -Math.cos(util.toRadian(this.spriteGunRotation ));
   var launchDist = this.getRadius();
 
   var startVel = this.getStartVel(dX, dY);
@@ -487,17 +506,13 @@ Ship.prototype.takeBulletHit = function() {
     console.log("áái")
     //terrain.bombLandscape(this.cx, );
     this.health -= g_weapon.damage;
+    this.checkForDeath();
     //console.log(this.health);
 };
 
 Ship.prototype.takeExplosionHit = function(bombX, bombY) {
   if(!this.isHit){
-      console.log("exp")
-      //terrain.bombLandscape(this.cx, );
-      //console.log(bombX);
-      //console.log(bombY);
-      //console.log(this.cx);
-      //console.log(this.cy);
+
       var test = util.distCircles(this.cx, this.cy , bombX, bombY, this.getRadius(), 50)
       console.log(test);
       var range = Math.abs(util.distFromExplosion(this.cx, this.cy , bombX, bombY));
@@ -507,6 +522,29 @@ Ship.prototype.takeExplosionHit = function(bombX, bombY) {
       this.health += test;
       console.log("lífið " + this.health);
       this.isHit = true;
+      this.checkForDeath();
+    }
+
+};
+
+Ship.prototype.checkForDeath = function() {
+
+    if (this.health <= 0){
+      entityManager._explosions.push(new Death({
+              cx : this.cx,
+              cy : this.cy,
+              radius : this.getRadius(),
+              rotation : this.rotation
+          }) );
+        /*  entityManager._ships[1] = new Death({
+                  cx : this.cx,
+                  cy : this.cy,
+                  radius : this.getRadius(),
+                  rotation : this.rotation
+              });*/
+              //this.sprite = g_sprites.cloud1;
+
+      this._isDeadNow = true;
     }
 
 
@@ -514,14 +552,34 @@ Ship.prototype.takeExplosionHit = function(bombX, bombY) {
 
 //ATHUGA
 Ship.prototype.updateWeapon = function() {
-  this.weapon = g_weapon;
+  if (this.myTurn === true) {
+    if (keys[this.KEY_NEXTGUN]) {
+      ++this.weaponId;
+      this.weaponId = util.clampRange(this.weaponId,0,weapons.length-1)
+
+    }
+    if (keys[this.KEY_PREVGUN]) {
+      --this.weaponId;
+      this.weaponId = util.clampRange(this.weaponId,0,weapons.length-1)
+
+    }
+
+  }
+
+  this.weapon = weapons[this.weaponId];
+
 }
+
+
 
 Ship.prototype.render = function(ctx) {
   var origScale = this.sprite.scale;
   // pass my scale into the sprite, for drawing
   this.sprite.scale = this._scale;
 
+  //to tranlate the flag to the right posistion
+  var flagX = -8;
+  var flagY = -11;
   //console.log(this.rotation);
   var xOffset = (Math.cos((this.rotation * Math.PI / 180) + 90)) * this.sprite.width / 4;
   var yOffset = 0;
@@ -537,7 +595,10 @@ Ship.prototype.render = function(ctx) {
   this.sprite.drawCentredAt(ctx, this.cx - (xOffset), this.cy - yOffset, this.rotation);
 
   //this.spriteGunRotation += this.rotation
-  this.gunsprite.drawGunCentredAt(ctx, this.cx - (xOffset), this.cy - yOffset, this.spriteGunRotation);
+  this.gunsprite.drawGunCentredAt(ctx, this.cx - (xOffset), this.cy - yOffset, this.spriteGunRotation - 90);
+
+    this.flagsprite.drawFlagCentredAt(ctx, this.cx - (xOffset) , this.cy - yOffset , this.rotation, 0.05, flagX, flagY);
+
 
   this.sprite.scale = origScale;
 

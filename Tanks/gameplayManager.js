@@ -11,6 +11,10 @@ var gameplayManager = {
     setupReady : false,
     setupIndex : 0,
 
+    alivePlayers : 0,
+
+    hasWinner : false,
+
     players : [],
 
     _ : {
@@ -27,8 +31,9 @@ var gameplayManager = {
         this.loadPlayers();
         this.setupReady = true;
         entityManager._generateClouds();
+        entityManager._generateArrow();
         entityManager._ships[0].myTurn = true;
-        entityManager._generateClouds();
+        //entityManager._generateClouds();
     },
 
     setup : function() {
@@ -75,7 +80,8 @@ var gameplayManager = {
                  cx : util.randRange(0, g_canvas.width),
                  cy: 200,
                  playerNr : this.players[i].nr,
-                 playerId : this.players[i].id
+                 playerId : this.players[i].id,
+                 weapon : weapons[0]
              });
         }
 
@@ -90,14 +96,26 @@ var gameplayManager = {
     },
 
       nextTurn: function (){
+        if(this.checkForWinner()){
+          console.log("we have a winner, player nr: " + (this.activePlayerIndex+1) );
+          entityManager._ships[this.activePlayerIndex].myTurn = true;
+          return;
 
-        this._.turn++;
-        this.resetIsHit();
+        }
+          this._.turn++;
+          this.resetIsHit();
+          this.updateNextPlayer();
 
-        entityManager._ships[this.clamp(this.activePlayerIndex+1)].myTurn = true;
-        this.activePlayerIndex++;
-        this.activePlayerIndex %= this.players.length;
-        g_wind = util.randRange(-0.1,0.1);
+          while(this.checkIfAlive(this.activePlayerIndex)){
+            this.updateNextPlayer();
+          };
+
+
+
+          entityManager._ships[this.activePlayerIndex].myTurn = true;
+        //  this.activePlayerIndex++;
+        //  this.activePlayerIndex %= this.players.length;
+          g_wind = util.randRange(-0.1,0.1);
 
       },
 
@@ -107,12 +125,38 @@ var gameplayManager = {
         }
       },
 
+      checkForWinner: function(){
+          var cnt = 0;
+          var target = this.players.length -1;
+        for(var i = 0; i< this.players.length; i++){
+          if(entityManager._ships[i]._isDeadNow){
+            console.log("pingiddead");
+            cnt++;
+          }
+        }
+        if (cnt >= target){
+          return true
+        }
+
+        return false;
+
+      },
+
+      updateNextPlayer: function(){
+        this.activePlayerIndex++;
+        this.activePlayerIndex %= this.players.length;
+      },
+
+      checkIfAlive: function(num){
+        if(entityManager._ships[num]._isDeadNow){
+          return true;
+        }else return false;
+
+
+      },
+
       updateWeapon: function(){
 
-
-
       }
-
-
 
 }

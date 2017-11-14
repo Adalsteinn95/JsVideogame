@@ -95,7 +95,7 @@ init: function() {
     this._generateClouds();
 },
 
-fireBullet: function(cx, cy, velX, velY, rotation,partOfShower, i,volcanoMaster) {
+fireBullet: function(cx, cy, velX, velY, rotation,partOfShower, i,volcanoMaster, weapon) {
     this._bullets.push(new Bullet({
         cx   : cx,
         cy   : cy,
@@ -105,7 +105,8 @@ fireBullet: function(cx, cy, velX, velY, rotation,partOfShower, i,volcanoMaster)
         rotation : rotation,
         partOfShower: partOfShower,
         showerIndex : i,
-        volcanoMaster : volcanoMaster
+        volcanoMaster : volcanoMaster,
+        weapon : weapon
     }));
 },
 
@@ -113,7 +114,12 @@ generateClouds : function () {
     this._clouds.push(new Cloud());
 },
 
+_generateArrow : function () {
+    this._clouds.push(new Arrow());
+},
+
 generateShip : function(descr) {
+
     this._ships.push(new Ship(descr));
 },
 
@@ -148,18 +154,28 @@ update: function(du) {
         var i = 0;
 
         while (i < aCategory.length) {
+          //console.log(aCategory[i]);
 
             var status = aCategory[i].update(du);
-
 
             if (status === this.KILL_ME_NOW) {
                 // remove the dead guy, and shuffle the others down to
                 // prevent a confusing gap from appearing in the array
-                aCategory.splice(i,1);
+                if(aCategory !== this._ships){
+                  //we need the tank in the entitymanager despite death
+                  //aCategory.splice(i,1);
+                  aCategory.splice(i,1);
+                  if(this._bullets.length < 1 && this._explosions.length <  1){
+                     gameplayManager.nextTurn();
+                   }
+
+                }else {
+                  ++i;
                 //console.log(this._categories);
                 //console.log(this._ships);
-                if(this._bullets.length < 1 && this._explosions.length <  1){
-                  gameplayManager.nextTurn();
+                  /*if(this._bullets.length < 1 && this._explosions.length <  1){
+                    gameplayManager.nextTurn();
+                  }*/
                 }
             }
             else {
@@ -167,8 +183,6 @@ update: function(du) {
             }
         }
     }
-
-
 
 },
 
@@ -180,14 +194,13 @@ render: function(ctx) {
 
         var aCategory = this._categories[c];
 
-        /*if (!this._bShowRocks &&
-            aCategory == this._rocks)
-            continue;*/
-
         for (var i = 0; i < aCategory.length; ++i) {
+            if(aCategory === this._ships && aCategory[i]._isDeadNow){
+                //aCategory[i].render(ctx);
 
-            aCategory[i].render(ctx);
-
+            }else{aCategory[i].render(ctx)}
+            //if(aCategory === )
+            //aCategory[i].render(ctx);
 
             //debug.text(".", debugX + i * 10, debugY);
 
@@ -195,8 +208,6 @@ render: function(ctx) {
         debugY += 10;
     }
 }
-
-
 
 }
 

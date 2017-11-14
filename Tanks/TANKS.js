@@ -7,7 +7,7 @@ var g_ctx = g_canvas.getContext("2d");
 // ====================
 // CREATE INITIAL SHIPS
 // ====================
-
+/*
 function createInitialShips() {
 
     entityManager.generateShip({
@@ -23,7 +23,7 @@ function createInitialShips() {
         id : 2
     });
 }
-
+*/
 
 // =============
 // GATHER INPUTS
@@ -47,6 +47,8 @@ function updateSimulation(du) {
 
     // Prevent perpetual firing!
     eatKey(Ship.prototype.KEY_FIRE);
+    eatKey(Ship.prototype.KEY_NEXTGUN);
+    eatKey(Ship.prototype.KEY_PREVGUN);
 }
 
 
@@ -80,7 +82,7 @@ var KEY_K = keyCode('K');
 var button = document.getElementById("weaponbutton");
 button.addEventListener("click", function() {
   var e = document.getElementById("weaponSelect");
-  g_weapon = weapons[e.selectedIndex];
+  //g_weapon = weapons[e.selectedIndex];
 
 
 });
@@ -146,7 +148,14 @@ function requestPreloads() {
         rightDoor : "../myndir/doorRight.png",
         tankgun : "../myndir/guns/green.png",
         explosion : "../myndir/explosives/explosionsheet.png",
+
+        tankDeath : "../myndir/tankexplode/tankDeath.png",
+        flagtest : "../myndir/flags/sw.png",
+        pointer : "../myndir/pointer/arrowSmall.png"
+
+
         atom : "../myndir/explosives/atomsheet.png"
+
     };
 
     imagesPreload(requiredImages, g_images, preloadDone);
@@ -155,7 +164,6 @@ function requestPreloads() {
 var g_sprites = {};
 
 function preloadDone() {
-
     g_sprites.ship  = new Sprite(g_images.ship);
     g_sprites.tankgun = new Sprite(g_images.tankgun);
 
@@ -165,10 +173,14 @@ function preloadDone() {
     g_sprites.cloud2 = new Sprite(g_images.cloud2);
     g_sprites.cloud3 = new Sprite(g_images.cloud3);
 
-    g_sprites.xplode = spriteUtil.decomposeSheet(100,100,10,10,74, g_images.explosion);
-    g_sprites.atom = spriteUtil.decomposeSheet(96, 96, 5, 3, 14, g_images.atom);
 
-    console.log(g_images);
+    g_sprites.xplode = spriteUtil.decomposeSheet(100,100,9,9,81, g_images.explosion);
+    g_sprites.tankDeath = spriteUtil.decomposeSheet(81,40,6,2,12, g_images.tankDeath);
+     g_sprites.atom = spriteUtil.decomposeSheet(96, 96, 5, 3, 14, g_images.atom);
+    g_sprites.arrows = new Sprite(g_images.pointer);
+
+    g_sprites.flag = new Sprite(g_images.flagtest);
+
 
     entityManager.init();
     //gameplayManager.init();

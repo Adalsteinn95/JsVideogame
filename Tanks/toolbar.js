@@ -191,8 +191,8 @@ var toolbar = {
     },
 
     renderWeapon : function(ctx) {
-      //console.log(weapons);
-        util.drawTextAt(ctx, 50, 75, "Courier", "20px", "black", "Weapon: " + g_weapon.name);
+
+        util.drawTextAt(ctx, 50, 75, "Courier", "20px", "black", "Weapon: " + entityManager._ships[gameplayManager.activePlayerIndex].weapon.name);
 
         if (eatKey(this.KEY_PLUS)) {
             //next weapon

@@ -150,25 +150,26 @@ update: function(du) {
         while (i < aCategory.length) {
           //console.log(aCategory[i]);
 
-
-
             var status = aCategory[i].update(du);
-
 
             if (status === this.KILL_ME_NOW) {
                 // remove the dead guy, and shuffle the others down to
                 // prevent a confusing gap from appearing in the array
                 if(aCategory !== this._ships){
                   //we need the tank in the entitymanager despite death
+                  //aCategory.splice(i,1);
                   aCategory.splice(i,1);
-                  gameplayManager.nextTurn();
+                  if(this._bullets.length < 1 && this._explosions.length <  1){
+                     gameplayManager.nextTurn();
+                   }
 
-                }
-              //  aCategory.splice(i,1);
+                }else {
+                  ++i;
                 //console.log(this._categories);
                 //console.log(this._ships);
-                else if(this._bullets.length < 1 && this._explosions.length <  1){
-                  gameplayManager.nextTurn();
+                  /*if(this._bullets.length < 1 && this._explosions.length <  1){
+                    gameplayManager.nextTurn();
+                  }*/
                 }
             }
             else {
@@ -176,8 +177,6 @@ update: function(du) {
             }
         }
     }
-
-
 
 },
 
@@ -189,14 +188,13 @@ render: function(ctx) {
 
         var aCategory = this._categories[c];
 
-        /*if (!this._bShowRocks &&
-            aCategory == this._rocks)
-            continue;*/
-
         for (var i = 0; i < aCategory.length; ++i) {
+            if(aCategory === this._ships && aCategory[i]._isDeadNow){
+                //aCategory[i].render(ctx);
 
-            aCategory[i].render(ctx);
-
+            }else{aCategory[i].render(ctx)}
+            //if(aCategory === )
+            //aCategory[i].render(ctx);
 
             //debug.text(".", debugX + i * 10, debugY);
 
@@ -204,8 +202,6 @@ render: function(ctx) {
         debugY += 10;
     }
 }
-
-
 
 }
 

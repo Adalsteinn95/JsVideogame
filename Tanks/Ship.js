@@ -76,7 +76,7 @@ Ship.prototype.update = function(du) {
 
 
   if (this._isDeadNow === true) {
-    console.log("pingdeath");
+
     spatialManager.unregister(this);
     return entityManager.KILL_ME_NOW;
   }

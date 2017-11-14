@@ -11,6 +11,10 @@ var gameplayManager = {
     setupReady : false,
     setupIndex : 0,
 
+    alivePlayers : 0,
+
+    hasWinner : false,
+
     players : [],
 
     _ : {
@@ -28,7 +32,7 @@ var gameplayManager = {
         this.setupReady = true;
         entityManager._generateClouds();
         entityManager._ships[0].myTurn = true;
-        entityManager._generateClouds();
+        //entityManager._generateClouds();
     },
 
     setup : function() {
@@ -90,27 +94,37 @@ var gameplayManager = {
     },
 
       nextTurn: function (){
+        var died = 0;
+        var winner = this.activePlayerIndex+1;
+        //this._.turn++;
+        //this.resetIsHit();
 
+        //if(this.checkIfAlive()){
+        while(entityManager._ships[this.clamp(this.activePlayerIndex+1)]._isDeadNow){
+          ++this.activePlayerIndex;
+          this.activePlayerIndex = this.clamp(this.activePlayerIndex);
+          ++died;
+          //shitty winner check notað fyrir debugging
+          if(died >= this.players.length -1){
+            console.log("player number " + winner + " won the game" );
+            this.hasWinner = true;
+            entityManager._ships[this.clamp(winner-1)].myTurn = true;
+            //this.activePlayerIndex = this.clamp(this.activePlayerIndex);
+
+          }
+        }
+        if(this.hasWinner){
+
+          return;
+        }
         this._.turn++;
         this.resetIsHit();
 
-        console.log("1 " +this.activePlayerIndex);
-
-        //if(this.checkIfAlive()){
-        console.log(entityManager._ships);
-        if(entityManager._ships[this.clamp(this.activePlayerIndex+1)]._isDeadNow){
-          ++this.activePlayerIndex;
-        }
-
-        console.log("2 " +this.activePlayerIndex);
 
         entityManager._ships[this.clamp(this.activePlayerIndex+1)].myTurn = true;
         this.activePlayerIndex++;
         this.activePlayerIndex %= this.players.length;
         g_wind = util.randRange(-0.1,0.1);
-
-        console.log("3 " +this.activePlayerIndex);
-      //}
 
       },
 

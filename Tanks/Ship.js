@@ -73,7 +73,7 @@ Ship.prototype.offsetX = 0;
 Ship.prototype.offsetY = 0;
 
 //hitpoints
-Ship.prototype.health = 1;
+Ship.prototype.health = 10000000000000;
 
 //becomes true when hit, so the explosion doesnt hit multiple times
 //færa í bullet ?
@@ -87,13 +87,18 @@ Ship.prototype.update = function(du) {
     return entityManager.KILL_ME_NOW;
   }
 
-  this.updateWeapon();
   //update weapon if it has been changed ÞARF AÐ BREYTA
+  //used to check for dmg, need to know what weapon is being fired
+  //can be fixed by getting the damage for the explosion entity or Bullet
+  //ATHUGA
   if (this.weapon !== g_weapon) {
     //önnur föll kalla á g_weapon
     g_weapon = this.weapon;
 
   };
+
+  this.updateWeapon();
+
 
 
   this.updatePower(du);

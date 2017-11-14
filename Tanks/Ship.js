@@ -73,7 +73,7 @@ Ship.prototype.offsetX = 0;
 Ship.prototype.offsetY = 0;
 
 //hitpoints
-Ship.prototype.health = 10000000000;
+Ship.prototype.health = 1;
 
 //becomes true when hit, so the explosion doesnt hit multiple times
 //færa í bullet ?

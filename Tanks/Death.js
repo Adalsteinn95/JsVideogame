@@ -13,7 +13,6 @@ var delay = 10
 Death.prototype = new Entity();
 
 Death.prototype.render = function(ctx) {
-  //  console.log(this.sprite);
     var cell = this.sprite[this.index];
     cell.drawClippedCentredAt(
         ctx, this.cx, this.cy, this.rotation, this.radius, this.radius);
@@ -30,8 +29,4 @@ Death.prototype.update = function(du) {
     if (this.index >= this.sprite.length) {
         return entityManager.KILL_ME_NOW;
     }
-
-Death.prototype.getRadius = function(){
-  return 1;
-}
 }

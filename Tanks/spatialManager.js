@@ -11,10 +11,6 @@ e.g. general collision detection.
 
 /* jshint browser: true, devel: true, globalstrict: true */
 
-/*
-0        1         2         3         4         5         6         7         8
-12345678901234567890123456789012345678901234567890123456789012345678901234567890
-*/
 
 var spatialManager = {
 
@@ -32,7 +28,6 @@ _entities : [],
 // PUBLIC METHODS
 
 getNewSpatialID : function() {
-    // TODO: YOUR STUFF HERE!
 
     var tmp = spatialManager._nextSpatialID;
     spatialManager._nextSpatialID++;
@@ -41,33 +36,19 @@ getNewSpatialID : function() {
 },
 
 register: function(entity) {
-    //var pos = entity.getPos();
     var radius = entity.getRadius();
 
     var spatialID = entity.getSpatialID();
 
-    // TODO: YOUR STUFF HERE!
     spatialManager._entities[spatialID] = entity;
-    //spatialManager._entities.splice(spatialID,0,entity);
 
 },
 
 unregister: function(entity) {
     var spatialID = entity.getSpatialID();
-    //console.log("ping");
-    // TODO: YOUR STUFF HERE!
+
     spatialManager._entities[spatialID] = false;
     //spatialManager._entities.splice(spatialID,1);
-
-},
-//splice the bullets from the spatial manager
-unregisterBullet: function(entity) {
-    var spatialID = entity.getSpatialID();
-    //console.log("ping");
-    // TODO: YOUR STUFF HERE!
-    //spatialManager._entities[spatialID] = false;
-    spatialManager._entities.splice(spatialID,1);
-    spatialManager._nextSpatialID--;
 
 },
 
@@ -84,7 +65,6 @@ findEntityInRange: function(posX, posY, radius) {
 
       if(spatialManager.collisioncheck(c1,c2) && !thing.partOfShower){
 
-        //console.log('THING', thing)
         return thing;
       }
     }
@@ -94,27 +74,12 @@ findEntityInRange: function(posX, posY, radius) {
 
 //detects collision between 2 circles
 //c1 and c2 must contain x and y coordinates and radius
-/* collisioncheck: function(c1, c2){
-   var distance = util.wrappedDistSq(c1.xPos, c1.yPos, c2.xPos,c2.yPos, g_canvas.width, g_canvas.height);
-   var limit = c1.radius + c2.radius;
-   limit = util.square(limit);
-   if(distance < limit){
-     return true;
-   } else {return false;}
-
-},*/
-
-//detects collision between 2 circles
-//c1 and c2 must contain x and y coordinates and radius
  collisioncheck: function(c1, c2){
-   //console.log("c1   " + c1);
-   //console.log("c2    " + c2);
+
    var distance = util.distFromExplosion(c1.xPos, c1.yPos, c2.xPos,c2.yPos);
-   //console.log("dist     " + distance);
+
    var limit = c1.radius + c2.radius;
 
-   //limit = util.square(limit);
-     //console.log("æimit   " + limit)
    if(distance <= limit){
      return true;
    } else {return false;}
@@ -122,13 +87,10 @@ findEntityInRange: function(posX, posY, radius) {
 },
 
 render: function(ctx) {
-  // console.log(this._entities);
     var oldStyle = ctx.strokeStyle;
     ctx.strokeStyle = "red";
 
     for (var ID in this._entities) {
-
-
         var e = this._entities[ID];
 
         if(e !== false){
@@ -136,10 +98,10 @@ render: function(ctx) {
             util.strokeCircle(ctx, e.cx - e.offsetX, e.cy - e.offsetY, e.getRadius());
           } else {
         util.strokeCircle(ctx, e.cx, e.cy, e.getRadius());
-      }
-    }
+          }
+        }
     }
     ctx.strokeStyle = oldStyle;
-}
+  }
 
 }

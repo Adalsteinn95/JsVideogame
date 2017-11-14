@@ -4,26 +4,6 @@
 var g_canvas = document.getElementById("myCanvas");
 var g_ctx = g_canvas.getContext("2d");
 
-// ====================
-// CREATE INITIAL SHIPS
-// ====================
-/*
-function createInitialShips() {
-
-    entityManager.generateShip({
-        cx : 200,
-        cy : 200,
-        weapon: weapons.shower,
-        id : 1
-    });
-
-    entityManager.generateShip({
-        cx : 600,
-        cy : 200,
-        id : 2
-    });
-}
-*/
 
 // =============
 // GATHER INPUTS
@@ -45,27 +25,24 @@ function updateSimulation(du) {
     terrain.render(ctx, g_landscape, g_canvas);
     entityManager.update(du);
 
-    // Prevent perpetual firing!
+    // Prevent perpetual firing and gun change!
     eatKey(Ship.prototype.KEY_FIRE);
     eatKey(Ship.prototype.KEY_NEXTGUN);
     eatKey(Ship.prototype.KEY_PREVGUN);
 }
-
-
 
 // GAME-SPECIFIC DIAGNOSTICS
 
 var g_allowMixedActions = true;
 var g_useGravity = false;
 var g_useAveVel = true;
-var g_weapon = weapons[0];
+var g_weapon = consts.weapons[0];
 var g_wind = util.randRange(-0.1,0.1)
 
 var g_renderSpatialDebug = true;
 
 
-
-var KEY_MIXED   = keyCode('M');;
+var KEY_MIXED   = keyCode('M');
 var KEY_GRAVITY = keyCode('G');
 var KEY_AVE_VEL = keyCode('V');
 var KEY_SPATIAL = keyCode('X');
@@ -82,8 +59,6 @@ var KEY_K = keyCode('K');
 var button = document.getElementById("weaponbutton");
 button.addEventListener("click", function() {
   var e = document.getElementById("weaponSelect");
-  //g_weapon = weapons[e.selectedIndex];
-
 
 });
 
@@ -113,7 +88,6 @@ var first = true;
 function renderSimulation(ctx) {
 
     if (gameplayManager.setupReady) {
-        //graphicsManager.render(ctx);
         terrain.render(ctx, g_landscape, g_canvas);
         entityManager.render(ctx);
 
@@ -143,7 +117,6 @@ function requestPreloads() {
         cloud1  : "../cloudsimg/cloud1.PNG",
         cloud2  : "../cloudsimg/cloud2.PNG",
         cloud3  : "../cloudsimg/cloud3.PNG",
-        //terrain : "http://i0.kym-cdn.com/entries/icons/mobile/000/013/564/doge.jpg",
         leftDoor : "../myndir/doorLeft.png",
         rightDoor : "../myndir/doorRight.png",
         tankgun : "../myndir/guns/green.png",
@@ -151,9 +124,7 @@ function requestPreloads() {
 
         tankDeath : "../myndir/tankexplode/tankDeath.png",
         flagtest : "../myndir/flags/sw.png",
-        pointer : "../myndir/pointer/arrowSmall.png"
-
-
+        pointer : "../myndir/pointer/arrowSmall.png",
         atom : "../myndir/explosives/atomsheet.png"
 
     };
@@ -173,19 +144,15 @@ function preloadDone() {
     g_sprites.cloud2 = new Sprite(g_images.cloud2);
     g_sprites.cloud3 = new Sprite(g_images.cloud3);
 
-
     g_sprites.xplode = spriteUtil.decomposeSheet(100,100,9,9,81, g_images.explosion);
     g_sprites.tankDeath = spriteUtil.decomposeSheet(81,40,6,2,12, g_images.tankDeath);
-     g_sprites.atom = spriteUtil.decomposeSheet(96, 96, 5, 3, 14, g_images.atom);
+    g_sprites.atom = spriteUtil.decomposeSheet(96, 96, 5, 3, 14, g_images.atom);
     g_sprites.arrows = new Sprite(g_images.pointer);
-
     g_sprites.flag = new Sprite(g_images.flagtest);
 
 
     entityManager.init();
-    //gameplayManager.init();
     toolbar.init();
-    //createInitialShips();
 
     main.init();
 }

@@ -17,7 +17,7 @@ var g_ctx = g_canvas.getContext("2d");
 var g_dash = document.getElementById("toolbar");
 var dash_ctx = g_dash.getContext("2d");
 
-var g_weapon = "normal";
+var g_weapon;
 var NOMINAL_GRAVITY = 0.12;
 
 

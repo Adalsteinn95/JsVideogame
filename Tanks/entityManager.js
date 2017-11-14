@@ -147,14 +147,12 @@ haltShips: function() {
 },
 
 update: function(du) {
-    //console.log(this._bullets);
     for (var c = 0; c < this._categories.length; ++c) {
 
         var aCategory = this._categories[c];
         var i = 0;
 
         while (i < aCategory.length) {
-          //console.log(aCategory[i]);
 
             var status = aCategory[i].update(du);
 
@@ -163,7 +161,6 @@ update: function(du) {
                 // prevent a confusing gap from appearing in the array
                 if(aCategory !== this._ships){
                   //we need the tank in the entitymanager despite death
-                  //aCategory.splice(i,1);
                   aCategory.splice(i,1);
                   if(this._bullets.length < 1 && this._explosions.length <  1){
                      gameplayManager.nextTurn();
@@ -171,11 +168,6 @@ update: function(du) {
 
                 }else {
                   ++i;
-                //console.log(this._categories);
-                //console.log(this._ships);
-                  /*if(this._bullets.length < 1 && this._explosions.length <  1){
-                    gameplayManager.nextTurn();
-                  }*/
                 }
             }
             else {
@@ -188,24 +180,19 @@ update: function(du) {
 
 render: function(ctx) {
 
-    var debugX = 10, debugY = 100;
-
     for (var c = 0; c < this._categories.length; ++c) {
 
         var aCategory = this._categories[c];
 
         for (var i = 0; i < aCategory.length; ++i) {
             if(aCategory === this._ships && aCategory[i]._isDeadNow){
-                //aCategory[i].render(ctx);
-
-            }else{aCategory[i].render(ctx)}
-            //if(aCategory === )
-            //aCategory[i].render(ctx);
-
-            //debug.text(".", debugX + i * 10, debugY);
+              //dont render dead tanks
+            }
+            else{
+              aCategory[i].render(ctx)
+            }
 
         }
-        debugY += 10;
     }
 }
 

@@ -19,8 +19,6 @@ function Cloud(descr) {
     this.scale  = this.scale  || 1;
 };
 
-
-
 Cloud.prototype = new Entity();
 
 Cloud.prototype.randomisePosition = function () {
@@ -70,15 +68,11 @@ Cloud.prototype.update = function (du) {
 
     this.wrapPosition();
 
-    //spatialManager.register(this);
-
 };
 
 Cloud.prototype.render = function (ctx) {
-    //var origScale = this.sprite.scale;
     // pass my scale into the sprite, for drawing
     this.sprite.scale = this.scale;
-
 
     this.sprite.drawWrappedCentredAt(
         ctx, this.cx, this.cy, this.rotation

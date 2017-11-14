@@ -194,12 +194,6 @@ var toolbar = {
 
         util.drawTextAt(ctx, 50, 75, "Courier", "20px", "black", "Weapon: " + entityManager._ships[gameplayManager.activePlayerIndex].weapon.name);
 
-        if (eatKey(this.KEY_PLUS)) {
-            //next weapon
-        }
-        if (eatKey(this.KEY_MINUS)) {
-            //previous weapon
-        }
     },
 
     renderWind : function(ctx) {

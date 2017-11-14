@@ -13,11 +13,8 @@ Arrow.prototype = new Entity();
 
 Arrow.prototype.render = function(ctx) {
     var cell = this.sprite;
-    //athuga
     cell.drawCentredAt(
         ctx, this.cx , this.cy , this.rotation );
-
-        //this.update();
 
 };
 Arrow.prototype.update = function() {

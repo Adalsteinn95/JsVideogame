@@ -33,7 +33,6 @@ var gameplayManager = {
         entityManager._generateClouds();
         entityManager._generateArrow();
         entityManager._ships[0].myTurn = true;
-        //entityManager._generateClouds();
     },
 
     setup : function() {
@@ -81,11 +80,9 @@ var gameplayManager = {
                  cy: 200,
                  playerNr : this.players[i].nr,
                  playerId : this.players[i].id,
-                 weapon : weapons[0]
+                 weapon : consts.weapons[0]
              });
         }
-
-
     },
 
     clamp: function(i){
@@ -110,11 +107,8 @@ var gameplayManager = {
             this.updateNextPlayer();
           };
 
-
-
           entityManager._ships[this.activePlayerIndex].myTurn = true;
-        //  this.activePlayerIndex++;
-        //  this.activePlayerIndex %= this.players.length;
+          //get new wind direction and power
           g_wind = util.randRange(-0.1,0.1);
 
       },
@@ -130,7 +124,6 @@ var gameplayManager = {
           var target = this.players.length -1;
         for(var i = 0; i< this.players.length; i++){
           if(entityManager._ships[i]._isDeadNow){
-            console.log("pingiddead");
             cnt++;
           }
         }
@@ -152,11 +145,6 @@ var gameplayManager = {
           return true;
         }else return false;
 
-
       },
-
-      updateWeapon: function(){
-
-      }
 
 }

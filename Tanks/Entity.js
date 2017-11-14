@@ -56,7 +56,7 @@ Entity.prototype.getPos = function () {
 };
 
 Entity.prototype.getRadius = function () {
-    //return 0.1;
+    return 1;
 };
 
 Entity.prototype.getSpatialID = function () {
@@ -69,7 +69,6 @@ Entity.prototype.kill = function () {
 
 Entity.prototype.findHitEntity = function () {
     var pos = this.getPos();
-    //console.log(pos.posX + " " + pos.posY + " " + this.getRadius() + " " + this);
     return spatialManager.findEntityInRange(
         pos.posX, pos.posY, this.getRadius(),this
     );
@@ -82,5 +81,4 @@ Entity.prototype.isColliding = function () {
 
 Entity.prototype.wrapPosition = function () {
     this.cx = util.wrapRange(this.cx, 0, g_canvas.width);
-    //this.cy = util.wrapRange(this.cy, 0, g_canvas.height);
 };

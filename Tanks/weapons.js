@@ -2,7 +2,7 @@
 // WEAPONS
 // ======
 
-
+/*
 "use strict"
 
 var weapons = [
@@ -31,3 +31,4 @@ var weapons = [
     name: "volcano"
   }
 ]
+*/

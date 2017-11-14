@@ -151,9 +151,7 @@ function requestPreloads() {
 
         tankDeath : "../myndir/tankexplode/tankDeath.png",
         flagtest : "../myndir/flags/sw.png",
-        pointer : "../myndir/pointer/arrowSmall.png"
-
-
+        pointer : "../myndir/pointer/arrowSmall.png",
         atom : "../myndir/explosives/atomsheet.png"
 
     };

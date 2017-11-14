@@ -52,6 +52,35 @@ Sprite.prototype.drawCentredAt = function (ctx, cx, cy, rotation) {
     ctx.restore();
 };
 
+Sprite.prototype.drawFlagCentredAt = function (ctx, cx, cy, rotation, scale, flagX, flagY) {
+
+    if (rotation === undefined) rotation = 0;
+
+    var w = this.width,
+        h = this.height;
+
+
+    ctx.save();
+    //athuga
+    ctx.translate(cx, cy);
+
+    ctx.rotate((rotation * Math.PI/180));
+    //console.log(rotation);
+
+        ctx.translate( flagX, flagY)
+
+    ctx.scale(scale, scale );
+
+
+
+    // drawImage expects "top-left" coords, so we offset our destination
+    // coords accordingly, to draw our sprite centred at the origin
+    ctx.drawImage(this.image,
+                  -w/2, -h/2);
+
+    ctx.restore();
+};
+
 Sprite.prototype.drawClippedCentredAt = function (
     ctx, cx, cy, rotation, w = this.width, h = this.height) {
     if (rotation === undefined) rotation = 0;

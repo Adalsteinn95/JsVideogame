@@ -22,6 +22,8 @@ function Ship(descr) {
   // Default sprite, if not otherwise specified
   this.sprite = this.sprite || g_sprites.ship;
   this.gunsprite = g_sprites.tankgun;
+  this.flagsprite = g_sprites.flag;
+  this.arrowSprite = g_sprites.arrows;
 
   // Set normal drawing scale, and warp state off
   this._scale = 1;
@@ -501,11 +503,16 @@ Ship.prototype.updateWeapon = function() {
   this.weapon = g_weapon;
 }
 
+
+
 Ship.prototype.render = function(ctx) {
   var origScale = this.sprite.scale;
   // pass my scale into the sprite, for drawing
   this.sprite.scale = this._scale;
 
+  //to tranlate the flag to the right posistion
+  var flagX = -8;
+  var flagY = -11;
   //console.log(this.rotation);
   var xOffset = (Math.cos((this.rotation * Math.PI / 180) + 90)) * this.sprite.width / 4;
   var yOffset = 0;
@@ -522,6 +529,8 @@ Ship.prototype.render = function(ctx) {
 
   //this.spriteGunRotation += this.rotation
   this.gunsprite.drawGunCentredAt(ctx, this.cx - (xOffset), this.cy - yOffset, this.spriteGunRotation - 90);
+
+    this.flagsprite.drawFlagCentredAt(ctx, this.cx - (xOffset) , this.cy - yOffset , this.rotation, 0.05, flagX, flagY);
 
   this.sprite.scale = origScale;
 

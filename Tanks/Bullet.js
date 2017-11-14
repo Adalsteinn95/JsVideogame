@@ -65,9 +65,10 @@ Bullet.prototype.update = function (du) {
 
     this.wrapPosition();
 
-    // Handle collisions
+    // Handle collisions for bullet against tank
     var hitEntity = this.findHitEntity();
     if (hitEntity) {
+      console.log("ping");
         var canTakeHit = hitEntity.takeBulletHit();
         if (canTakeHit) canTakeHit.call(hitEntity);
         terrain.bombLandscape(this.cx, this.weapon.damage/2, true);
@@ -122,7 +123,7 @@ Bullet.prototype.checkForVolcano = function() {
 };
 
 Bullet.prototype.getRadius = function () {
-    return 1;
+    return 2;
 };
 
 Bullet.prototype.takeBulletHit = function () {
@@ -131,6 +132,10 @@ Bullet.prototype.takeBulletHit = function () {
     // Make a noise when I am zapped by another bullet
     //this.zappedSound.play();
 };
+
+Bullet.prototype.topPointer(){
+  
+}
 
 Bullet.prototype.render = function (ctx) {
 

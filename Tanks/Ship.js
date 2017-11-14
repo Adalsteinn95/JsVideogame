@@ -73,7 +73,7 @@ Ship.prototype.offsetX = 0;
 Ship.prototype.offsetY = 0;
 
 //hitpoints
-Ship.prototype.health = 1;
+Ship.prototype.health = 1000000000000;
 
 //becomes true when hit, so the explosion doesnt hit multiple times
 //færa í bullet ?
@@ -405,12 +405,9 @@ Ship.prototype.calculatePath = function() {
           this.cx = util.clamp(this.cx);
           this.AIpath--;
         }
-
       }
-
     }
   }
-
 }
 
 Ship.prototype.updatePower = function(du) {
@@ -497,7 +494,6 @@ Ship.prototype.updateWeapon = function() {
 
 };
 
-
 Ship.prototype.render = function(ctx) {
   var origScale = this.sprite.scale;
   // pass my scale into the sprite, for drawing
@@ -523,7 +519,6 @@ Ship.prototype.render = function(ctx) {
   this.gunsprite.drawGunCentredAt(ctx, this.cx - (xOffset), this.cy - yOffset, this.spriteGunRotation - 90);
 
     this.flagsprite.drawFlagCentredAt(ctx, this.cx - (xOffset) , this.cy - yOffset , this.rotation, 0.05, flagX, flagY);
-
 
   this.sprite.scale = origScale;
 

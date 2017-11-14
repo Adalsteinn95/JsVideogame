@@ -148,6 +148,10 @@ drawTextAt : function(ctx, x, y, font, size, style, msg) {
   return angle * (180 / Math.PI);
 },
 
+toRadian: function (angle) {
+ return angle * ( Math.PI / 180);
+},
+
 //Clamp for index wrapping x is a number
 clamp: function(x){
   var num = x;

@@ -54,7 +54,6 @@ Sprite.prototype.drawCentredAt = function (ctx, cx, cy, rotation) {
 
 Sprite.prototype.drawClippedCentredAt = function (
     ctx, cx, cy, rotation, w = this.width, h = this.height) {
-      console.log(w + " " + h);
     if (rotation === undefined) rotation = 0;
 
     ctx.save();

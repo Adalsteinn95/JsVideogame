@@ -13,7 +13,6 @@ Explosion.prototype = new Entity();
 
 Explosion.prototype.render = function(ctx) {
     var cell = this.sprite[this.index];
-    console.log(this.radius);
     cell.drawClippedCentredAt(
         ctx, this.cx + 500, this.cy + 500, this.rotation, this.radius, this.radius);
 

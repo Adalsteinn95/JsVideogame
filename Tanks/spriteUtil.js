@@ -15,8 +15,7 @@ var spriteUtil = {
                 }
             }
         }
-        console.log(arr.length);
-        console.log(arr);
+
         return arr;
     },
 

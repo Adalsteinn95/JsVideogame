@@ -222,8 +222,8 @@ Ship.prototype.maybeFireBullet = function() {
 
     this.myTurn = false;
 
-    var dX = +Math.sin(this.gunrotation);
-    var dY = -Math.cos(this.gunrotation);
+    var dX = +Math.sin(util.toRadian(this.spriteGunRotation));
+    var dY = -Math.cos(util.toRadian(this.spriteGunRotation));
     var launchDist = this.getRadius();
 
     var startVel = this.getStartVel(dX, dY);
@@ -296,13 +296,14 @@ Ship.prototype.updateGunRotation = function() {
   this.calculatePath();
 
   if (this.myTurn === true) {
-    if (keys[this.KEY_LEFT] && util.toDegrees(this.gunrotation) > -90) {
+    if (keys[this.KEY_LEFT] && util.toDegrees(this.gunrotation) > 0) {
       this.gunrotation -= NOMINAL_ROTATE_RATE * 2;
     }
-    if (keys[this.KEY_RIGHT] && util.toDegrees(this.gunrotation) < 90) {
+    if (keys[this.KEY_RIGHT] && util.toDegrees(this.gunrotation) < 180) {
       this.gunrotation += NOMINAL_ROTATE_RATE * 2;
     }
     this.spriteGunRotation = util.toDegrees(this.gunrotation) - 90;
+    this.spriteGunRotation += this.rotation;
   }
 };
 
@@ -317,8 +318,8 @@ Ship.prototype.calculatePath = function() {
   /*bullet trail prediction */
   this.predictCord = [];
 
-  var dX = +Math.sin(this.gunrotation);
-  var dY = -Math.cos(this.gunrotation);
+  var dX = +Math.sin(util.toRadian(this.spriteGunRotation ));
+  var dY = -Math.cos(util.toRadian(this.spriteGunRotation ));
   var launchDist = this.getRadius();
 
   var startVel = this.getStartVel(dX, dY);
@@ -520,7 +521,7 @@ Ship.prototype.render = function(ctx) {
   this.sprite.drawCentredAt(ctx, this.cx - (xOffset), this.cy - yOffset, this.rotation);
 
   //this.spriteGunRotation += this.rotation
-  this.gunsprite.drawGunCentredAt(ctx, this.cx - (xOffset), this.cy - yOffset, this.spriteGunRotation);
+  this.gunsprite.drawGunCentredAt(ctx, this.cx - (xOffset), this.cy - yOffset, this.spriteGunRotation - 90);
 
   this.sprite.scale = origScale;
 

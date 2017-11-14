@@ -113,6 +113,10 @@ generateClouds : function () {
     this._clouds.push(new Cloud());
 },
 
+_generateArrow : function () {
+    this._clouds.push(new Arrow());
+},
+
 generateShip : function(descr) {
     this._ships.push(new Ship(descr));
 },

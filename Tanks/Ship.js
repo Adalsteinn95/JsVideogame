@@ -532,6 +532,7 @@ Ship.prototype.render = function(ctx) {
 
     this.flagsprite.drawFlagCentredAt(ctx, this.cx - (xOffset) , this.cy - yOffset , this.rotation, 0.05, flagX, flagY);
 
+
   this.sprite.scale = origScale;
 
   ///Projectile path

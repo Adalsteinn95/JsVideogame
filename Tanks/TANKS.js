@@ -135,7 +135,7 @@ function renderSimulation(ctx) {
 var g_images = {};
 
 function requestPreloads() {
-    console.log("1");
+
     var requiredImages = {
         ship   : "../myndir/tanks/green.png",
         cloud1  : "../cloudsimg/cloud1.PNG",
@@ -148,7 +148,7 @@ function requestPreloads() {
         explosion : "../myndir/explosives/explosionsheet.png",
         tankDeath : "../myndir/tankexplode/tankDeath.png",
         flagtest : "../myndir/flags/sw.png",
-        pointer : "../myndir/pointer/arrow"
+        pointer : "../myndir/pointer/arrowSmall.png"
 
     };
 
@@ -158,7 +158,6 @@ function requestPreloads() {
 var g_sprites = {};
 
 function preloadDone() {
-    console.log(2);
     g_sprites.ship  = new Sprite(g_images.ship);
     g_sprites.tankgun = new Sprite(g_images.tankgun);
 
@@ -168,9 +167,10 @@ function preloadDone() {
     g_sprites.cloud2 = new Sprite(g_images.cloud2);
     g_sprites.cloud3 = new Sprite(g_images.cloud3);
 
-    g_sprites.xplode = spriteUtil.decomposeSheet(100,100,9,9,81, g_images.explosion, 0, 0);
-    g_sprites.tankDeath = spriteUtil.decomposeSheet(81,40,6,2,12, g_images.tankDeath, 0, 0);
-    g_sprites.arrows = spriteUtil.decomposeSheet(48,48,8,1,3, g_images.pointer, 6,0);
+    g_sprites.xplode = spriteUtil.decomposeSheet(100,100,9,9,81, g_images.explosion);
+    g_sprites.tankDeath = spriteUtil.decomposeSheet(81,40,6,2,12, g_images.tankDeath);
+    g_sprites.arrows = spriteUtil.decomposeSheet(49,47,3,1,3, g_images.pointer);
+    console.log(g_sprites.arrows);
 
     g_sprites.flag = new Sprite(g_images.flagtest);
     //7/console.log(g_sprites.tankDeath);

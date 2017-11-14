@@ -19,7 +19,7 @@ var spriteUtil = {
         return arr;
     },
 
-    decomposeSheet : function(celWidth, celHeight, numCols, numRows, numCells, img, startRow, startCol) {
+  /*  decomposeSheet : function(celWidth, celHeight, numCols, numRows, numCells, img, startRow, startCol) {
         var arr = [];
         var sprite;
 
@@ -32,9 +32,9 @@ var spriteUtil = {
                 }
             }
         }
-
+        console.log(arr);
         return arr;
-    },
+    },*/
 
 
     pushImgUrl : function(url, length) {

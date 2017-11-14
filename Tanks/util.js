@@ -163,6 +163,16 @@ clamp: function(x){
   return num;
 },
 
+clampMinMax: function(x, min, max){
+  var num = x;
+  if(num >= max){
+    num = num - max;
+  }else if ( num < min){
+    num = num + max;
+  }
+  return num;
+},
+
 // landscape functions
 fun: [
     function(x) { return 100 + (-x*x); },

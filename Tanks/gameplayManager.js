@@ -31,6 +31,7 @@ var gameplayManager = {
         this.loadPlayers();
         this.setupReady = true;
         entityManager._generateClouds();
+        entityManager._generateArrow();
         entityManager._ships[0].myTurn = true;
         //entityManager._generateClouds();
     },

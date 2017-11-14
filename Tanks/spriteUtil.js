@@ -15,8 +15,11 @@ var spriteUtil = {
                 }
             }
         }
+        console.log(arr.length);
+        console.log(arr);
         return arr;
     },
+
 
     pushImgUrl : function(url, length) {
         var arr = [];

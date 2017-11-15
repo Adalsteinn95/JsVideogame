@@ -61,7 +61,6 @@ findEntityInRange: function(posX, posY, radius) {
       if(thing === false){
         continue;
       }
-      console.log(thing);
       var c2 = {xPos : thing.cx, yPos : thing.cy, radius : thing.getRadius()};
 
       if(spatialManager.collisioncheck(c1,c2) && !thing.partOfShower){

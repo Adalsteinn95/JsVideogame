@@ -133,9 +133,9 @@ Bullet.prototype.takeBulletHit = function () {
     //this.zappedSound.play();
 };
 
-Bullet.prototype.topPointer(){
-  
-}
+Bullet.prototype.topPointer = function (){
+
+};
 
 Bullet.prototype.render = function (ctx) {
 

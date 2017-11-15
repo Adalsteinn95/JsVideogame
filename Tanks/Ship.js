@@ -73,7 +73,7 @@ Ship.prototype.offsetX = 0;
 Ship.prototype.offsetY = 0;
 
 //hitpoints
-Ship.prototype.health = 1000000000000;
+Ship.prototype.health = 1;
 
 //becomes true when hit, so the explosion doesnt hit multiple times
 //færa í bullet ?
@@ -151,7 +151,7 @@ Ship.prototype.computeThrustMag = function() {
 
   var thrust = 0;
 
-  if (this.myTurn === true) {
+  if (this.myTurn === true && this.playerId === "Human"  ) {
     if (keys[this.KEY_THRUST] && this.rotation > -85 && this.cx + this.sprite.width / 2 < g_canvas.width) {
       thrust += NOMINAL_THRUST;
       this.dir = true;
@@ -216,7 +216,7 @@ Ship.prototype.falldown = function(thrust) {
 
 Ship.prototype.maybeFireBullet = function() {
 
-  if (keys[this.KEY_FIRE] && this.myTurn === true || this.myTurn === true && this.playerId === "AI") {
+  if ((keys[this.KEY_FIRE] && this.myTurn === true && this.playerId === "Human") || this.myTurn === true && this.playerId === "AI") {
 
     this.myTurn = false;
 
@@ -265,7 +265,7 @@ Ship.prototype.updateRotation = function(du) {
   xIndex2 = util.clamp(xIndex2);
 
 
-  this.rotation = util.toDegrees(Math.atan2(g_landscape[xIndex2] - this.cy, (xIndex2 - this.cx) /** xLine*/));
+  this.rotation = util.toDegrees(Math.atan2(g_landscape[xIndex2] - this.cy, (xIndex2 - this.cx)));
 } else { this.rotation = 0}
 
 };
@@ -303,6 +303,8 @@ Ship.prototype.updateGunRotation = function() {
 
 Ship.prototype.AIdirection = "right";
 Ship.prototype.AIpath = 0;
+
+
 Ship.prototype.calculatePath = function() {
   if(this.playerId === 'AI'){
     /*random power test for AI*/
@@ -335,7 +337,7 @@ Ship.prototype.calculatePath = function() {
     if (g_landscape[Math.floor(testX)] < testY) {
       break;
     };
-
+    //projectile path
     this.predictCord.push({testX, testY});
 
     veltestY += NOMINAL_GRAVITY;
@@ -347,8 +349,15 @@ Ship.prototype.calculatePath = function() {
   var destX = util.clamp(testX);
 
   var targetx = this.playerNr + 1;
-
   targetx %= entityManager._ships.length;
+  //AI will not aim at a dead player
+  //will get fixed once we have a winner screen
+  while(entityManager._ships[targetx]._isDeadNow){
+    targetx++
+    targetx = util.clampMinMax(targetx, 0, entityManager._ships.length);
+  }
+
+
   targetx = entityManager._ships[targetx].cx
 
   if (this.playerId === "AI") {
@@ -365,14 +374,15 @@ Ship.prototype.calculatePath = function() {
         }
 
       } else {
+        console.log("ping");
         destX += startVel[0];
         destX = util.clamp(destX);
         /*Rotation of the AI gun*/
-        if (Math.floor(util.toDegrees(this.gunrotation)) === 90) {
+        if (Math.floor(util.toDegrees(this.gunrotation)) === 180) {
           this.AIdirection = "left";
         }
 
-        if (Math.floor(util.toDegrees(this.gunrotation)) === -90) {
+        if (Math.floor(util.toDegrees(this.gunrotation)) === 0) {
           this.AIdirection = "right";
         }
 
@@ -397,12 +407,12 @@ Ship.prototype.calculatePath = function() {
         } else if(this.AIpath < 0){
 
           this.cx--;
-          this.cx = util.clamp(this.cx);
+          this.cx = util.clampRange(this.cx, 0, g_canvas.width);
           this.AIpath++;
         } else if(this.AIpath > 0){
 
           this.cx++;
-          this.cx = util.clamp(this.cx);
+          this.cx = util.clampRange(this.cx, 0 , g_canvas.width);
           this.AIpath--;
         }
       }

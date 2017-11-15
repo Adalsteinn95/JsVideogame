@@ -64,6 +64,7 @@ Ship.prototype.numSubSteps = 1;
 Ship.prototype.power = 2;
 Ship.prototype.POWER_INCREASE = 0.085;
 Ship.prototype.weaponId =  0;
+Ship.prototype.destX = 0;
 
 //is it this players turn?
 Ship.prototype.myTurn = false;
@@ -306,12 +307,12 @@ Ship.prototype.AIpath = 0;
 
 
 Ship.prototype.calculatePath = function() {
-  /*if(this.playerId === 'AI'){
+  if(this.playerId === 'AI'){
     /*random power test for AI*/
-  /*  var x = Math.floor(Math.random() * 6) + 1
+    var x = Math.floor(Math.random() * 6) + 1
     this.power = x;
 
-  }*/
+  }
   /*bullet trail prediction */
   this.predictCord = [];
 
@@ -343,10 +344,13 @@ Ship.prototype.calculatePath = function() {
     veltestY += NOMINAL_GRAVITY;
     veltestX += g_wind;
 
-  }
-};
+//ath
+    this.destX = util.clamp(testX);
 
-/*
+  }
+
+
+
   var destX = util.clamp(testX);
 
   var targetx = this.playerNr + 1;
@@ -379,7 +383,7 @@ Ship.prototype.calculatePath = function() {
         destX += startVel[0];
         destX = util.clamp(destX);
         /*Rotation of the AI gun*/
-  /*      if (Math.floor(util.toDegrees(this.gunrotation)) === 180) {
+       if (Math.floor(util.toDegrees(this.gunrotation)) === 180) {
           this.AIdirection = "left";
         }
 
@@ -396,12 +400,12 @@ Ship.prototype.calculatePath = function() {
         }
 
         /*movement of the AI */
-/*        if(this.AIpath === 0){
+        if(this.AIpath === 0){
           /*generate 1 from 50*/
           //var num = Math.floor(Math.random()*100) + 1;
-  /*        var num = 100;
+          var num = 100;
           /*50-50 that it will be a minus*/
-    /*      num *= Math.floor(Math.random()*2) == 1 ? 1 : -1
+         num *= Math.floor(Math.random()*2) == 1 ? 1 : -1
           this.AIpath = num;
 
 
@@ -419,7 +423,7 @@ Ship.prototype.calculatePath = function() {
       }
     }
   }
-}*/ 
+}
 
 Ship.prototype.updatePower = function(du) {
   if (this.myTurn === true) {

@@ -64,7 +64,12 @@ Ship.prototype.numSubSteps = 1;
 Ship.prototype.power = 2;
 Ship.prototype.POWER_INCREASE = 0.085;
 Ship.prototype.weaponId =  0;
+
+//AI stuff
 Ship.prototype.destX = 0;
+Ship.prototype.startVelX = 0;
+Ship.prototype.AIdirection = "right";
+Ship.prototype.AIpath = 0;
 
 //is it this players turn?
 Ship.prototype.myTurn = false;
@@ -88,38 +93,57 @@ Ship.prototype.update = function(du) {
     return entityManager.KILL_ME_NOW;
   }
 
+
   //update weapon if it has been changed ÞARF AÐ BREYTA
   //used to check for dmg, need to know what weapon is being fired
   //can be fixed by getting the damage for the explosion entity or Bullet
   //ATHUGA
   if (this.weapon !== g_weapon) {
-    //önnur föll kalla á g_weapon
-    g_weapon = this.weapon;
+      //önnur föll kalla á g_weapon
+      g_weapon = this.weapon;
 
   };
 
-  this.updateWeapon();
+  if(this.playerId === "AI" && this.myTurn === true){
+      //calculate teh path to get the DestX
+      this.calculatePath();
+      //
+      ai.AIupdate(this.destX, this.startVelX, this.AIdirection, this.AIpath);
+      //get y coordinates
+      var xIndex = util.clamp(Math.floor(this.cx));
+      this.cy = g_landscape[xIndex];
+      if (this.cy > 600) {
+        this.cy = 600;
+        this.rotation = 0;
+      }
+      //ai stuff
+  } else {
 
+  //changes weapon for player
+    this.updateWeapon();
+    //changes the power for the player
+    this.updatePower(du);
 
+  //óþarfi bæta við ef við höfum tank on tank hitbox
+    //spatialManager.unregister(this);
 
-  this.updatePower(du);
+    // Perform movement substeps
+    var steps = this.numSubSteps;
+    var dStep = du / steps;
+    for (var i = 0; i < steps; ++i) {
+      this.computeSubStep(dStep);
+    }
 
-  spatialManager.unregister(this);
+    this.calculatePath();
 
-  // Perform movement substeps
-  var steps = this.numSubSteps;
-  var dStep = du / steps;
-  for (var i = 0; i < steps; ++i) {
-    this.computeSubStep(dStep);
+    // Handle firing
+
+    if (this.playerId === "Human") {
+      this.maybeFireBullet();
+    }
+
+    //spatialManager.register(this);
   }
-
-  // Handle firing
-
-  if (this.playerId === "Human") {
-    this.maybeFireBullet();
-  }
-
-  spatialManager.register(this);
 };
 
 Ship.prototype.computeSubStep = function(du) {
@@ -153,11 +177,11 @@ Ship.prototype.computeThrustMag = function() {
   var thrust = 0;
 
   if (this.myTurn === true && this.playerId === "Human"  ) {
-    if (keys[this.KEY_THRUST] && this.rotation > -85 && this.cx + this.sprite.width / 2 < g_canvas.width) {
+    if (keys[this.KEY_THRUST]  && this.cx + this.sprite.width / 2 < g_canvas.width) {
       thrust += NOMINAL_THRUST;
       this.dir = true;
     }
-    if (keys[this.KEY_RETRO] && this.rotation < 85 && this.cx - this.sprite.width / 2 + 10 > 0) {
+    if (keys[this.KEY_RETRO] && this.cx - this.sprite.width / 2 + 10 > 0) {
       thrust += NOMINAL_RETRO;
       this.dir = false;
     }
@@ -288,7 +312,7 @@ Ship.prototype.getStartVel = function(dX, dY) {
 
 Ship.prototype.updateGunRotation = function() {
 
-  this.calculatePath();
+
 
   if (this.myTurn === true) {
     if (keys[this.KEY_LEFT] && util.toDegrees(this.gunrotation) > 0) {
@@ -302,8 +326,7 @@ Ship.prototype.updateGunRotation = function() {
   }
 };
 
-Ship.prototype.AIdirection = "right";
-Ship.prototype.AIpath = 0;
+
 
 
 Ship.prototype.calculatePath = function() {
@@ -346,84 +369,12 @@ Ship.prototype.calculatePath = function() {
 
 //ath
     this.destX = util.clamp(testX);
+    this.startVelX = startVel[0];
 
   }
 
+};
 
-
-  var destX = util.clamp(testX);
-
-  var targetx = this.playerNr + 1;
-  targetx %= entityManager._ships.length;
-  //AI will not aim at a dead player
-  //will get fixed once we have a winner screen
-  while(entityManager._ships[targetx]._isDeadNow){
-    targetx++
-    targetx = util.clampMinMax(targetx, 0, entityManager._ships.length);
-  }
-
-
-  targetx = entityManager._ships[targetx].cx
-
-  if (this.playerId === "AI") {
-    if (this.myTurn === true) {
-      if (Math.floor(destX) < targetx && targetx - 20 < Math.floor(destX) || Math.floor(destX) < targetx && targetx + 20 < Math.floor(destX)) {
-        //&& targetx - this.cx > 50 || this.cx - targetx > 50
-
-        console.log(Math.abs(targetx - this.cx));
-        if(Math.abs(targetx - this.cx) < 50){
-          console.log("dont shoot")
-        } else {
-          this.AIpath = 0;
-          this.maybeFireBullet();
-        }
-
-      } else {
-        console.log("ping");
-        destX += startVel[0];
-        destX = util.clamp(destX);
-        /*Rotation of the AI gun*/
-       if (Math.floor(util.toDegrees(this.gunrotation)) === 180) {
-          this.AIdirection = "left";
-        }
-
-        if (Math.floor(util.toDegrees(this.gunrotation)) === 0) {
-          this.AIdirection = "right";
-        }
-
-        if (this.AIdirection === "left") {
-          this.gunrotation -= NOMINAL_ROTATE_RATE * 2;
-        }
-
-        if (this.AIdirection === "right") {
-          this.gunrotation += NOMINAL_ROTATE_RATE * 2;
-        }
-
-        /*movement of the AI */
-        if(this.AIpath === 0){
-          /*generate 1 from 50*/
-          //var num = Math.floor(Math.random()*100) + 1;
-          var num = 100;
-          /*50-50 that it will be a minus*/
-         num *= Math.floor(Math.random()*2) == 1 ? 1 : -1
-          this.AIpath = num;
-
-
-        } else if(this.AIpath < 0){
-
-          this.cx--;
-          this.cx = util.clampRange(this.cx, 0, g_canvas.width);
-          this.AIpath++;
-        } else if(this.AIpath > 0){
-
-          this.cx++;
-          this.cx = util.clampRange(this.cx, 0 , g_canvas.width);
-          this.AIpath--;
-        }
-      }
-    }
-  }
-}
 
 Ship.prototype.updatePower = function(du) {
   if (this.myTurn === true) {

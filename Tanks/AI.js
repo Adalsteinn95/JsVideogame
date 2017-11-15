@@ -129,13 +129,11 @@ var ai = {
           path = this.AIMovement(path);
           direction = this.AIrotation(direction);
           this.shipUpdate(destX, path, direction);
-          //return( AIupdate(destX,startVelX, direction, path))
 
     }
   },
 
   shipUpdate: function(destX, path, direction){
-
 
     //update all the variables in ship
     entityManager._ships[gameplayManager.activePlayerIndex].destX = destX;

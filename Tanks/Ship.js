@@ -106,6 +106,7 @@ Ship.prototype.update = function(du) {
 
   if(this.playerId === "AI" && this.myTurn === true){
       //calculate teh path to get the DestX
+      spatialManager.register(this);
       this.calculatePath();
       //
       ai.AIupdate(this.destX, this.startVelX, this.AIdirection, this.AIpath);
@@ -142,7 +143,7 @@ Ship.prototype.update = function(du) {
       this.maybeFireBullet();
     }
 
-    //spatialManager.register(this);
+    spatialManager.register(this);
   }
 };
 
@@ -425,7 +426,7 @@ Ship.prototype.takeExplosionHit = function(bombX, bombY) {
 };
 
 Ship.prototype.checkForDeath = function() {
-
+    console.log("ping");
     if (this.health <= 0){
       //add the death animation to the entity manager
       entityManager._explosions.push(new Death({

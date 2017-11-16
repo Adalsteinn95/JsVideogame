@@ -110,6 +110,7 @@ var gameplayManager = {
           this.findNextPlayer();
 
           entityManager._ships[this.activePlayerIndex].myTurn = true;
+          entityManager._ships[this.activePlayerIndex].preMove = true;
           //get more ammo
           if(entityManager._ships[this.activePlayerIndex].ammo < 1){
             entityManager._ships[this.activePlayerIndex].ammo++;

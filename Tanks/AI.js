@@ -30,15 +30,50 @@ var ai = {
     return entityManager._ships[targetx].cx
   },
 
-  AIMovement: function(AIpath, ship){
+  AIMovement: function(ship){
     /*movement of the AI */
     var thrust;
+    console.log("currentx " + Math.floor(ship.cx))
+    console.log("nextX " + ship.nextX);
+
+    if(Math.floor(ship.cx) > ship.nextX){
+
+      ship.updateRotation();
+      thrust = -1;
+
+      if ((ship.rotation < -50) || (ship.rotation > 50)) {
+
+        thrust = ship.falldown(thrust);
+      }
+
+      if( Math.floor(ship.cx) - ship.sprite.width / 2 + 10 > 0){
+        ship.applyAccel(thrust);
+      }
+    } else if  (Math.floor(ship.cx) < ship.nextX){
+
+        ship.updateRotation();
+        thrust = 1;
+
+        if ((ship.rotation < -50) || (ship.rotation > 50)) {
+
+          thrust = ship.falldown(thrust);
+        }
+
+        if(Math.floor(ship.cx) + ship.sprite.width / 2 < g_canvas.width){
+          ship.applyAccel(thrust);
+        }
+      }
+    },
+
+/*  AIMovement: function(AIpath, ship){
+    //movement of the AI
+    var thrust;
     if(AIpath === 0){
-      /*generate 1 from 50*/
+      //generate 1 from 50
       //var num = Math.floor(Math.random()*100) + 1;
       var num = 150;
-      /*50-50 that it will be a minus*/
-      num *= Math.floor(Math.random()*2) == 1 ? 1 : -1
+      //50-50 that it will be a minus/
+     num *= Math.floor(Math.random()*2) == 1 ? 1 : -1
       AIpath = num;
 
     } else if(AIpath < 0){
@@ -75,7 +110,7 @@ var ai = {
     }
 
     return AIpath;
-  },
+  },*/
 
   AIrotation: function(AIdirection, ship){
 
@@ -112,6 +147,11 @@ var ai = {
       this.timer = 1000;
     }
     this.timer--;
+    if(Math.floor(ship.cx) !== ship.nextX){
+      //move to where it wants to go
+      this.AIMovement(ship);
+
+    }else{
 
         if (Math.floor(destX) < targetx && targetx - 20 < Math.floor(destX) || Math.floor(destX) < targetx && targetx + 20 < Math.floor(destX)) {
           //&& targetx - this.cx > 50 || this.cx - targetx > 50
@@ -122,7 +162,7 @@ var ai = {
             //move and rotate instead
             destX += startVelX;
             destX = util.clamp(destX, ship);
-            path = this.AIMovement(path, ship);
+          //  path = this.AIMovement(path, ship);
             direction = this.AIrotation(direction, ship);
             this.shipUpdate(destX, path, direction, ship);
             //change direction and run movement
@@ -134,12 +174,13 @@ var ai = {
         } else {
           destX += startVelX;
           destX = util.clamp(destX, ship);
-          path = this.AIMovement(path, ship);
+          //path = this.AIMovement(path, ship);
           direction = this.AIrotation(direction, ship);
           this.shipUpdate(destX, path, direction, ship);
 
     }
-  },
+  }
+},
 
   shipUpdate: function(destX, path, direction, ship){
 
@@ -147,8 +188,28 @@ var ai = {
     ship.destX = destX;
     ship.AIdirection = direction;
     ship.AIpath = path;
-  }
+  },
 
+//oldx = the current x coord of the ai tank, index is its player index
+  whereToMove: function(oldx, index){
+    //athuga breyta þetta í eitthvað sniðugt miðað við staðsetningar hinna
+    //skriðdrekkann
+    //decide whice direction to go, 50/50
+    var num = 1
+    /*50-50 that it will be a minus*/
+    num *= Math.floor(Math.random()*2) == 1 ? 1 : -1;
+
+
+
+    var dist = Math.floor(Math.random()*100);
+    console.log("dist " + dist);
+    dist *= num;
+    console.log("dist " + dist);
+    //ATHUGA
+    dist = util.clampRange(dist,0,g_canvas.length);
+    console.log("dist " + dist);
+    entityManager._ships[index].nextX = oldx + dist;
+  },
 
 }
 

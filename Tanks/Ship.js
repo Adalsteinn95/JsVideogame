@@ -72,6 +72,10 @@ Ship.prototype.destX = 0;
 Ship.prototype.startVelX = 0;
 Ship.prototype.AIdirection = "right";
 Ship.prototype.AIpath = 0;
+Ship.prototype.preMove = false;
+Ship.prototype.nextX;
+Ship.prototype.nextY;
+
 
 //is it this players turn?
 Ship.prototype.myTurn = false;
@@ -90,11 +94,20 @@ Ship.prototype.canFire = false;
 
 Ship.prototype.update = function(du) {
 
-  if(this.myTurn){
+  //if you only want one player to console log do it here
+  /*if(this.myTurn){
     console.log("ammo " + this.ammo);
     console.log("cost " + this.weapon.cost)
     var check = this.checkAmmoCost();
     console.log(check);
+  }*/
+
+  // if a AI player has not done premove calculations then do it here
+  if( this.playerId === 'AI' && !this.preMoveCalc){
+      //spatialID -1 gets the index of the ship on entitymanager
+      console.log(this._spatialID);
+      ai.whereToMove(Math.floor(this.cx), util.clampRange(this._spatialID-1,0,8));
+      this.preMoveCalc = true;
   }
 
   if (this._isDeadNow === true) {

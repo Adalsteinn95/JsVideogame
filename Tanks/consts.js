@@ -12,28 +12,34 @@ var consts = {
 
    weapons : [
        {
+
         damage: 25,
-        name: "normal"
+        name: "normal",
+        cost: 1
       },
 
        {
         showerAmount : 7,
         damage: 10,
-        name: "shower"
+        name: "shower",
+        cost: 2
       },
 
        {
-        damage: 100,
-        name: "atom"
+        damage: 150,
+        name: "atom",
+        cost: 6
       },
        {
-        damage: 5,
-        name: "tracer"
+        damage: 10,
+        name: "tracer",
+        cost: 4
       },
        {
         volcanoAmount:15,
-        damage:20,
-        name: "volcano"
+        damage:10,
+        name: "volcano",
+        cost: 3
       }
     ]
 };

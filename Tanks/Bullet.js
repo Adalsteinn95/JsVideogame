@@ -135,7 +135,7 @@ Bullet.prototype.takeBulletHit = function () {
 
 Bullet.prototype.render = function (ctx) {
     if(this.cy < 0) {
-      g_sprites.bulletArrow.drawFlagCentredAt(
+      g_sprites.bulletArrow.drawIndicatorCentredAt(
         ctx, this.cx, 0, 90, 0.025, (g_sprites.bulletArrow.height/2)*0.025,0
 
       );

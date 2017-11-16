@@ -485,7 +485,7 @@ Ship.prototype.render = function(ctx) {
   //this.spriteGunRotation += this.rotation
   this.gunsprite.drawGunCentredAt(ctx, this.cx - (xOffset), this.cy - yOffset, this.spriteGunRotation - 90);
 
-    this.flagsprite.drawFlagCentredAt(ctx, this.cx - (xOffset) , this.cy - yOffset , this.rotation, 0.05, flagX, flagY);
+    this.flagsprite.drawIndicatorCentredAt(ctx, this.cx - (xOffset) , this.cy - yOffset , this.rotation, 0.05, flagX, flagY);
 
   this.sprite.scale = origScale;
 

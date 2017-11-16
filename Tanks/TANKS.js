@@ -125,7 +125,9 @@ function requestPreloads() {
         tankDeath : "../myndir/tankexplode/tankDeath.png",
         flagtest : "../myndir/flags/sw.png",
         pointer : "../myndir/pointer/arrowSmall.png",
-        atom : "../myndir/explosives/atomsheet.png"
+        atom : "../myndir/explosives/atomsheet.png",
+        bulletArrow: "../myndir/arrow.png"
+
 
     };
 
@@ -149,6 +151,7 @@ function preloadDone() {
     g_sprites.atom = spriteUtil.decomposeSheet(96, 96, 5, 3, 14, g_images.atom);
     g_sprites.arrows = new Sprite(g_images.pointer);
     g_sprites.flag = new Sprite(g_images.flagtest);
+    g_sprites.bulletArrow = new Sprite(g_images.bulletArrow);
 
 
     entityManager.init();

@@ -384,7 +384,7 @@ Ship.prototype.updatePower = function(du) {
         this.power += this.POWER_INCREASE;
 
       }
-    } else if(this.power > 10){
+    } else if(this.power >= 6){
       if (keys[this.KEY_LESSPOWER]) {
         this.power -= this.POWER_INCREASE;
 

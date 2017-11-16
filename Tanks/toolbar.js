@@ -188,11 +188,21 @@ var toolbar = {
         this.renderWind(ctx);
         this.renderPower(ctx, tank);
         this.renderRotation(ctx, tank);
+        this.renderTime(g_ctx);
     },
 
     renderWeapon : function(ctx, tank) {
         util.drawTextAt(ctx, 50, 75, "Courier", "20px", "black", "Weapon: " +
                         tank.weapon.name);
+    },
+    renderTime : function(ctx) {
+        ctx.textAlign = 'center';
+        var oneThird = (g_countdown.timeLeft < (g_countdown.duration / 3) ) 
+        var color = oneThird ? "red" : "black";
+        var fixedNum = oneThird ? 2 : 0;
+        util.drawTextAt(ctx, g_canvas.width/2, 30, "Comic Sans MS", "20px", color, (g_countdown.timeLeft / 60).toFixed(fixedNum))
+
+
     },
 
     renderWind : function(ctx) {
@@ -229,8 +239,10 @@ var toolbar = {
         gradient.addColorStop(0,"#7CFC00");
         gradient.addColorStop(0.5, "#FFD700");
         gradient.addColorStop(1, "#FF3030");
-
-        var x = (tank.power / 6) * box.w;
+        var tankPower = tank.power
+        tankPower = (tankPower > 6 || tankPower < 0.3) ? Math.floor(tankPower) : tankPower;
+        var x = (tankPower / 6) * box.w;
+        console.log('TANK.POWER', tank.power)
         util.fillBox(ctx, box.cx, box.cy, x, box.h, gradient);
         ctx.lineWidth = 2;
         util.strokeBox(ctx, box.cx, box.cy, box.w, box.h, "black")

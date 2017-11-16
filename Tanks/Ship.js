@@ -72,7 +72,7 @@ Ship.prototype.destX = 0;
 Ship.prototype.startVelX = 0;
 Ship.prototype.AIdirection = "right";
 Ship.prototype.AIpath = 0;
-Ship.prototype.preMove = false;
+Ship.prototype.preMoveCalc = false;
 Ship.prototype.nextX;
 Ship.prototype.nextY;
 

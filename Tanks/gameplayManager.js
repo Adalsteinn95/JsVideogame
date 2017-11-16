@@ -93,7 +93,7 @@ var gameplayManager = {
     },
 
       nextTurn: function (){
-        console.log("pinging");
+
         if(this.checkForWinner()){
           console.log("we have a winner, player nr: " + (this.activePlayerIndex+1) );
           entityManager._ships[this.activePlayerIndex].myTurn = true;
@@ -110,7 +110,7 @@ var gameplayManager = {
           this.findNextPlayer();
 
           entityManager._ships[this.activePlayerIndex].myTurn = true;
-          entityManager._ships[this.activePlayerIndex].preMove = true;
+          entityManager._ships[this.activePlayerIndex].preMoveCalc = false;
           //get more ammo
           if(entityManager._ships[this.activePlayerIndex].ammo < 1){
             entityManager._ships[this.activePlayerIndex].ammo++;

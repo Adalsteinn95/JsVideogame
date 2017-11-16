@@ -133,13 +133,8 @@ Bullet.prototype.takeBulletHit = function () {
     //this.zappedSound.play();
 };
 
-Bullet.prototype.shouldDrawTopPointer = function (){
-    return this.cy < 0;
-
-};
-
 Bullet.prototype.render = function (ctx) {
-    if(this.shouldDrawTopPointer()) {
+    if(this.cy < 0) {
       g_sprites.bulletArrow.drawFlagCentredAt(
         ctx, this.cx, 0, 90, 0.025, (g_sprites.bulletArrow.height/2)*0.025,0
 

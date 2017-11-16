@@ -243,7 +243,7 @@ Ship.prototype.falldown = function(thrust) {
 Ship.prototype.maybeFireBullet = function() {
 
   if ((keys[this.KEY_FIRE] && this.myTurn === true && this.playerId === "Human") || this.myTurn === true && this.playerId === "AI") {
-
+    g_countdown.stop = true;
     this.myTurn = false;
 
     var dX = +Math.sin(util.toRadian(this.spriteGunRotation));

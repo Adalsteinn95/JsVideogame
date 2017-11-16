@@ -17,6 +17,7 @@ var gameplayManager = {
 
     players : [],
 
+
     _ : {
         turn : 0
     },
@@ -28,6 +29,8 @@ var gameplayManager = {
     },
 
     init : function() {
+        g_countdown.timeLeft = g_countdown.duration;
+        console.log('G_COUNTDOWN.TIMELEFT', g_countdown.timeLeft)
         this.loadPlayers();
         this.setupReady = true;
         entityManager._generateClouds();
@@ -93,6 +96,10 @@ var gameplayManager = {
     },
 
       nextTurn: function (){
+        g_countdown.stop = false;
+        g_countdown.timeLeft = g_countdown.duration;
+
+        entityManager._ships[this.activePlayerIndex].myTurn = false;
         if(this.checkForWinner()){
           console.log("we have a winner, player nr: " + (this.activePlayerIndex+1) );
           entityManager._ships[this.activePlayerIndex].myTurn = true;

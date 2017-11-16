@@ -147,6 +147,14 @@ haltShips: function() {
 },
 
 update: function(du) {
+    if(!g_countdown.stop){
+      g_countdown.timeLeft -= du;
+    }
+    if(g_countdown.timeLeft < 0) {
+      gameplayManager.nextTurn();
+
+
+    }
     for (var c = 0; c < this._categories.length; ++c) {
 
         var aCategory = this._categories[c];
@@ -162,7 +170,7 @@ update: function(du) {
                 if(aCategory !== this._ships){
                   //we need the tank in the entitymanager despite death
                   aCategory.splice(i,1);
-                  if(this._bullets.length < 1 && this._explosions.length <  1){
+                  if((this._bullets.length < 1 && this._explosions.length <  1)){
                      gameplayManager.nextTurn();
                    }
 

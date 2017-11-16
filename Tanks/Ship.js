@@ -435,6 +435,7 @@ Ship.prototype.updatePower = function(du) {
 Ship.prototype.takeBulletHit = function() {
 
     this.health -= g_weapon.damage;
+    this.health = this.health < 0 ? 0 : this.health;
     this.checkForDeath();
 
 };

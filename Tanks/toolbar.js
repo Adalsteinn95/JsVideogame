@@ -42,6 +42,13 @@ var toolbar = {
             w : 150,
             h : 30
         },
+        lifeBox : {
+          cx : 600,
+          cy : 30,
+          w : 100,
+          h : 10
+
+        },
 
         rotBox : {
             tx : 500,
@@ -187,6 +194,7 @@ var toolbar = {
         this.renderWeapon(ctx);
         this.renderWind(ctx);
         this.renderPower(ctx, tank);
+        this.renderLifebars(ctx);
         this.renderRotation(ctx, tank);
         this.renderTime(g_ctx);
     },
@@ -194,6 +202,56 @@ var toolbar = {
     renderWeapon : function(ctx) {
 
         util.drawTextAt(ctx, 50, 75, "Courier", "20px", "black", "Weapon: " + entityManager._ships[gameplayManager.activePlayerIndex].weapon.name);
+
+    },
+    renderLifebars : function(ctx) {
+      //þarf að breyta originalHealth af að healthi er breytt
+      var originalHealth = 100
+      var red, green;
+      var box = this._.lifeBox;
+      var offsetX = 0;
+      var offsetY = 0;
+      var gradient = ctx.createLinearGradient(box.cx,box.cy,box.cx+box.w,box.h);
+      gradient.addColorStop(0,"#FF3030");
+      gradient.addColorStop(0.5, "#FFD700");
+      gradient.addColorStop(1, "#7CFC00");
+      for(var i = 0; i < entityManager._ships.length; i++ ){
+        if(i === 2) {
+          offsetY = 50;
+          offsetX = 0;
+        }
+        else if (i < 2){
+          offsetY = 0;
+        }
+
+        util.fillBox(ctx, box.cx + offsetX, box.cy + offsetY, box.w, box.h, "#B0E0E6");
+        var health = entityManager._ships[i].health
+
+        if(health < originalHealth / 2 ) {
+
+           red = 255;
+           green = (health/50) * 255;
+        }
+        else{
+          green = 255;
+          red = ((originalHealth - health) / 50) * 255
+        }
+
+        var color = 'rgb(' + Math.round(red) +  ',' + Math.round(green) + ',' + 0 + ')';
+
+        var x = (entityManager._ships[i].health / 100) * box.w;
+        util.fillBox(ctx, box.cx + offsetX, box.cy + offsetY, x, box.h, color);
+        ctx.lineWidth = 2;
+        util.strokeBox(ctx, box.cx + offsetX, box.cy + offsetY, box.w, box.h, "black")
+        var sprite = entityManager._ships[i].flagsprite;
+        sprite.scale = 0.15;
+        sprite.drawCentredAt(ctx, box.cx + offsetX + box.w/2, (box.cy - 15) + offsetY, 0)
+
+
+        offsetX += box.w + 20;
+      }
+
+
 
     },
     renderTime : function(ctx) {
@@ -243,7 +301,6 @@ var toolbar = {
         var tankPower = tank.power
         tankPower = (tankPower > 6 || tankPower < 0.3) ? Math.floor(tankPower) : tankPower;
         var x = (tankPower / 6) * box.w;
-        console.log('TANK.POWER', tank.power)
         util.fillBox(ctx, box.cx, box.cy, x, box.h, gradient);
         ctx.lineWidth = 2;
         util.strokeBox(ctx, box.cx, box.cy, box.w, box.h, "black")

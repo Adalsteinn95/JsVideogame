@@ -184,16 +184,15 @@ var toolbar = {
         util.drawTextAt(ctx, 50, 30, "Courier", "25px", "black",
         "Turn " + gameplayManager._.turn +
         ": player " + parseInt(tank.playerNr+1));
-        this.renderWeapon(ctx);
+        this.renderWeapon(ctx, tank);
         this.renderWind(ctx);
         this.renderPower(ctx, tank);
         this.renderRotation(ctx, tank);
     },
 
-    renderWeapon : function(ctx) {
-
-        util.drawTextAt(ctx, 50, 75, "Courier", "20px", "black", "Weapon: " + entityManager._ships[gameplayManager.activePlayerIndex].weapon.name);
-
+    renderWeapon : function(ctx, tank) {
+        util.drawTextAt(ctx, 50, 75, "Courier", "20px", "black", "Weapon: " +
+                        tank.weapon.name);
     },
 
     renderWind : function(ctx) {

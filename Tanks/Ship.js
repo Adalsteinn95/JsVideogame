@@ -118,7 +118,6 @@ Ship.prototype.update = function(du) {
 
   this.endTurn();
 
-
   //update weapon if it has been changed ÞARF AÐ BREYTA
   //used to check for dmg, need to know what weapon is being fired
   //can be fixed by getting the damage for the explosion entity or Bullet
@@ -372,8 +371,6 @@ Ship.prototype.updateGunRotation = function() {
 };
 
 
-
-
 Ship.prototype.calculatePath = function() {
   if(this.playerId === 'AI'){
     /*random power test for AI*/
@@ -409,6 +406,7 @@ Ship.prototype.calculatePath = function() {
     //projectile path
     this.predictCord.push({testX, testY});
 
+
     veltestY += NOMINAL_GRAVITY;
     veltestX += g_wind;
 
@@ -416,7 +414,9 @@ Ship.prototype.calculatePath = function() {
     this.destX = util.clamp(testX);
     this.startVelX = startVel[0];
 
+
   }
+
 
 };
 
@@ -456,7 +456,7 @@ Ship.prototype.takeBulletHit = function() {
 Ship.prototype.takeExplosionHit = function(bombX, bombY) {
   if(!this.isHit){
 
-      var test = util.distCircles(this.cx, this.cy , bombX, bombY, this.getRadius(), 50)
+      var test = util.distCircles(this.cx, this.cy , bombX, bombY, this.getRadius(), g_weapon.damage);
       console.log(test);
       var range = Math.abs(util.distFromExplosion(this.cx, this.cy , bombX, bombY));
       console.log("fjarlægð frá sprengju " + range);
@@ -481,7 +481,6 @@ Ship.prototype.checkForDeath = function() {
           }) );
       this._isDeadNow = true;
     }
-
 
 };
 
@@ -536,6 +535,10 @@ Ship.prototype.render = function(ctx) {
   this.offsetX = xOffset;
   this.offsetY = yOffset;
 
+  //calc stöff ATHUGA
+  var dX = +Math.sin(util.toRadian(this.spriteGunRotation )) * this.power;
+  var dY = -Math.cos(util.toRadian(this.spriteGunRotation )) * this.power;
+
   this.sprite.drawCentredAt(ctx, this.cx - (xOffset), this.cy - yOffset, this.rotation);
 
   //this.spriteGunRotation += this.rotation
@@ -544,6 +547,11 @@ Ship.prototype.render = function(ctx) {
     this.flagsprite.drawIndicatorCentredAt(ctx, this.cx - (xOffset) , this.cy - yOffset , this.rotation, 0.05, flagX, flagY);
 
   this.sprite.scale = origScale;
+
+if(this.myTurn === true){
+  util.strokeCircle(g_ctx,this.cx, this.cy, util.horizontalRange(util.initialVelocity(dX, dY), 90, NOMINAL_GRAVITY ));
+
+}
 
   ///Projectile path
 

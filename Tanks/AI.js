@@ -65,53 +65,6 @@ var ai = {
       }
     },
 
-/*  AIMovement: function(AIpath, ship){
-    //movement of the AI
-    var thrust;
-    if(AIpath === 0){
-      //generate 1 from 50
-      //var num = Math.floor(Math.random()*100) + 1;
-      var num = 150;
-      //50-50 that it will be a minus/
-     num *= Math.floor(Math.random()*2) == 1 ? 1 : -1
-      AIpath = num;
-
-    } else if(AIpath < 0){
-
-      ship.updateRotation();
-      thrust = -1;
-
-      if ((ship.rotation < -50) || (ship.rotation > 50)) {
-
-        thrust = ship.falldown(thrust);
-      }
-
-      if( ship.cx - ship.sprite.width / 2 + 10 > 0){
-      ship.applyAccel(thrust);
-          AIpath++;
-    } else { AIpath = 150}
-
-
-    } else if(AIpath > 0){
-
-      ship.updateRotation();
-      thrust = 1;
-
-      if ((ship.rotation < -50) || (ship.rotation > 50)) {
-
-        thrust = ship.falldown(thrust);
-      }
-
-      if(ship.cx + ship.sprite.width / 2 < g_canvas.width){
-      ship.applyAccel(thrust);
-      AIpath--;
-    }else { AIpath = -150}
-
-    }
-
-    return AIpath;
-  },*/
-
   AIrotation: function(AIdirection, ship){
 
     /*Rotation of the AI gun*/
@@ -142,7 +95,6 @@ var ai = {
 
     var targetx = this.getTarget(ship);
     if(this.timer < 0){
-      console.log("ping")
       ship.maybeFireBullet();
       this.timer = 1000;
     }
@@ -199,8 +151,6 @@ var ai = {
     /*50-50 that it will be a minus*/
     num *= Math.floor(Math.random()*2) == 1 ? 1 : -1;
 
-
-
     var dist = Math.floor(Math.random()*100);
     console.log("dist " + dist);
     dist *= num;
@@ -212,8 +162,3 @@ var ai = {
   },
 
 }
-
-
-
-
-//===================================

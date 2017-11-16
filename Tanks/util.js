@@ -37,6 +37,27 @@ isBetween: function(value, lowBound, highBound) {
     return true;
 },
 
+//Clamp for index wrapping x is a number
+clamp: function(x){
+  var num = x;
+  if(num >= g_canvas.width){
+    num = num - g_canvas.width;
+  }else if ( num < 0){
+    num = num + g_canvas.width;
+  }
+  return num;
+},
+
+clampMinMax: function(x, min, max){
+  var num = x;
+  if(num >= max){
+    num = num - max;
+  }else if ( num < min){
+    num = num + max;
+  }
+  return num;
+},
+
 
 // RANDOMNESS
 // ==========
@@ -103,6 +124,7 @@ clearCanvas: function (ctx) {
 
 strokeCircle: function (ctx, x, y, r, p1 = 0, p2 = Math.PI * 2) {
     ctx.beginPath();
+    ctx.fillStyle = 'black';
     ctx.arc(x, y, r, p1, p2);
     ctx.stroke();
 },
@@ -135,6 +157,18 @@ drawTextAt : function(ctx, x, y, font, size, style, msg) {
     ctx.restore();
 },
 
+
+//============================
+//  ANGLES
+// ==============================
+
+ angleBetweenPoints: function(x1, y1, x2, y2){
+   console.log('X1, Y1, X2, Y2', x1, y1, x2, y2);
+
+    console.log('Point angle ' +  Math.atan2((x2-x1), (y2-y1)))
+    return Math.atan2((x2-x1), (y2-y1));
+
+ },
 //line1 and line 2 are array of start and end points of lines x1,y1,x2,y2
 //this is how we get the rotation from the slopes
  angleBetween2Lines: function (line1, line2){
@@ -152,26 +186,7 @@ toRadian: function (angle) {
  return angle * ( Math.PI / 180);
 },
 
-//Clamp for index wrapping x is a number
-clamp: function(x){
-  var num = x;
-  if(num >= g_canvas.width){
-    num = num - g_canvas.width;
-  }else if ( num < 0){
-    num = num + g_canvas.width;
-  }
-  return num;
-},
 
-clampMinMax: function(x, min, max){
-  var num = x;
-  if(num >= max){
-    num = num - max;
-  }else if ( num < min){
-    num = num + max;
-  }
-  return num;
-},
 
 // landscape functions
 fun: [
@@ -205,6 +220,38 @@ sinAcos: function(ratio, radius) {
 
     ctx.stroke();
     ctx.closePath();
+  },
+
+  //dx = x velocity and dy = y velocity, returns total velocity that the 2 forces would bring
+  initialVelocity: function(dx, dy){
+    //ath
+    var calc =  Math.sqrt(util.square(dx) + util.square(dy));
+    if( dx < 0 || dy < 0){
+      calc = -calc;
+    }
+    return calc;
+  },
+
+  //returns the time of floght for a bullet
+  timeOfFlight: function(velocity, angle, gravity){
+    return ((2*velocity)*Math.sin(angle))/ gravity;
+  },
+  //returns max height a bullet reaches with the given velocity
+  maxHeightReached: function(vel, angle, gravity){
+    return (util.square(vel) * util.square(Math.sin(angle)))/(2*gravity);
+
+  },
+  //return the horizontal range
+  horizontalRange: function(vel, angle, gravity){
+    var a = angle;
+    console.log('VEL, ANGLE, GRAVITY', vel, angle, gravity);
+    console.log(a);
+    console.log('GRAVITY', gravity)
+    console.log('MATH.SIN(2*A)', Math.sin(2*a))
+    console.log('UTIL.SQUARE(VEL)', util.square(vel))
+
+    return ((util.square(vel) * Math.sin(a))/gravity);
+
   },
 
 

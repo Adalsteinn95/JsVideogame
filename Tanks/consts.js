@@ -12,22 +12,22 @@ var consts = {
 
    weapons : [
        {
-        damage: 50,
+        damage: 25,
         name: "normal"
       },
 
        {
         showerAmount : 7,
-        damage: 50,
+        damage: 10,
         name: "shower"
       },
 
        {
-        damage: 200,
+        damage: 100,
         name: "atom"
       },
        {
-        damage: 20,
+        damage: 5,
         name: "tracer"
       },
        {

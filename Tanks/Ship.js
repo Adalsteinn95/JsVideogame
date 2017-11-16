@@ -91,10 +91,8 @@ Ship.prototype.canFire = false;
 Ship.prototype.update = function(du) {
 
   if(this.myTurn){
-    console.log("ammo " + this.ammo);
-    console.log("cost " + this.weapon.cost)
+
     var check = this.checkAmmoCost();
-    console.log(check);
   }
 
   if (this._isDeadNow === true) {

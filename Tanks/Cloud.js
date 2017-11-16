@@ -35,15 +35,18 @@ Cloud.prototype.randomiseScale = function () {
 
 Cloud.prototype.randomiseVelocity = function () {
     this.windspeed = g_wind;
+    console.log('G_WIND', Math.abs(g_wind * 10))
+    var windPerc = Math.abs(g_wind * 10)
+
     var sizeOffset;
     if(this.scale < .25) {
-      sizeOffset = 0.075;
+      sizeOffset = 0.075 * windPerc;
     }
     else if(this.scale < .3) {
-      sizeOffset = 0.05;
+      sizeOffset = 0.05 * windPerc;
     }
     else if(this.scale < .35) {
-      sizeOffset = 0.025;
+      sizeOffset = 0.025 * windPerc;
     }
     else if(this.scale <= .4) {
       sizeOffset = 0;

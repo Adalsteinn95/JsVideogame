@@ -133,11 +133,18 @@ Bullet.prototype.takeBulletHit = function () {
     //this.zappedSound.play();
 };
 
-Bullet.prototype.topPointer = function (){
+Bullet.prototype.shouldDrawTopPointer = function (){
+    return this.cy < 0;
 
 };
 
 Bullet.prototype.render = function (ctx) {
+    if(this.shouldDrawTopPointer()) {
+      g_sprites.bulletArrow.drawFlagCentredAt(
+        ctx, this.cx, 0, 90, 0.025, (g_sprites.bulletArrow.height/2)*0.025,0
+
+      );
+    }
 
     g_sprites.bullet.drawWrappedCentredAt(
         ctx, this.cx, this.cy, this.rotation

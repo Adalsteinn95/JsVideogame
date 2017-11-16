@@ -257,6 +257,7 @@ Ship.prototype.maybeFireBullet = function() {
   this.canFire = this.checkAmmoCost();
 
   if ((keys[this.KEY_FIRE] && this.myTurn && this.playerId === "Human" && this.canFire) || this.myTurn && this.playerId === "AI" && this.canFire) {
+    g_countdown.stop = true;
 
     this.myTurn = false;
 

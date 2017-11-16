@@ -39,7 +39,11 @@ var g_useGravity = false;
 var g_useAveVel = true;
 var g_weapon = consts.weapons[0];
 var g_wind = util.randRange(-0.1,0.1)
+var g_countdown = {
+  duration: 30000 / NOMINAL_UPDATE_INTERVAL,
+  stop: false,
 
+}
 var g_renderSpatialDebug = true;
 
 

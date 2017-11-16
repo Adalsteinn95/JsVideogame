@@ -116,7 +116,10 @@ var gameplayManager = {
             entityManager._ships[this.activePlayerIndex].ammo++;
         }
           //get new wind direction and power
-          g_wind = util.randRange(-0.1,0.1);
+          //g_wind = util.randRange(-0.1,0.1);
+
+          //test
+          g_wind = 0;
 
       },
 

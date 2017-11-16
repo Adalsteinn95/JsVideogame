@@ -539,6 +539,8 @@ Ship.prototype.render = function(ctx) {
   var dX = +Math.sin(util.toRadian(this.spriteGunRotation ));
   var dY = -Math.cos(util.toRadian(this.spriteGunRotation ));
 
+  var angle = this.gunrotation + util.toRadian(this.rotation);
+
   this.sprite.drawCentredAt(ctx, this.cx - (xOffset), this.cy - yOffset, this.rotation);
 
   //this.spriteGunRotation += this.rotation
@@ -551,8 +553,8 @@ Ship.prototype.render = function(ctx) {
   var startVel = this.getStartVel(dX, dY);
 
 if(this.myTurn === true){
-  console.log(util.initialVelocity(startVel[0], startVel[1]));
-  util.strokeCircle(g_ctx,this.cx, this.cy, util.horizontalRange(util.initialVelocity(startVel[0], startVel[1]), this.gunrotation, NOMINAL_GRAVITY ));
+  console.log(angle);
+  util.strokeCircle(g_ctx,this.cx - this.offsetX, this.cy - this.offsetY, util.horizontalRange(util.initialVelocity(dX * this.power, dY * this.power), angle, NOMINAL_GRAVITY ));
 
 }
 

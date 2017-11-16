@@ -191,15 +191,9 @@ var toolbar = {
     },
 
     renderWeapon : function(ctx) {
-      //console.log(weapons);
-        util.drawTextAt(ctx, 50, 75, "Courier", "20px", "black", "Weapon: " + g_weapon.name);
 
-        if (eatKey(this.KEY_PLUS)) {
-            //next weapon
-        }
-        if (eatKey(this.KEY_MINUS)) {
-            //previous weapon
-        }
+        util.drawTextAt(ctx, 50, 75, "Courier", "20px", "black", "Weapon: " + entityManager._ships[gameplayManager.activePlayerIndex].weapon.name);
+
     },
 
     renderWind : function(ctx) {
@@ -251,7 +245,7 @@ var toolbar = {
         ctx.fillStyle = "#FFF";
         util.fillCircle(ctx, box.cx, box.cy, box.r, Math.PI, 0);
 
-        var rotText = (Math.abs(util.toDegrees(tank.gunrotation) - 90).toFixed(2) + "°");
+        var rotText = (Math.abs(util.toDegrees(tank.gunrotation)- 180).toFixed(2) + "°");
         ctx.textAlign = "center";
         util.drawTextAt(ctx, box.cx, box.cy-20, "Courier", "14px", "black", rotText);
 
@@ -259,7 +253,7 @@ var toolbar = {
         ctx.strokeStyle = "#F00";
         ctx.lineWidth = 3;
         ctx.translate(box.cx, box.cy);
-        ctx.rotate(tank.gunrotation);
+        ctx.rotate(tank.gunrotation - Math.PI/2);
         ctx.translate(-box.cx, -box.cy);
         ctx.beginPath();
         ctx.moveTo(box.cx,box.cy);

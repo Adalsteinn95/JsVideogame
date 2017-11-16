@@ -2,6 +2,7 @@ function Cloud(descr) {
 
     this.randomisePosition();
     this.randomiseScale();
+    this.randomiseVelocity();
 
     //set random cloud image
     var randSprite = Math.random();
@@ -18,14 +19,12 @@ function Cloud(descr) {
     this.scale  = this.scale  || 1;
 };
 
-
-
 Cloud.prototype = new Entity();
 
 Cloud.prototype.randomisePosition = function () {
 
     this.cx = util.randRange(0, 600)
-    this.cy = util.randRange(50, 150)
+    this.cy = util.randRange(25, 150)
 
 };
 
@@ -34,23 +33,46 @@ Cloud.prototype.randomiseScale = function () {
 
 };
 
+Cloud.prototype.randomiseVelocity = function () {
+    this.windspeed = g_wind;
+    var sizeOffset;
+    if(this.scale < .25) {
+      sizeOffset = 0.075;
+    }
+    else if(this.scale < .3) {
+      sizeOffset = 0.05;
+    }
+    else if(this.scale < .35) {
+      sizeOffset = 0.025;
+    }
+    else if(this.scale <= .4) {
+      sizeOffset = 0;
+    }
+    if(g_wind < 0) {
+      sizeOffset = -sizeOffset;
+
+    }
+    this.velX = g_wind + sizeOffset;
+}
+
 
 
 Cloud.prototype.update = function (du) {
+    //if g_wind has changed, update the velocity
+    if(this.windspeed !== g_wind) {
+      this.randomiseVelocity();
 
-    this.cx += (g_wind * 10) * du;
+    }
+
+    this.cx +=  (this.velX * 10) * du;
 
     this.wrapPosition();
-
-    //spatialManager.register(this);
 
 };
 
 Cloud.prototype.render = function (ctx) {
-    //var origScale = this.sprite.scale;
     // pass my scale into the sprite, for drawing
     this.sprite.scale = this.scale;
-
 
     this.sprite.drawWrappedCentredAt(
         ctx, this.cx, this.cy, this.rotation

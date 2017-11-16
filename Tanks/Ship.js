@@ -22,6 +22,8 @@ function Ship(descr) {
   // Default sprite, if not otherwise specified
   this.sprite = this.sprite || g_sprites.ship;
   this.gunsprite = g_sprites.tankgun;
+  this.flagsprite = g_sprites.flag;
+  this.arrowSprite = g_sprites.arrows;
 
   // Set normal drawing scale, and warp state off
   this._scale = 1;
@@ -43,6 +45,9 @@ Ship.prototype.KEY_LEFT = 'A'.charCodeAt(0);
 Ship.prototype.KEY_RIGHT = 'D'.charCodeAt(0);
 Ship.prototype.KEY_POWER = '5'.charCodeAt(0);
 Ship.prototype.KEY_LESSPOWER = '4'.charCodeAt(0);
+Ship.prototype.KEY_PREVGUN = 'Z'.charCodeAt(0);
+Ship.prototype.KEY_NEXTGUN = 'X'.charCodeAt(0);
+
 
 Ship.prototype.KEY_FIRE = ' '.charCodeAt(0);
 
@@ -60,6 +65,12 @@ Ship.prototype.power = 2;
 Ship.prototype.POWER_INCREASE = 0.085;
 Ship.prototype.weaponId =  0;
 
+//AI stuff
+Ship.prototype.destX = 0;
+Ship.prototype.startVelX = 0;
+Ship.prototype.AIdirection = "right";
+Ship.prototype.AIpath = 0;
+
 //is it this players turn?
 Ship.prototype.myTurn = false;
 
@@ -69,47 +80,71 @@ Ship.prototype.offsetY = 0;
 
 //hitpoints
 Ship.prototype.health = 100;
-//becomes true when hit, so the explosion doenst hit multiple times
+
+//becomes true when hit, so the explosion doesnt hit multiple times
+//færa í bullet ?
 Ship.prototype.isHit = false;
 
 Ship.prototype.update = function(du) {
-  //update weapon if it has been changed ÞARF AÐ BREYTA
-  if (this.weapon !== g_weapon) {
-    this.updateWeapon();
-  };
 
   if (this._isDeadNow === true) {
+
     spatialManager.unregister(this);
     return entityManager.KILL_ME_NOW;
   }
 
-  this.updatePower(du);
 
-  spatialManager.unregister(this);
+  //update weapon if it has been changed ÞARF AÐ BREYTA
+  //used to check for dmg, need to know what weapon is being fired
+  //can be fixed by getting the damage for the explosion entity or Bullet
+  //ATHUGA
+  if (this.weapon !== g_weapon) {
+      //önnur föll kalla á g_weapon
+      g_weapon = this.weapon;
 
-  // Handle collisions with other tank maybe
-  //
-  /*var hitEntity = this.findHitEntity();
-    if (hitEntity) {
-        var canTakeHit = hitEntity.takeBulletHit;
-        if (canTakeHit) canTakeHit.call(hitEntity);
-        this.takeBulletHit();
-    }*/
+  };
 
-  // Perform movement substeps
-  var steps = this.numSubSteps;
-  var dStep = du / steps;
-  for (var i = 0; i < steps; ++i) {
-    this.computeSubStep(dStep);
+  if(this.playerId === "AI" && this.myTurn === true){
+      //calculate teh path to get the DestX
+      spatialManager.register(this);
+      this.calculatePath();
+      //
+      ai.AIupdate(this.destX, this.startVelX, this.AIdirection, this.AIpath);
+      //get y coordinates
+      var xIndex = util.clamp(Math.floor(this.cx));
+      this.cy = g_landscape[xIndex];
+      if (this.cy > 600) {
+        this.cy = 600;
+        this.rotation = 0;
+      }
+      //ai stuff
+  } else {
+
+  //changes weapon for player
+    this.updateWeapon();
+    //changes the power for the player
+    this.updatePower(du);
+
+  //óþarfi bæta við ef við höfum tank on tank hitbox
+    //spatialManager.unregister(this);
+
+    // Perform movement substeps
+    var steps = this.numSubSteps;
+    var dStep = du / steps;
+    for (var i = 0; i < steps; ++i) {
+      this.computeSubStep(dStep);
+    }
+
+    this.calculatePath();
+
+    // Handle firing
+
+    if (this.playerId === "Human") {
+      this.maybeFireBullet();
+    }
+
+    spatialManager.register(this);
   }
-
-  // Handle firing
-
-  if (this.playerId === "Human") {
-    this.maybeFireBullet();
-  }
-
-  spatialManager.register(this);
 };
 
 Ship.prototype.computeSubStep = function(du) {
@@ -122,7 +157,7 @@ Ship.prototype.computeSubStep = function(du) {
   var thrust = this.computeThrustMag();
 
   //falling down from a hill
-  if ((this.rotation < -50/*&& this.dir === true*/) || (this.rotation > 50/*&& this.dir === false)*/)) {
+  if ((this.rotation < -50) || (this.rotation > 50)) {
 
     thrust = this.falldown(thrust);
   }
@@ -130,8 +165,6 @@ Ship.prototype.computeSubStep = function(du) {
   // Apply thrust directionally, based on our rotation
   var accelX = thrust;
   var accelY = thrust;
-
-  //accelY += this.computeGravity();
 
   this.applyAccel(accelX, accelY, du);
 
@@ -141,16 +174,15 @@ var NOMINAL_THRUST = +1;
 var NOMINAL_RETRO = -1;
 
 Ship.prototype.computeThrustMag = function() {
-  //console.log(this.cx - this.sprite.width/2 +10);
 
   var thrust = 0;
 
-  if (this.myTurn === true) {
-    if (keys[this.KEY_THRUST] && this.rotation > -85 && this.cx + this.sprite.width / 2 < g_canvas.width) {
+  if (this.myTurn === true && this.playerId === "Human"  ) {
+    if (keys[this.KEY_THRUST]  && this.cx + this.sprite.width / 2 < g_canvas.width) {
       thrust += NOMINAL_THRUST;
       this.dir = true;
     }
-    if (keys[this.KEY_RETRO] && this.rotation < 85 && this.cx - this.sprite.width / 2 + 10 > 0) {
+    if (keys[this.KEY_RETRO] && this.cx - this.sprite.width / 2 + 10 > 0) {
       thrust += NOMINAL_RETRO;
       this.dir = false;
     }
@@ -177,12 +209,10 @@ Ship.prototype.predictY = 0;
 Ship.prototype.predictCord = [];
 
 Ship.prototype.falldown = function(thrust) {
-  //console.log(this.rotation);
   if (this.cx + this.sprite.width / 2 < g_canvas.width && this.cx - this.sprite.width / 2 + 10 > 0) {
     //heading upp a hill to the right
     if (this.rotation < -50) {
 
-      //if(this.dir === true){
       if (this.rotation > -65) {
 
         thrust += NOMINAL_RETRO / 4
@@ -196,7 +226,6 @@ Ship.prototype.falldown = function(thrust) {
     //hmmm
     if (this.rotation > 50) {
       //heading upp a hill to the right
-      //if(this.dir === true){
       if (this.rotation < 65) {
         thrust += NOMINAL_THRUST / 4
       } else if (this.rotation < 75) {
@@ -205,7 +234,6 @@ Ship.prototype.falldown = function(thrust) {
         thrust += NOMINAL_THRUST / 2
       }
     }
-
   }
 
   return thrust;
@@ -214,28 +242,26 @@ Ship.prototype.falldown = function(thrust) {
 
 Ship.prototype.maybeFireBullet = function() {
 
-  if (keys[this.KEY_FIRE] && this.myTurn === true || this.myTurn === true && this.playerId === "AI") {
+  if ((keys[this.KEY_FIRE] && this.myTurn === true && this.playerId === "Human") || this.myTurn === true && this.playerId === "AI") {
 
     this.myTurn = false;
 
-    var dX = +Math.sin(this.gunrotation);
-    var dY = -Math.cos(this.gunrotation);
+    var dX = +Math.sin(util.toRadian(this.spriteGunRotation));
+    var dY = -Math.cos(util.toRadian(this.spriteGunRotation));
     var launchDist = this.getRadius();
 
     var startVel = this.getStartVel(dX, dY);
 
     var volcanoMaster = this.weapon.name === "volcano";
 
-    //console.log('THIS.WEAPON ', this.weapon )
-
+    //if shower then need to spawn more bullets right away
     if(this.weapon.name === "shower") {
-      //console.log('CONDITION PASSED')
       for (var i = -this.weapon.showerAmount/2; i < this.weapon.showerAmount/2; i++) {
-        entityManager.fireBullet((this.cx + dX * launchDist) - this.offsetX, (this.cy + dY * launchDist) - this.offsetY + 100, startVel[0], startVel[1], this.spriteGunRotation,true,i,false);
+        entityManager.fireBullet((this.cx + dX * launchDist) - this.offsetX, (this.cy + dY * launchDist) - this.offsetY , startVel[0], startVel[1], this.spriteGunRotation,true,i,false, this.weapon);
 
       }
     } else {
-      entityManager.fireBullet((this.cx + dX * launchDist) - this.offsetX, (this.cy + dY * launchDist) - this.offsetY, startVel[0], startVel[1], this.spriteGunRotation, false, 0, volcanoMaster);
+      entityManager.fireBullet((this.cx + dX * launchDist) - this.offsetX, (this.cy + dY * launchDist) - this.offsetY, startVel[0], startVel[1], this.spriteGunRotation, false, 0, volcanoMaster, this.weapon);
 
     }
     volcanoMaster = false;
@@ -250,7 +276,6 @@ Ship.prototype.getRadius = function() {
 Ship.prototype.reset = function() {
   this.setPos(this.reset_cx, this.reset_cy);
   this.rotation = this.reset_rotation;
-
 };
 
 var NOMINAL_ROTATE_RATE = 0.01;
@@ -266,13 +291,12 @@ Ship.prototype.updateRotation = function(du) {
   xIndex2 = util.clamp(xIndex2);
 
 
-  this.rotation = util.toDegrees(Math.atan2(g_landscape[xIndex2] - this.cy, (xIndex2 - this.cx) /** xLine*/));
+  this.rotation = util.toDegrees(Math.atan2(g_landscape[xIndex2] - this.cy, (xIndex2 - this.cx)));
 } else { this.rotation = 0}
-
 
 };
 
-//calculates teh starting velocity and returnas an array with index 0 = x and 1 = y
+//calculates the starting velocity and returnas an array with index 0 = x and 1 = y
 Ship.prototype.getStartVel = function(dX, dY) {
 
   var relVel = this.launchVel;
@@ -289,32 +313,35 @@ Ship.prototype.getStartVel = function(dX, dY) {
 
 Ship.prototype.updateGunRotation = function() {
 
-  this.calculatePath();
+
 
   if (this.myTurn === true) {
-    if (keys[this.KEY_LEFT] && util.toDegrees(this.gunrotation) > -90) {
+    if (keys[this.KEY_LEFT] && util.toDegrees(this.gunrotation) > 0) {
       this.gunrotation -= NOMINAL_ROTATE_RATE * 2;
     }
-    if (keys[this.KEY_RIGHT] && util.toDegrees(this.gunrotation) < 90) {
+    if (keys[this.KEY_RIGHT] && util.toDegrees(this.gunrotation) < 180) {
       this.gunrotation += NOMINAL_ROTATE_RATE * 2;
     }
     this.spriteGunRotation = util.toDegrees(this.gunrotation) - 90;
+    this.spriteGunRotation += this.rotation;
   }
 };
 
-Ship.prototype.AIdirection = "right";
+
+
+
 Ship.prototype.calculatePath = function() {
   if(this.playerId === 'AI'){
     /*random power test for AI*/
-    var x = (Math.random() * 10);
+    var x = Math.floor(Math.random() * 6) + 1
     this.power = x;
 
   }
   /*bullet trail prediction */
   this.predictCord = [];
 
-  var dX = +Math.sin(this.gunrotation);
-  var dY = -Math.cos(this.gunrotation);
+  var dX = +Math.sin(util.toRadian(this.spriteGunRotation ));
+  var dY = -Math.cos(util.toRadian(this.spriteGunRotation ));
   var launchDist = this.getRadius();
 
   var startVel = this.getStartVel(dX, dY);
@@ -335,132 +362,80 @@ Ship.prototype.calculatePath = function() {
     if (g_landscape[Math.floor(testX)] < testY) {
       break;
     };
-
+    //projectile path
     this.predictCord.push({testX, testY});
 
     veltestY += NOMINAL_GRAVITY;
     veltestX += g_wind;
 
+//ath
+    this.destX = util.clamp(testX);
+    this.startVelX = startVel[0];
+
   }
 
+};
 
-  var destX = util.clamp(testX);
-
-  var targetx = this.playerNr + 1;
-
-  targetx %= entityManager._ships.length;
-  targetx = entityManager._ships[targetx].cx
-
-  if (this.playerId === "AI") {
-    if (this.myTurn === true) {
-      if (Math.floor(destX) < targetx && targetx - 10 < Math.floor(destX) || Math.floor(destX) < targetx && targetx + 10 < Math.floor(destX)) {
-        this.maybeFireBullet();
-      } else {
-        destX += startVel[0];
-        destX = util.clamp(destX);
-        /*Rotation of the AI*/
-        if (Math.floor(util.toDegrees(this.gunrotation)) === 90) {
-          this.AIdirection = "left";
-        }
-
-        if (Math.floor(util.toDegrees(this.gunrotation)) === -90) {
-          this.AIdirection = "right";
-        }
-
-        if (this.AIdirection === "left") {
-          this.gunrotation -= NOMINAL_ROTATE_RATE * 2;
-        }
-
-        if (this.AIdirection === "right") {
-          this.gunrotation += NOMINAL_ROTATE_RATE * 2;
-        }
-
-        /*movement of the AI */
-        var accel = Math.floor((Math.random() * -1) + 2);
-        this.cx += accel;
-        this.cx = util.clamp(this.cx);
-        /*
-        while(fakePower > 0){
-          fakePower -= this.POWER_INCREASE;
-
-          var d_X = +Math.sin(this.gunrotation);
-
-          var relVelX = d_X * this.launchVel;
-
-          var startVelX = fakePower * relVelX + this.velX * fakePower;
-          destX += startVelX;
-
-          if(Math.floor(destX) <= 400 && 380 <= Math.floor(destX)){
-            this.power = fakePower;
-          }
-          if(fakePower < 0){
-            break;
-          }
-        }
-
-        while(fakePower < 10){
-          fakePower += this.POWER_INCREASE;
-
-          var dX = +Math.sin(this.gunrotation);
-
-          var relVelX = dX * this.launchVel;
-
-          var startVelX = fakePower * relVelX + this.velX * fakePower;
-          destX += startVelX;
-
-          if(Math.floor(destX) <= 400 && 380 <= Math.floor(destX)){
-            this.power = fakePower;
-          }
-          if(fakePower > 10){
-            break;
-          }
-        }*/
-
-      }
-
-    }
-  }
-
-}
 
 Ship.prototype.updatePower = function(du) {
   if (this.myTurn === true) {
-    if (keys[this.KEY_POWER]) {
-      this.power += this.POWER_INCREASE/* du*/;
+    if(this.power < 0.3){
+      if (keys[this.KEY_POWER]) {
+        this.power += this.POWER_INCREASE;
 
-    }
-    if (keys[this.KEY_LESSPOWER]) {
-      this.power -= this.POWER_INCREASE/* du*/;
+      }
+    } else if(this.power > 10){
+      if (keys[this.KEY_LESSPOWER]) {
+        this.power -= this.POWER_INCREASE;
 
+      }
+    } else {
+      if (keys[this.KEY_POWER]) {
+        this.power += this.POWER_INCREASE;
+
+      }
+      if (keys[this.KEY_LESSPOWER]) {
+        this.power -= this.POWER_INCREASE;
+
+      }
     }
   }
 };
 
 Ship.prototype.takeBulletHit = function() {
 
-    console.log("áái")
-    //terrain.bombLandscape(this.cx, );
     this.health -= g_weapon.damage;
-    //console.log(this.health);
+    this.checkForDeath();
+
 };
 
 Ship.prototype.takeExplosionHit = function(bombX, bombY) {
   if(!this.isHit){
-      console.log("exp")
-      //terrain.bombLandscape(this.cx, );
-      //console.log(bombX);
-      //console.log(bombY);
-      //console.log(this.cx);
-      //console.log(this.cy);
+
       var test = util.distCircles(this.cx, this.cy , bombX, bombY, this.getRadius(), 50)
       console.log(test);
       var range = Math.abs(util.distFromExplosion(this.cx, this.cy , bombX, bombY));
       console.log("fjarlægð frá sprengju " + range);
-      //this.health -= (g_weapon.damage - range);
 
       this.health += test;
       console.log("lífið " + this.health);
       this.isHit = true;
+      this.checkForDeath();
+    }
+
+};
+
+Ship.prototype.checkForDeath = function() {
+    console.log("ping");
+    if (this.health <= 0){
+      //add the death animation to the entity manager
+      entityManager._explosions.push(new Death({
+              cx : this.cx,
+              cy : this.cy,
+              radius : this.getRadius(),
+              rotation : this.rotation
+          }) );
+      this._isDeadNow = true;
     }
 
 
@@ -468,15 +443,32 @@ Ship.prototype.takeExplosionHit = function(bombX, bombY) {
 
 //ATHUGA
 Ship.prototype.updateWeapon = function() {
-  this.weapon = g_weapon;
-}
+  if (this.myTurn === true) {
+    if (keys[this.KEY_NEXTGUN]) {
+      ++this.weaponId;
+      this.weaponId = util.clampRange(this.weaponId,0,consts.weapons.length-1)
+
+    }
+    if (keys[this.KEY_PREVGUN]) {
+      --this.weaponId;
+      this.weaponId = util.clampRange(this.weaponId,0,consts.weapons.length-1)
+
+    }
+
+  }
+
+  this.weapon = consts.weapons[this.weaponId];
+
+};
 
 Ship.prototype.render = function(ctx) {
   var origScale = this.sprite.scale;
   // pass my scale into the sprite, for drawing
   this.sprite.scale = this._scale;
 
-  //console.log(this.rotation);
+  //to tranlate the flag to the right posistion
+  var flagX = -8;
+  var flagY = -11;
   var xOffset = (Math.cos((this.rotation * Math.PI / 180) + 90)) * this.sprite.width / 4;
   var yOffset = 0;
 
@@ -491,7 +483,9 @@ Ship.prototype.render = function(ctx) {
   this.sprite.drawCentredAt(ctx, this.cx - (xOffset), this.cy - yOffset, this.rotation);
 
   //this.spriteGunRotation += this.rotation
-  this.gunsprite.drawGunCentredAt(ctx, this.cx - (xOffset), this.cy - yOffset, this.spriteGunRotation);
+  this.gunsprite.drawGunCentredAt(ctx, this.cx - (xOffset), this.cy - yOffset, this.spriteGunRotation - 90);
+
+    this.flagsprite.drawFlagCentredAt(ctx, this.cx - (xOffset) , this.cy - yOffset , this.rotation, 0.05, flagX, flagY);
 
   this.sprite.scale = origScale;
 

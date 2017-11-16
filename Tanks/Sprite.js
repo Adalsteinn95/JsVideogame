@@ -21,6 +21,7 @@ function Sprite(image, cx = 0, cy = 0, width = image.width, height = image.heigh
     this.width = width;
     this.height = height;
     this.scale = 1;
+
 }
 
 Sprite.prototype.drawAt = function (ctx, x, y) {
@@ -35,12 +36,10 @@ Sprite.prototype.drawCentredAt = function (ctx, cx, cy, rotation) {
     var w = this.width,
         h = this.height;
 
-
     ctx.save();
     ctx.translate(cx, cy);
 
     ctx.rotate((rotation * Math.PI/180));
-    //console.log(rotation);
 
     ctx.scale(this.scale, this.scale);
 
@@ -52,15 +51,40 @@ Sprite.prototype.drawCentredAt = function (ctx, cx, cy, rotation) {
     ctx.restore();
 };
 
+Sprite.prototype.drawFlagCentredAt = function (ctx, cx, cy, rotation, scale, flagX, flagY) {
+
+    if (rotation === undefined) rotation = 0;
+
+    var w = this.width,
+        h = this.height;
+
+
+    ctx.save();
+    //athuga
+    ctx.translate(cx, cy);
+
+    ctx.rotate((rotation * Math.PI/180));
+
+        ctx.translate( flagX, flagY)
+
+    ctx.scale(scale, scale );
+
+    // drawImage expects "top-left" coords, so we offset our destination
+    // coords accordingly, to draw our sprite centred at the origin
+    ctx.drawImage(this.image,
+                  -w/2, -h/2);
+
+    ctx.restore();
+};
+
 Sprite.prototype.drawClippedCentredAt = function (
     ctx, cx, cy, rotation, w = this.width, h = this.height) {
-
     if (rotation === undefined) rotation = 0;
 
     ctx.save();
     ctx.translate(-w, -h);
 
-    ctx.drawImage(this.image, this.cx, this.cy, 100, 100, cx, cy, 2*w, 2*h);
+    ctx.drawImage(this.image, this.cx, this.cy, this.width, this.height, cx, cy, 2*w, 2*h);
 
     ctx.restore();
 };
@@ -79,7 +103,6 @@ Sprite.prototype.drawGunCentredAt = function (ctx, cx, cy, rotation) {
 
     ctx.rotate((rotation * Math.PI/180));
 
-    //console.log(rotation);
     ctx.translate(g_sprites.tankgun.width/2,0);
 
     ctx.scale(this.scale, this.scale);

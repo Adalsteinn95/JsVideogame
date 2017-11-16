@@ -148,6 +148,10 @@ drawTextAt : function(ctx, x, y, font, size, style, msg) {
   return angle * (180 / Math.PI);
 },
 
+toRadian: function (angle) {
+ return angle * ( Math.PI / 180);
+},
+
 //Clamp for index wrapping x is a number
 clamp: function(x){
   var num = x;
@@ -155,6 +159,16 @@ clamp: function(x){
     num = num - g_canvas.width;
   }else if ( num < 0){
     num = num + g_canvas.width;
+  }
+  return num;
+},
+
+clampMinMax: function(x, min, max){
+  var num = x;
+  if(num >= max){
+    num = num - max;
+  }else if ( num < min){
+    num = num + max;
   }
   return num;
 },

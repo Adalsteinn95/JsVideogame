@@ -39,22 +39,15 @@ Bullet.prototype.cy = 200;
 Bullet.prototype.velX = 1;
 Bullet.prototype.velY = 1;
 
-Bullet.prototype.life = 10;
-
-Bullet.prototype.tankWeapon = g_weapon;
 
 // Convert times from milliseconds to "nominal" time units.
-Bullet.prototype.lifeSpan = 3000 / NOMINAL_UPDATE_INTERVAL;
+Bullet.prototype.lifeSpan = 1;
 
 Bullet.prototype.update = function (du) {
 
     if(this.partOfShower) {
       this.velX += (this.showerIndex/100 );
-      //console.log('THIS.SHOWERINDEX', this.showerIndex)
     }
-
-    // TODO: YOUR STUFF HERE! --- Unregister and check for death
-    //spatialManager.unregister(this);
 
     if (this.lifeSpan === 0 || this.cy > g_canvas.height) {
 
@@ -66,55 +59,44 @@ Bullet.prototype.update = function (du) {
     this.velX += g_wind;
     this.velY += NOMINAL_GRAVITY;
 
-
-
     this.rotation += 1 * du;
     this.rotation = util.wrapRange(this.rotation,
                                    0, consts.FULL_CIRCLE);
 
     this.wrapPosition();
 
-    // Handle collisions
+    // Handle collisions for bullet against tank
     var hitEntity = this.findHitEntity();
-    //console.log(hitEntity);
     if (hitEntity) {
-        console.log("ping1")
+      console.log("ping");
         var canTakeHit = hitEntity.takeBulletHit();
         if (canTakeHit) canTakeHit.call(hitEntity);
-        terrain.bombLandscape(this.cx, g_weapon.damage/2, true);
+        terrain.bombLandscape(this.cx, this.weapon.damage/2, true);
         this.checkForVolcano();
         this.lifeSpan = 0;
         return;
     };
 
-    //terrain hit first edition
+    //terrain hit
     this.terrainHit(this.cx, this.cy);
 
-    //(Re-)Register
-    //spatialManager.register(this);
 };
 
 Bullet.prototype.terrainHit = function(x, y){
     var xIndex = util.clamp(Math.floor(x));
-  //  console.log(x)
-  //  console.log(y);
     if(g_landscape[xIndex] < y){
 
         this.checkForVolcano();
 
         //check if the radius of the explosion hits a tank
         var hitEntity = this.findExplosionHitEntity();
-        console.log(hitEntity);
         if (hitEntity) {
-            console.log("ping");
             var canTakeHit = hitEntity.takeExplosionHit(this.cx, this.cy);
             if (canTakeHit) canTakeHit.call(hitEntity);
         };
-        terrain.bombLandscape(x, g_weapon.damage);
+        terrain.bombLandscape(x, this.weapon.damage);
         this.lifeSpan = 0;
     }
-
-
 
 };
 
@@ -123,26 +105,25 @@ Bullet.prototype.findExplosionHitEntity = function() {
 
   //get explosion parameters, mainly radius!!
   var pos = this.getPos();
-  //console.log(pos.posX + " " + pos.posY + " " + g_weapon.damage + " " + this);
   return spatialManager.findEntityInRange(
-      pos.posX, pos.posY, g_weapon.damage
+      pos.posX, pos.posY, this.weapon.damage
   );
 }
 
 
 Bullet.prototype.checkForVolcano = function() {
-  if(g_weapon.name === "volcano" && this.volcanoMaster) {
-    for (var i = -g_weapon.volcanoAmount/2; i < g_weapon.volcanoAmount/2; i++) {
+  if(this.weapon.name === "volcano" && this.volcanoMaster) {
+    for (var i = -this.weapon.volcanoAmount/2; i < this.weapon.volcanoAmount/2; i++) {
       var randVelX = util.randRange(-2,2)
       var randVelY = util.randRange(-2,-4)
-      console.log(randVelY)
-      entityManager.fireBullet(this.cx, this.cy, randVelX, randVelY, this.gunrotation,true,i,false);
+
+      entityManager.fireBullet(this.cx, this.cy, randVelX, randVelY, this.gunrotation,true,i,false, this.weapon);
     }
   }
 };
 
 Bullet.prototype.getRadius = function () {
-    return 1;
+    return 2;
 };
 
 Bullet.prototype.takeBulletHit = function () {
@@ -152,9 +133,9 @@ Bullet.prototype.takeBulletHit = function () {
     //this.zappedSound.play();
 };
 
-Bullet.prototype.checkForWeapon = function (weapon) {
+Bullet.prototype.topPointer = function (){
 
-}
+};
 
 Bullet.prototype.render = function (ctx) {
 

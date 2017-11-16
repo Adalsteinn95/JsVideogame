@@ -230,7 +230,7 @@ var toolbar = {
         gradient.addColorStop(0.5, "#FFD700");
         gradient.addColorStop(1, "#FF3030");
 
-        var x = (tank.power / 10) * box.w;
+        var x = (tank.power / 6) * box.w;
         util.fillBox(ctx, box.cx, box.cy, x, box.h, gradient);
         ctx.lineWidth = 2;
         util.strokeBox(ctx, box.cx, box.cy, box.w, box.h, "black")

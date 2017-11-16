@@ -51,7 +51,7 @@ Sprite.prototype.drawCentredAt = function (ctx, cx, cy, rotation) {
     ctx.restore();
 };
 
-Sprite.prototype.drawFlagCentredAt = function (ctx, cx, cy, rotation, scale, flagX, flagY) {
+Sprite.prototype.drawIndicatorCentredAt = function (ctx, cx, cy, rotation, scale, flagX, flagY) {
 
     if (rotation === undefined) rotation = 0;
 

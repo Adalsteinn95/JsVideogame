@@ -123,7 +123,7 @@ var ai = {
             destX += startVelX;
             destX = util.clamp(destX, ship);
             path = this.AIMovement(path, ship);
-            //direction = this.AIrotation(direction, ship);
+            direction = this.AIrotation(direction, ship);
             this.shipUpdate(destX, path, direction, ship);
             //change direction and run movement
           } else {
@@ -135,7 +135,7 @@ var ai = {
           destX += startVelX;
           destX = util.clamp(destX, ship);
           path = this.AIMovement(path, ship);
-        //  direction = this.AIrotation(direction, ship);
+          direction = this.AIrotation(direction, ship);
           this.shipUpdate(destX, path, direction, ship);
 
     }

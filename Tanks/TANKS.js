@@ -29,6 +29,7 @@ function updateSimulation(du) {
     eatKey(Ship.prototype.KEY_FIRE);
     eatKey(Ship.prototype.KEY_NEXTGUN);
     eatKey(Ship.prototype.KEY_PREVGUN);
+    eatKey(Ship.prototype.KEY_ENDTURN);
 }
 
 // GAME-SPECIFIC DIAGNOSTICS

@@ -47,6 +47,7 @@ Ship.prototype.KEY_POWER = '5'.charCodeAt(0);
 Ship.prototype.KEY_LESSPOWER = '4'.charCodeAt(0);
 Ship.prototype.KEY_PREVGUN = 'Z'.charCodeAt(0);
 Ship.prototype.KEY_NEXTGUN = 'X'.charCodeAt(0);
+Ship.prototype.KEY_ENDTURN = 'V'.charCodeAt(0);
 
 
 Ship.prototype.KEY_FIRE = ' '.charCodeAt(0);
@@ -64,6 +65,7 @@ Ship.prototype.numSubSteps = 1;
 Ship.prototype.power = 2;
 Ship.prototype.POWER_INCREASE = 0.085;
 Ship.prototype.weaponId =  0;
+Ship.prototype.ammo = 1;
 
 //AI stuff
 Ship.prototype.destX = 0;
@@ -84,14 +86,24 @@ Ship.prototype.health = 100;
 //becomes true when hit, so the explosion doesnt hit multiple times
 //færa í bullet ?
 Ship.prototype.isHit = false;
+Ship.prototype.canFire = false;
 
 Ship.prototype.update = function(du) {
+
+  if(this.myTurn){
+    console.log("ammo " + this.ammo);
+    console.log("cost " + this.weapon.cost)
+    var check = this.checkAmmoCost();
+    console.log(check);
+  }
 
   if (this._isDeadNow === true) {
 
     spatialManager.unregister(this);
     return entityManager.KILL_ME_NOW;
   }
+
+  this.endTurn();
 
 
   //update weapon if it has been changed ÞARF AÐ BREYTA
@@ -241,8 +253,10 @@ Ship.prototype.falldown = function(thrust) {
 };
 
 Ship.prototype.maybeFireBullet = function() {
+  //check if the player has enough ammo for the chosen weapon
+  this.canFire = this.checkAmmoCost();
 
-  if ((keys[this.KEY_FIRE] && this.myTurn === true && this.playerId === "Human") || this.myTurn === true && this.playerId === "AI") {
+  if ((keys[this.KEY_FIRE] && this.myTurn && this.playerId === "Human" && this.canFire) || this.myTurn && this.playerId === "AI" && this.canFire) {
 
     this.myTurn = false;
 
@@ -265,8 +279,25 @@ Ship.prototype.maybeFireBullet = function() {
 
     }
     volcanoMaster = false;
+    //decreacse amunition by the bullet cost
+    this.ammo -= this.weapon.cost;
+    this.canFire = false;
   }
 };
+
+Ship.prototype.endTurn = function() {
+
+
+    if (keys[this.KEY_ENDTURN] && this.myTurn) {
+
+      this.canFire = false;
+      this.ammo *= 2;
+      this.myTurn = false;
+      gameplayManager.nextTurn();
+      keys[this.KEY_ENDTURN] = false;
+    }
+
+}
 
 Ship.prototype.getRadius = function() {
   //return (this.sprite.width / 2) * 0.9;
@@ -439,6 +470,18 @@ Ship.prototype.checkForDeath = function() {
     }
 
 
+};
+
+//Check if the player has enough ammo to fire the chosen bullet
+Ship.prototype.checkAmmoCost = function() {
+
+  var weaponCost = this.weapon.cost;
+  if(this.ammo >= weaponCost){
+      return true;
+
+  }
+
+  return false;
 };
 
 //ATHUGA

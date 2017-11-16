@@ -35,7 +35,6 @@ Cloud.prototype.randomiseScale = function () {
 
 Cloud.prototype.randomiseVelocity = function () {
     this.windspeed = g_wind;
-    console.log('G_WIND', Math.abs(g_wind * 10))
     var windPerc = Math.abs(g_wind * 10)
 
     var sizeOffset;

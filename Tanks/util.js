@@ -226,9 +226,7 @@ sinAcos: function(ratio, radius) {
   initialVelocity: function(dx, dy){
     //ath
     var calc =  Math.sqrt(util.square(dx) + util.square(dy));
-    if( dx < 0 || dy < 0){
-      calc = -calc;
-    }
+
     return calc;
   },
 
@@ -244,11 +242,12 @@ sinAcos: function(ratio, radius) {
   //return the horizontal range
   horizontalRange: function(vel, angle, gravity){
     var a = angle;
-    console.log('VEL, ANGLE, GRAVITY', vel, angle, gravity);
-    console.log(a);
-    console.log('GRAVITY', gravity)
-    console.log('MATH.SIN(2*A)', Math.sin(2*a))
-    console.log('UTIL.SQUARE(VEL)', util.square(vel))
+
+    if(a < 0){
+      a = 0;
+    } else if(angle > 3.12){
+      a = 3.14;
+    }
 
     return ((util.square(vel) * Math.sin(a))/gravity);
 

@@ -536,8 +536,8 @@ Ship.prototype.render = function(ctx) {
   this.offsetY = yOffset;
 
   //calc stöff ATHUGA
-  var dX = +Math.sin(util.toRadian(this.spriteGunRotation )) * this.power;
-  var dY = -Math.cos(util.toRadian(this.spriteGunRotation )) * this.power;
+  var dX = +Math.sin(util.toRadian(this.spriteGunRotation ));
+  var dY = -Math.cos(util.toRadian(this.spriteGunRotation ));
 
   this.sprite.drawCentredAt(ctx, this.cx - (xOffset), this.cy - yOffset, this.rotation);
 
@@ -548,8 +548,11 @@ Ship.prototype.render = function(ctx) {
 
   this.sprite.scale = origScale;
 
+  var startVel = this.getStartVel(dX, dY);
+
 if(this.myTurn === true){
-  util.strokeCircle(g_ctx,this.cx, this.cy, util.horizontalRange(util.initialVelocity(dX, dY), 90, NOMINAL_GRAVITY ));
+  console.log(util.initialVelocity(startVel[0], startVel[1]));
+  util.strokeCircle(g_ctx,this.cx, this.cy, util.horizontalRange(util.initialVelocity(startVel[0], startVel[1]), this.gunrotation, NOMINAL_GRAVITY ));
 
 }
 

@@ -93,6 +93,7 @@ var gameplayManager = {
     },
 
       nextTurn: function (){
+        console.log("pinging");
         if(this.checkForWinner()){
           console.log("we have a winner, player nr: " + (this.activePlayerIndex+1) );
           entityManager._ships[this.activePlayerIndex].myTurn = true;
@@ -103,11 +104,16 @@ var gameplayManager = {
           this.resetIsHit();
           this.updateNextPlayer();
 
-          while(this.checkIfAlive(this.activePlayerIndex)){
+        /*  while(this.checkIfAlive(this.activePlayerIndex)){
             this.updateNextPlayer();
-          };
+          };*/
+          this.findNextPlayer();
 
           entityManager._ships[this.activePlayerIndex].myTurn = true;
+          //get more ammo
+          if(entityManager._ships[this.activePlayerIndex].ammo < 1){
+            entityManager._ships[this.activePlayerIndex].ammo++;
+        }
           //get new wind direction and power
           g_wind = util.randRange(-0.1,0.1);
 
@@ -146,5 +152,11 @@ var gameplayManager = {
         }else return false;
 
       },
+
+      findNextPlayer: function(){
+        while(this.checkIfAlive(this.activePlayerIndex)){
+          this.updateNextPlayer();
+        }
+      }
 
 }

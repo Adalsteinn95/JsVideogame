@@ -96,7 +96,7 @@ function renderSimulation(ctx) {
         terrain.render(ctx, g_landscape, g_canvas);
         entityManager.render(ctx);
 
-        if (g_renderSpatialDebug) spatialManager.render(ctx);
+        //if (g_renderSpatialDebug) spatialManager.render(ctx);
     }
 
     else {
@@ -128,13 +128,14 @@ function requestPreloads() {
         explosion : "../myndir/explosives/explosionsheet.png",
 
         tankDeath : "../myndir/tankexplode/tankDeath.png",
-        flagtest : "../myndir/flags/sw.png",
         pointer : "../myndir/pointer/arrowSmall.png",
         atom : "../myndir/explosives/atomsheet.png",
         bulletArrow: "../myndir/arrow.png"
-
-
     };
+
+    requiredImages = spriteUtil.loadImgs(requiredImages, "../myndir/flags/", ".png");
+
+    console.log(requiredImages);
 
     imagesPreload(requiredImages, g_images, preloadDone);
 }
@@ -155,8 +156,13 @@ function preloadDone() {
     g_sprites.tankDeath = spriteUtil.decomposeSheet(81,40,6,2,12, g_images.tankDeath);
     g_sprites.atom = spriteUtil.decomposeSheet(96, 96, 5, 3, 14, g_images.atom);
     g_sprites.arrows = new Sprite(g_images.pointer);
-    g_sprites.flag = new Sprite(g_images.flagtest);
     g_sprites.bulletArrow = new Sprite(g_images.bulletArrow);
+    g_sprites.flags = [];
+
+    for (var i = 0; i < 16; i++) {
+        var flag = "flag" + i;
+        g_sprites.flags[i] = new Sprite(g_images[flag]);
+    }
 
 
     entityManager.init();

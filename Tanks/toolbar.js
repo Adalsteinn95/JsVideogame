@@ -4,6 +4,7 @@ var toolbar = {
 
     setupReady : false,
     setupIndex : 0,
+    idSelected: false,
 
     KEY_PLUS : '8'.charCodeAt(0),
     KEY_MINUS : '7'.charCodeAt(0),
@@ -25,6 +26,14 @@ var toolbar = {
             cy : 40,
             w : g_canvas.width/5,
             h : g_canvas.height/5
+        },
+
+        flagSetup: {
+            cx: 370,
+            cy: 50,
+            w: 160,
+            h: 100,
+            index: 0
         },
 
         windBox : {
@@ -54,6 +63,7 @@ var toolbar = {
     },
 
     playerIdSetup : [],
+    playerFlagSetup: [],
 
     init : function() {
         //global landscape initiated here
@@ -82,6 +92,7 @@ var toolbar = {
                 break;
             case 1:
                 this.renderPlayerSetup(ctx);
+                this.renderFlagSetup(ctx);
                 break;
             case 2:
                 this.renderMapPreview(ctx);
@@ -116,28 +127,57 @@ var toolbar = {
         util.drawTextAt(ctx, 50, 100, "Courier", "20px", "black",
                         id);
 
-        if (eatKey(this.KEY_PLUS) || eatKey(this.KEY_MINUS)) {
-            this._.humanOrAI = !this._.humanOrAI;
+        if (eatKey(this.KEY_PLUS)) {
+            if (this.idSelected) {
+                this._.flagSetup.index++;
+                this._.flagSetup.index %= 16;
+            } else {
+                this._.humanOrAI = !this._.humanOrAI;
+            }
+        }
+        if (eatKey(this.KEY_MINUS)) {
+            if (this.idSelected) {
+                this._.flagSetup.index--;
+                if (this._.flagSetup.index < 0) this._.flagSetup.index = 15;
+            } else {
+                this._.humanOrAI = !this._.humanOrAI;
+            }
         }
 
-        if (eatKey(this.KEY_CONFIRM)) {
-            if (this.playerIdSetup.length < this._.numPlayers) {
+        var flagI = this._.flagSetup.index;
 
-                this.playerIdSetup[this._.playerIndex] = id;
+        if (eatKey(this.KEY_CONFIRM)) {
+            if (this.idSelected) {
+                this.idSelected = false;
+                this.playerFlagSetup[this._.playerIndex] = flagI;
+                if (this.playerIdSetup.length === this._.numPlayers) {
+                    this.pushPlayers(this.playerIdSetup, this.playerFlagSetup);
+                    this.setupIndex++;
+                }
                 this._.playerIndex++;
-            }
-            if (this.playerIdSetup.length === this._.numPlayers) {
-                this.pushPlayers(this.playerIdSetup);
-                this.setupIndex++;
+            } else {
+                if (this.playerIdSetup.length < this._.numPlayers) {
+                    this.playerIdSetup[this._.playerIndex] = id;
+                }
+                this.idSelected = true;
             }
         }
     },
 
-    pushPlayers(playerIds) {
+    renderFlagSetup: function(ctx) {
+        var box = this._.flagSetup;
+        var img = g_sprites.flags[box.index];
+        ctx.drawImage(img.image, box.cx, box.cy, box.w, box.h);
+    },
+
+    pushPlayers: function(playerIds, flagIds) {
         for (var i in playerIds) {
+            var flagI = flagIds[i];
+            var sprite = g_sprites.flags[flagI];
             gameplayManager.addPlayer({
                 nr : parseInt(i),
-                id : playerIds[i]
+                id : playerIds[i],
+                flagsprite: sprite
             });
         }
     },
@@ -242,7 +282,6 @@ var toolbar = {
         var tankPower = tank.power
         tankPower = (tankPower > 6 || tankPower < 0.3) ? Math.floor(tankPower) : tankPower;
         var x = (tankPower / 6) * box.w;
-        console.log('TANK.POWER', tank.power)
         util.fillBox(ctx, box.cx, box.cy, x, box.h, gradient);
         ctx.lineWidth = 2;
         util.strokeBox(ctx, box.cx, box.cy, box.w, box.h, "black")

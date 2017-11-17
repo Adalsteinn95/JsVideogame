@@ -539,7 +539,7 @@ Ship.prototype.render = function(ctx) {
   var dX = +Math.sin(util.toRadian(this.spriteGunRotation ));
   var dY = -Math.cos(util.toRadian(this.spriteGunRotation ));
 
-  var angle = this.gunrotation + util.toRadian(this.rotation);
+  var angle = this.spriteGunRotation - this.rotation;
 
   this.sprite.drawCentredAt(ctx, this.cx - (xOffset), this.cy - yOffset, this.rotation);
 
@@ -553,8 +553,47 @@ Ship.prototype.render = function(ctx) {
   var startVel = this.getStartVel(dX, dY);
 
 if(this.myTurn === true){
-  console.log(angle);
-  util.strokeCircle(g_ctx,this.cx - this.offsetX, this.cy - this.offsetY, util.horizontalRange(util.initialVelocity(dX * this.power, dY * this.power), angle, NOMINAL_GRAVITY ));
+  //util.strokeCircle(g_ctx,this.cx - this.offsetX, this.cy - this.offsetY, util.maxHeightReached(util.initialVelocity(startVel[0], startVel[1]), angle,NOMINAL_GRAVITY));
+  //util.strokeCircle(g_ctx,this.cx - this.offsetX, this.cy - this.offsetY, 3909);
+  var r = util.maxHeight(startVel[1], NOMINAL_GRAVITY, util.maxHeightTime(startVel[1], NOMINAL_GRAVITY ));
+
+  util.strokeCircle(g_ctx,this.cx - this.offsetX, this.cy - this.offsetY - r -20, 10);
+  var hMax =  g_canvas.height - (this.cy - this.offsetY - r -20);
+
+  //console.log('HMAX', hMax)
+
+  //console.log(startVel[1]);
+  var xTime = util.xTravelTime(hMax,NOMINAL_GRAVITY);
+  //console.log('XTIME', xTime)
+  var time = xTime +  util.maxHeightTime(-startVel[1], NOMINAL_GRAVITY );
+
+
+// target x - this.cx / time = velX
+/////////////////7
+  var xDistance = time * startVel[0];
+  console.log('XDISTANCE', xDistance)
+    util.strokeCircle(g_ctx,util.clamp(this.cx - this.offsetX + xDistance) , this.cy - this.offsetY, 10);
+  var yOnHit =g_canvas.height - g_landscape[util.clamp(Math.floor(this.cx - this.offsetX + xDistance))-10];
+  //console.log('YONHIT', yOnHit)
+
+  hMax = g_canvas.height - (yOnHit - r -20);
+  xTime = util.xTravelTime(hMax,NOMINAL_GRAVITY);
+  time = xTime +  util.maxHeightTime(-startVel[1], NOMINAL_GRAVITY );
+  xDistance = time * startVel[0];
+  console.log('XDISTANCEnytt', xDistance)
+
+  util.fillCircle(g_ctx,util.clamp(this.cx - this.offsetX + xDistance) , this.cy - this.offsetY, 10);
+
+
+ var yRing = this.cy - this.offsetY - r -20;
+ var xRing = this.cx - this.offsetX + xDistance;
+ /*if( this.playerId === 'AI' && !this.preMoveCalc){
+     //spatialID -1 gets the index of the ship on entitymanager
+     ai.whereToMove(Math.floor(this.cx), util.clampRange(this._spatialID-1,0,8));
+     ai.getInitialAim(util.clampRange(this._spatialID-1,0,8) );
+     this.preMoveCalc = true;
+ }*/
+
 
 }
 

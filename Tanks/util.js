@@ -236,21 +236,39 @@ sinAcos: function(ratio, radius) {
   },
   //returns max height a bullet reaches with the given velocity
   maxHeightReached: function(vel, angle, gravity){
-    return (util.square(vel) * util.square(Math.sin(angle)))/(2*gravity);
+    return (util.square(vel) * util.square(Math.sin(util.toRadian(angle)))/(2*gravity));
 
   },
   //return the horizontal range
   horizontalRange: function(vel, angle, gravity){
     var a = angle;
 
-    if(a < 0){
+    /*if(a < 0){
       a = 0;
     } else if(angle > 3.12){
       a = 3.14;
-    }
+    }*/
+    return ((util.square(vel) * (Math.sin(2*util.toRadian(a))) / gravity))
+    //return ((util.square(vel) * (Math.sin(this.clampMinMax(2*a, 0, Math.PI)))/gravity));
 
-    return ((util.square(vel) * (Math.sin(a)))/gravity);
+  },
 
+  //return the horizontal range
+  horizontalRange2: function(vel, angle, gravity){
+    var v = util.square(vel);
+
+    var g = 2 * gravity;
+    //ath
+    var y0 = g_sprites.ship.height / 2 ;
+    var a = util.square(Math.sin(util.clampMinMax(angle,0, Math.PI)));
+    var a2 = Math.sin(util.clampMinMax(2*angle, 0, Math.PI));
+
+    //v^2 / 2g
+    return ((v/g) * (1 + (Math.sqrt(1 + (g*y0/(v*a))))* a2));
+
+//nota nýju jöfnu og calmpa range sem fæst út frá rotation á gun + tankrotation
+//sin^2(x) = sin(x) * sin(x)
+//
   },
 
 
@@ -262,7 +280,43 @@ sinAcos: function(ratio, radius) {
     var dist = this.distSq(x1,y1,x2,y2);
     return Math.sqrt(dist);
 
+  },
+
+
+  //=======================
+  // AI vers 2
+  // =====================
+
+
+
+  maxHeightTime: function (vel, gravity){
+    return vel/gravity;
+  },
+
+  maxHeight: function(vel, gravity, time ){
+    return vel * time - (0.5*gravity*util.square(time));
+  },
+
+  xTravelTime: function(height, gravity){
+    return Math.sqrt(height / (0.5*gravity));
+
+  },
+
+
+  //==========================
+  //AI vers 3
+  // ===========================
+
+  findAngle: function ( vel, gravity, x, y){
+    //s = (v * v * v * v) - g * (g * (x * x) + 2 * y * (v * v));
+    var s = (util.square(util.square(vel))) - gravity * ( gravity * (util.square(x)) + 2 * y * (util.square(vel)));
+
+    // o = atan(((v * v) + sqrt(s)) / (g * x));
+    var angle = Math.atan((util.square(vel) + Math.sqrt(s)) / (gravity * x));
+    return angle;
   }
+
+
 
 
 };

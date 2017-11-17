@@ -435,6 +435,7 @@ Ship.prototype.updatePower = function(du) {
 Ship.prototype.takeBulletHit = function() {
 
     this.health -= g_weapon.damage;
+    this.health = this.health < 0 ? 0 : this.health;
     this.checkForDeath();
 
 };
@@ -442,12 +443,12 @@ Ship.prototype.takeBulletHit = function() {
 Ship.prototype.takeExplosionHit = function(bombX, bombY) {
   if(!this.isHit){
 
-      var test = util.distCircles(this.cx, this.cy , bombX, bombY, this.getRadius(), 50)
+      var test = util.distCircles(this.cx, this.cy , bombX, bombY, this.getRadius(), g_weapon.damage)
       console.log(test);
       var range = Math.abs(util.distFromExplosion(this.cx, this.cy , bombX, bombY));
       console.log("fjarlægð frá sprengju " + range);
 
-      this.health += test;
+      this.health -= Math.abs(test);
       console.log("lífið " + this.health);
       this.isHit = true;
       this.checkForDeath();

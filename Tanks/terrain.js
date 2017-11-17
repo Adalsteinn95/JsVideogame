@@ -56,7 +56,16 @@ initlandScape: function(f, bound, xShift, frame) {
     return ls;
 },
 
-bombLandscape: function(x, radius, tankhit) {
+bombLandscape: function(x, weapon, tankhit) {
+    var radius = weapon.damage
+    console.log('G_WEAPON.NAME', g_weapon.name)
+    if(weapon.name === "atom") {
+      util.playSoundOverlap(g_audio.atom);
+    }
+    else {
+      util.playSoundOverlap(g_audio.shotCollision);
+
+    }
     var explosionRadius = radius;
     if (tankhit) {
         explosionRadius *= 2;

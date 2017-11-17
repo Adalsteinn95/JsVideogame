@@ -112,8 +112,10 @@ function renderSimulation(ctx) {
 // =============
 // PRELOAD STUFF
 // =============
+var preloadCount = 0;
 
 var g_images = {};
+var g_audio = {};
 
 function requestPreloads() {
 
@@ -135,34 +137,46 @@ function requestPreloads() {
 
 
     };
+    var requiredAudio = {
+      fire : "../sound/fire.mp3",
+      shotCollision : "../sound/shotcollision.mp3",
+      atom : "../sound/atom.mp3"
+    };
 
     imagesPreload(requiredImages, g_images, preloadDone);
+    audioPreload(requiredAudio, g_audio, preloadDone);
 }
 
 var g_sprites = {};
 
 function preloadDone() {
-    g_sprites.ship  = new Sprite(g_images.ship);
-    g_sprites.tankgun = new Sprite(g_images.tankgun);
+    preloadCount++;
+    //if both images and audio are prealoaded, do all the stuff
+    if(preloadCount === 2) {
 
-    g_sprites.bullet = new Sprite(g_images.ship);
-    g_sprites.bullet.scale = 0.25;
-    g_sprites.cloud1 = new Sprite(g_images.cloud1);
-    g_sprites.cloud2 = new Sprite(g_images.cloud2);
-    g_sprites.cloud3 = new Sprite(g_images.cloud3);
+      g_sprites.ship  = new Sprite(g_images.ship);
+      g_sprites.tankgun = new Sprite(g_images.tankgun);
 
-    g_sprites.xplode = spriteUtil.decomposeSheet(100,100,9,9,81, g_images.explosion);
-    g_sprites.tankDeath = spriteUtil.decomposeSheet(81,40,6,2,12, g_images.tankDeath);
-    g_sprites.atom = spriteUtil.decomposeSheet(96, 96, 5, 3, 14, g_images.atom);
-    g_sprites.arrows = new Sprite(g_images.pointer);
-    g_sprites.flag = new Sprite(g_images.flagtest);
-    g_sprites.bulletArrow = new Sprite(g_images.bulletArrow);
+      g_sprites.bullet = new Sprite(g_images.ship);
+      g_sprites.bullet.scale = 0.25;
+      g_sprites.cloud1 = new Sprite(g_images.cloud1);
+      g_sprites.cloud2 = new Sprite(g_images.cloud2);
+      g_sprites.cloud3 = new Sprite(g_images.cloud3);
+
+      g_sprites.xplode = spriteUtil.decomposeSheet(100,100,9,9,81, g_images.explosion);
+      g_sprites.tankDeath = spriteUtil.decomposeSheet(81,40,6,2,12, g_images.tankDeath);
+      g_sprites.atom = spriteUtil.decomposeSheet(96, 96, 5, 3, 14, g_images.atom);
+      g_sprites.arrows = new Sprite(g_images.pointer);
+      g_sprites.flag = new Sprite(g_images.flagtest);
+      g_sprites.bulletArrow = new Sprite(g_images.bulletArrow);
 
 
-    entityManager.init();
-    toolbar.init();
 
-    main.init();
+      entityManager.init();
+      toolbar.init();
+
+      main.init();
+    }
 }
 
 // Kick it off

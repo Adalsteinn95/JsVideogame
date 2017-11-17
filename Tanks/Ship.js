@@ -400,7 +400,7 @@ Ship.prototype.calculatePath = function() {
     testX = util.clamp(testX);
     testY = testY;
 
-    if (g_landscape[Math.floor(testX)] < testY) {
+    if (/*g_landscape[Math.floor(testX)]*/g_canvas.height < testY) {
       break;
     };
     //projectile path

@@ -161,47 +161,5 @@ var ai = {
     entityManager._ships[index].nextX = util.clampRange(oldx + dist, 0, g_canvas.width);
   },
 
-  getInitialAim: function(index){
-    var tank = entityManager._ships[index];
-    //get x and y vel
-    var dX = +Math.sin(util.toRadian(tank.spriteGunRotation ));
-    var dY = -Math.cos(util.toRadian(tank.spriteGunRotation ));
-    var startVel = tank.getStartVel(dX, dY);
-
-    //calculate max height
-    var maxHeight  = util.maxHeight(startVel[1], NOMINAL_GRAVITY, util.maxHeightTime(startVel[1], NOMINAL_GRAVITY ));
-    maxHeight = tank.cy - tank.offsetY - r -20;
-
-    //calculate teh distance the shot will get
-    var xTime = util.xTravelTime(maxHeight,NOMINAL_GRAVITY);
-    var time = xTime +  util.maxHeightTime(-startVel[1], NOMINAL_GRAVITY );
-
-    var xDistance = time * startVel[0];
-    xDistance = util.clamp(this.cx - this.offsetX + xDistance);
-
-    this.setInitialAim(xDistance, maxHeight, index);
-
-
-  },
-
-  setInitialAim(x,y, index){
-    var target = entityManager._ships[util.clampRange(index +1, 0, 8)];
-    var tank = entityManager._ships[index];
-    if ( y > target.cy - 30 && Math.floor(x) !== Math.floor(target.cx)){
-      if( y > target.cy - 30){
-        // if the rotation is not pointing enough upwards update it
-        if(tank.spriteGunRotation < 45){
-          tank.spriteGunRotation++;
-
-        }else if ( tank.spriteGunRotation > 135 ){
-          tank.spriteGunRotation--
-        }
-        tank.power += tank.POWER_INCREASE;
-      } if ( Math.floor(x) !== Math.floor(target.cx)){
-          tank.power += tank.POWER_INCREASE;
-      }
-      this.getInitialAim(index);
-    }
-  }
-
+  
 }

@@ -18,9 +18,8 @@ var terrain = {
 
 // landscape functions
 fun: [
-    function(x, tilt) { return 100 + (-x*x); },
-    function(x, tilt) { return 100 * (Math.cos(x)); },
-    function(x, tilt) { return (x*x) * Math.sin(x); }
+    function(x) { return 100 * Math.cos(x); },
+    function(x) { return ((x*x) * Math.sin(x)); }
 ],
 
 rememberResets: function () {

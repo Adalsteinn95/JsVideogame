@@ -325,6 +325,11 @@ sinAcos: function(ratio, radius) {
     return distance/time;
   },
 
+ //finds the angle required to reach a certain distance given a velocity
+  getAngle: function(vel, dist, gravity ){
+    return 0.5 * Math.arcsin((gravity*dist) / util.square(vel))
+  }
+
   /*
   ATH SIN OG COS
   fáum x * cos(a) = velX
@@ -348,7 +353,30 @@ sinAcos: function(ratio, radius) {
    vel er þá sqrt(xx^2 + yy^2).
    hornið er þá 0.5*arcsin(g*d/v^2).
 
+   búum til fall sem gískar á maxheight needed köllum það MHN
+   var height = MHN();
+   var distance = targetx - this.cx
+   var velY = getVelY(height, gravity);
+   var time = getTimeToHeight(height, gravity); // athuga þetta fall
+   var velX = getVelX(distance, time);
+   var vel = initialvelocity(velX, velY);
+   var angel =  getAngle(vel, distance, gravity);
+
+   Þá vitum við hvaða angle á að nota: og hvaða vel við viljum
+   þ.a til að finna út hvaða power við viljum nota .......
+
+
+    Við vitum þá DX og DY jafnan fyrir startvelx og y er :
+    þar sem power er unknown
+    sartvelx = (DX*launchvel) * power
+    startvelY = DY*launchvel) * power   // afhverju gerðum við /2 ?
+
+    vitum allt nema power þannig við fáum :
+    power = startvelX / (DX*launcvel) og power = startvelY / (DY*launchvel);
+    hmmm
+
   */
+
 
 
 };

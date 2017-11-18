@@ -346,8 +346,8 @@ Ship.prototype.getStartVel = function(dX, dY) {
   var relVelX = dX * relVel;
   var relVelY = dY * relVel;
 
-  var startVelX = this.power * relVelX + this.velX * this.power;
-  var startVelY = -this.power * this.velY + relVelY * (this.power / 2);
+  var startVelX = this.power * relVelX;
+  var startVelY =  relVelY * (this.power / 2);
 
   var startVel = [startVelX, startVelY];
   return startVel;
@@ -378,11 +378,8 @@ Ship.prototype.calculatePath = function() {
   }
   /*bullet trail prediction */
   this.predictCord = [];
-  console.log(this.spriteGunRotation)
   var dX = +Math.sin(util.toRadian(this.spriteGunRotation ));
-  console.log('DX', dX)
   var dY = -Math.cos(util.toRadian(this.spriteGunRotation ));
-  console.log('DY', dY)
   var launchDist = this.getRadius();
 
   var startVel = this.getStartVel(dX, dY);

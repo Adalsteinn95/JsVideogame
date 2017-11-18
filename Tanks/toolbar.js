@@ -74,7 +74,8 @@ var toolbar = {
 
     init : function() {
         //global landscape initiated here
-        g_landscape = terrain.initlandScape(util.fun[2], bound, xShift, g_canvas);
+        //g_landscape = terrain.initlandScape(terrain.fun[1], bound, xShift, g_canvas);
+        this.rerollMap();
         this.drawBackground(dash_ctx);
     },
 
@@ -216,8 +217,14 @@ var toolbar = {
     },
 
     rerollMap : function() {
-        var i =  util.randInt(0, util.fun.length);
-        g_landscape = terrain.initlandScape(util.fun[i], bound, xShift, g_canvas);
+        for (var i = 0; i < 20; i++) {
+            g_landscape = terrain.initlandScape(terrain.fun[1], bound, xShift, g_canvas)
+            if (!g_landscape) {
+                continue;
+            } else {
+                break;
+            }
+        }
     },
 
     //////////////////////////

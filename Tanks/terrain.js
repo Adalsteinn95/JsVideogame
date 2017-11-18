@@ -8,12 +8,20 @@
 
 //initial landscape values
 var g_landscape = [];
-var bound = 15;
-var xShift = 0;
-
+var bound = 20;
+var xShift = 1;
+var tilt = function(x, degree) {
+    return x * degree;
+}
 
 var terrain = {
 
+// landscape functions
+fun: [
+    function(x, tilt) { return 100 + (-x*x); },
+    function(x, tilt) { return 100 * (Math.cos(x)); },
+    function(x, tilt) { return (x*x) * Math.sin(x); }
+],
 
 rememberResets: function () {
     // Remember my reset positions
@@ -40,20 +48,32 @@ render: function(ctx, ls, frame) {
 },
 
 initlandScape: function(f, bound, xShift, frame) {
-
+    bound *= Math.random();
+    xShift *= Math.random() * bound;
+    var roughness = Math.random() * 2;
+    var t =  util.randRange(-25, 25);
     var ls = [];
-
     var x = -bound + xShift;
+    var whoopsLandscapeIsOutOfBoundsLetsTryAgain = false;
 
     for (var i = 0; i < frame.width; i++) {
-        var y = f(x);
+        var y = f(x, tilt) + tilt(x,t);
+        y *= roughness;
         y += frame.height/2;
-        ls.push(y);
 
+        if (y > frame.height || y < 0) {
+            console.log("out of bounds, restarting");
+            whoopsLandscapeIsOutOfBoundsLetsTryAgain = true;
+            break;
+        }
+        ls.push(y);
         x += ((2*bound)/frame.width);
     }
-
-    return ls;
+    if (whoopsLandscapeIsOutOfBoundsLetsTryAgain) {
+        return false;
+    } else {
+        return ls;
+    }
 },
 
 bombLandscape: function(x, radius, tankhit) {

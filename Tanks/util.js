@@ -334,7 +334,7 @@ sinAcos: function(ratio, radius) {
   getAngle: function(vel, dist, gravity ){
     //þarf að breyta í radiana ?
     var angle =  util.toRadian(90) - (0.5 * Math.asin((gravity*dist) / util.square(vel)))
-    console.log('ANGLE', angle);
+    //console.log('ANGLE', angle);
     console.log('ANGLE', util.toDegrees(angle));
     return angle;
   },
@@ -344,6 +344,15 @@ sinAcos: function(ratio, radius) {
       //var s = Math.sin(angle);
       //var c = -Math.cos(angle);
       return vel/ Math.sqrt(util.square(s) + util.square(c));
+  },
+
+  secondDegreeSolver: function(a,b,c){
+    var result = (-1 * b + Math.sqrt(Math.pow(b, 2) - (4 * a * c))) / (2 * a);
+    var result2 = (-1 * b - Math.sqrt(Math.pow(b, 2) - (4 * a * c))) / (2 * a);
+    if ( result > 0){
+      return result;
+    } else return result2;
+
   },
 
   /*
@@ -413,6 +422,16 @@ sinAcos: function(ratio, radius) {
 
           x = vel / sqrt(s^2 + c^2);
 
+
+
+          hvað er power?
+          vel_x = power * 4sin(angle);     5.97
+          vel_Y = power/2 * -4cos(angle);   1.08
+
+          þannig að
+          gildin sem ég fæ: vel_x = 0.13, vel_Y = 1.5 , angle = 70;
+          power = vel_x / 4sin(angle)  =  0.034   -- 1.59
+          power = 2vel_Y / -4cos(angle) = 2.192   --  2.92
 
 
   */

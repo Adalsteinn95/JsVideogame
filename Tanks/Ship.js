@@ -274,6 +274,7 @@ Ship.prototype.maybeFireBullet = function() {
 
     var dX = +Math.sin(util.toRadian(this.spriteGunRotation));
     var dY = -Math.cos(util.toRadian(this.spriteGunRotation));
+    console.log('THIS.SPRITEGUNROTATION', this.spriteGunRotation)
     var launchDist = this.getRadius();
 
     var startVel = this.getStartVel(dX, dY);
@@ -535,8 +536,8 @@ Ship.prototype.render = function(ctx) {
   this.offsetY = yOffset;
 
   //calc stöff ATHUGA
-  var dX = +Math.sin(util.toRadian(this.spriteGunRotation ));
-  var dY = -Math.cos(util.toRadian(this.spriteGunRotation ));
+  var dX = +Math.sin(this.spriteGunRotation );
+  var dY = -Math.cos(this.spriteGunRotation );
 
   var angle = this.spriteGunRotation - this.rotation;
 
@@ -586,7 +587,41 @@ if(this.myTurn === true){
 
   util.fillCircle(g_ctx, 100 , 430, 10);
   util.fillCircle(g_ctx, 300 , 380, 10);
-  var calcVelY = util.getVelY(142, 0.12);
+  //round 2
+  //max hæðin sem við viljum ná ---ath þurfum fall sem gerir þetta
+  var maxHeight = 150;
+  //upphafsstaða skotsins
+  var y0 = g_canvas.height - 380;
+  //staða targets
+  var y1 = g_canvas.height - 430;
+  //y vel sem þarf til að ná maxheight
+  var Dyvel = util.getVelY(maxHeight, 0.12);
+  //console.log('DYVEL', Dyvel)
+  var timetoy = util.getTimeToHeight(Dyvel, 0.12);
+
+  var Dyvel = util.getVelX(maxHeight,timetoy);
+  console.log('DYVEL', Dyvel)
+
+  //tíminn sem kúlan er í loftinu
+  var c = y0 - y1;
+  var time = util.secondDegreeSolver(-0.06,Dyvel,0);
+  time *= SECS_TO_NOMINALS;
+  console.log('TIME', time)
+
+  var dVelX = util.getVelX(200,time);
+  console.log('VAR CALCVELX', dVelX);
+
+  var dVEL = util.initialVelocity(dVelX, Dyvel);
+  //console.log('CALCVEL', dVEL);
+
+  var dAngle = util.getAngle(dVEL,200,0.12);
+  //console.log('DANGLE', dAngle)
+  //console.log('rot' + this.spriteGunRotation);
+
+
+
+  //round 1
+  /*var calcVelY = util.getVelY(142, 0.12);
   //console.log("getvely " + util.getVelY(92, 0.12));
   var calcTime = util.getTimeToHeight(calcVelY, 0.12);
   //console.log("gettimetoheight " + util.getTimeToHeight(92, 0.12));
@@ -613,7 +648,7 @@ if(this.myTurn === true){
   var power = util.getPower(calcAngle, calcVEL, calcdX, calcdY);
   //console.log('POWER', power)
   console.log("this.power " + this.power)
-
+*/
 }
 
   ///Projectile path

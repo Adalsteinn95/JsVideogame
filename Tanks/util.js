@@ -271,7 +271,6 @@ sinAcos: function(ratio, radius) {
 //
   },
 
-
   //=====================
   // damage
   //=====================
@@ -282,12 +281,9 @@ sinAcos: function(ratio, radius) {
 
   },
 
-
   //=======================
   // AI vers 2
   // =====================
-
-
 
   maxHeightTime: function (vel, gravity){
     return vel/gravity;
@@ -301,7 +297,6 @@ sinAcos: function(ratio, radius) {
     return Math.sqrt(height / (0.5*gravity));
 
   },
-
 
   //==========================
   //AI vers 3
@@ -330,11 +325,30 @@ sinAcos: function(ratio, radius) {
     return distance/time;
   },
 
-  
+  /*
+  ATH SIN OG COS
+  fáum x * cos(a) = velX
+  og x * sin(a) = velY
+  sqrt(velY^2 + velX^2) = vel
+  þ.a ssqrt(xcos(a)^2 + xsin(a)^2) = vel
+
+  gætum við átt að nota angle = 0 og angle = 90 þá fáum við
+  sqrt(xcos(0)^2 + xsin(90)^2) = vel
+  sqrt(x^2 + x^2) = vel
+   2x = vel
+   x = vel/2.
+
+   Þá fáum við power i guess og getum þá gert:
 
 
+   ///
+   Fáum vely frá getvely sejum = yy
+   Faum þá travel tímann með gettimetoheight (*2?) = t
+   fáum þannig xvel með getvelx = xx
+   vel er þá sqrt(xx^2 + yy^2).
+   hornið er þá 0.5*arcsin(g*d/v^2).
 
-
+  */
 
 
 };

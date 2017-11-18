@@ -356,8 +356,6 @@ Ship.prototype.getStartVel = function(dX, dY) {
 
 Ship.prototype.updateGunRotation = function() {
 
-
-
   if (this.myTurn === true) {
     if (keys[this.KEY_LEFT] && util.toDegrees(this.gunrotation) > 0) {
       this.gunrotation -= NOMINAL_ROTATE_RATE * 2;
@@ -380,9 +378,11 @@ Ship.prototype.calculatePath = function() {
   }
   /*bullet trail prediction */
   this.predictCord = [];
-
+  console.log(this.spriteGunRotation)
   var dX = +Math.sin(util.toRadian(this.spriteGunRotation ));
+  console.log('DX', dX)
   var dY = -Math.cos(util.toRadian(this.spriteGunRotation ));
+  console.log('DY', dY)
   var launchDist = this.getRadius();
 
   var startVel = this.getStartVel(dX, dY);
@@ -571,7 +571,7 @@ if(this.myTurn === true){
 // target x - this.cx / time = velX
 /////////////////7
   var xDistance = time * startVel[0];
-  console.log('XDISTANCE', xDistance)
+  //console.log('XDISTANCE', xDistance)
     util.strokeCircle(g_ctx,util.clamp(this.cx - this.offsetX + xDistance) , this.cy - this.offsetY, 10);
   var yOnHit =g_canvas.height - g_landscape[util.clamp(Math.floor(this.cx - this.offsetX + xDistance))-10];
   //console.log('YONHIT', yOnHit)
@@ -580,7 +580,7 @@ if(this.myTurn === true){
   xTime = util.xTravelTime(hMax,NOMINAL_GRAVITY);
   time = xTime +  util.maxHeightTime(-startVel[1], NOMINAL_GRAVITY );
   xDistance = time * startVel[0];
-  console.log('XDISTANCEnytt', xDistance)
+  //console.log('XDISTANCEnytt', xDistance)
 
   util.fillCircle(g_ctx,util.clamp(this.cx - this.offsetX + xDistance) , this.cy - this.offsetY, 10);
 

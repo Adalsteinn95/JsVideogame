@@ -317,8 +317,13 @@ sinAcos: function(ratio, radius) {
   },
   //calculates the time it takes to reach a particular height
   //ekki notað?
-  getTimeToHeight: function(height, g){
-    return Math.sqrt(2*height/g);
+  //works only if ball is thrown directly up
+  getTimeToHeight: function(vel, g){
+  //  frá pat ekki efast um pat
+   //return Math.sqrt(2*height/g);
+   //þetta frekar?
+   return (2*vel) /g
+
   },
   //returns the x vel required to reach a certain distance in the given time
   getVelX: function(distance, time){
@@ -327,7 +332,11 @@ sinAcos: function(ratio, radius) {
 
  //finds the angle required to reach a certain distance given a velocity
   getAngle: function(vel, dist, gravity ){
-    return 0.5 * Math.arcsin((gravity*dist) / util.square(vel))
+    //þarf að breyta í radiana ?
+    var angle =  util.toRadian(90) - (0.5 * Math.asin((gravity*dist) / util.square(vel)))
+    console.log('ANGLE', angle);
+    console.log('ANGLE', util.toDegrees(angle));
+    return angle;
   }
 
   /*

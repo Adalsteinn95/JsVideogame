@@ -555,6 +555,7 @@ if(this.myTurn === true){
   var r = util.maxHeight(startVel[1], NOMINAL_GRAVITY, util.maxHeightTime(startVel[1], NOMINAL_GRAVITY ));
 
   util.strokeCircle(g_ctx,this.cx - this.offsetX, this.cy - this.offsetY - r -20, 10);
+  //console.log('THIS.CY - THIS.OFFSETY - R -20', this.cy - this.offsetY - r -20)
   var hMax =  g_canvas.height - (this.cy - this.offsetY - r -20);
 
   //console.log('HMAX', hMax)
@@ -580,6 +581,32 @@ if(this.myTurn === true){
   //console.log('XDISTANCEnytt', xDistance)
 
   util.fillCircle(g_ctx,util.clamp(this.cx - this.offsetX + xDistance) , this.cy - this.offsetY, 10);
+
+  util.fillCircle(g_ctx, 100 , 430, 10);
+  util.fillCircle(g_ctx, 300 , 380, 10);
+  var calcVelY = util.getVelY(92, 0.12);
+  //console.log("getvely " + util.getVelY(92, 0.12));
+  var calcTime = util.getTimeToHeight(calcVelY, 0.12);
+  //console.log("gettimetoheight " + util.getTimeToHeight(92, 0.12));
+  //distance er -200
+  var calcVelX = util.getVelX(-200,time);
+  //console.log('VAR CALCVELX', calcVelX);
+  var calcVEL = util.initialVelocity(calcVelX, calcVelY);
+  console.log('CALCVEL', calcVEL)
+  var calcAngle = util.getAngle(calcVEL,-200,0.12);
+  console.log('CALCANGLE', calcAngle)
+
+  var calcdX = +Math.sin(util.toRadian(calcAngle ));
+  console.log('CALCDX', calcdX)
+  var calcdY = -Math.cos(util.toRadian(calcAngle ));
+  console.log('CALCDY', calcdY)
+
+  var powerX = calcVelX/(this.launchVel*calcdX);
+  console.log('POWERX', powerX)
+  var powerY = calcVelY/(this.launchVel*calcdY);
+  console.log('POWERY', powerY)
+
+
 
 
  var yRing = this.cy - this.offsetY - r -20;

@@ -337,7 +337,14 @@ sinAcos: function(ratio, radius) {
     console.log('ANGLE', angle);
     console.log('ANGLE', util.toDegrees(angle));
     return angle;
-  }
+  },
+
+  //    x = vel / sqrt(s^2 + c^2);
+  getPower: function(angle, vel , s, c){
+      //var s = Math.sin(angle);
+      //var c = -Math.cos(angle);
+      return vel/ Math.sqrt(util.square(s) + util.square(c));
+  },
 
   /*
   ATH SIN OG COS
@@ -384,7 +391,35 @@ sinAcos: function(ratio, radius) {
     power = startvelX / (DX*launcvel) og power = startvelY / (DY*launchvel);
     hmmm
 
+
+
+         //angle of reach = a = 0.5 asin(g*d /v^2)
+         --> sin(a/0.5) = g*d / v^2
+         --> v^2 = g*d / sin(2a)
+         --> v = sqrt(g*d / sin(2a));
+
+
+         næsta skref mögulega --> VEL^2 = (x*sin(angle))^2 + (x*-cos(angle))^2
+         var s = sin(angle);
+         var c = -cos(angle);
+
+          vel^2 = (xs)^2 + (xc)^2
+          vel^2 = x^2s^2 +  x^2c^2
+
+          x = 2 og s = 3
+          (2*3)^2 = 36
+          2^2 *3^2 = 4*9 = 36
+
+
+          x = vel / sqrt(s^2 + c^2);
+
+
+
   */
+    //turned
+   angleOfReach: function(angle,grav, dist){
+     return Math.sqrt((grav*dist) / (Math.sin(2*angle)));
+   }
 
 
 

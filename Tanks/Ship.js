@@ -387,7 +387,9 @@ Ship.prototype.calculatePath = function() {
   var testX = this.cx - this.offsetX + dX * launchDist;
   var testY = this.cy - this.offsetY + dY * launchDist;
   var veltestY = startVel[1];
-  var veltestX = startVel[0]
+  var veltestX = startVel[0];
+
+  this.predictCord.push({testX, testY});
 
   while (testX < g_canvas.width || testX > g_canvas.width) {
 
@@ -584,40 +586,33 @@ if(this.myTurn === true){
 
   util.fillCircle(g_ctx, 100 , 430, 10);
   util.fillCircle(g_ctx, 300 , 380, 10);
-  var calcVelY = util.getVelY(92, 0.12);
+  var calcVelY = util.getVelY(142, 0.12);
   //console.log("getvely " + util.getVelY(92, 0.12));
   var calcTime = util.getTimeToHeight(calcVelY, 0.12);
   //console.log("gettimetoheight " + util.getTimeToHeight(92, 0.12));
   //distance er -200
-  var calcVelX = util.getVelX(-200,time);
+  var calcVelX = util.getVelX(200,time);
   //console.log('VAR CALCVELX', calcVelX);
   var calcVEL = util.initialVelocity(calcVelX, calcVelY);
-  console.log('CALCVEL', calcVEL)
+  //console.log('CALCVEL', calcVEL)
   var calcAngle = util.getAngle(calcVEL,-200,0.12);
-  console.log('CALCANGLE', calcAngle)
+  console.log(this.spriteGunRotation);
+  console.log('CALCANGLE', calcAngle);
+
+  var thepower = util.angleOfReach(calcAngle, 0.12, -200);
+  //console.log('THEPOWER', thepower)
 
   var calcdX = +Math.sin(util.toRadian(calcAngle ));
-  console.log('CALCDX', calcdX)
+  //console.log('CALCDX', calcdX)
   var calcdY = -Math.cos(util.toRadian(calcAngle ));
-  console.log('CALCDY', calcdY)
+  //console.log('CALCDY', calcdY)
 
-  var powerX = calcVelX/(this.launchVel*calcdX);
-  console.log('POWERX', powerX)
-  var powerY = calcVelY/(this.launchVel*calcdY);
-  console.log('POWERY', powerY)
+  var thestpower = thepower / calcdX;
+  console.log('THESTPOWER', thestpower);
 
-
-
-
- var yRing = this.cy - this.offsetY - r -20;
- var xRing = this.cx - this.offsetX + xDistance;
- /*if( this.playerId === 'AI' && !this.preMoveCalc){
-     //spatialID -1 gets the index of the ship on entitymanager
-     ai.whereToMove(Math.floor(this.cx), util.clampRange(this._spatialID-1,0,8));
-     ai.getInitialAim(util.clampRange(this._spatialID-1,0,8) );
-     this.preMoveCalc = true;
- }*/
-
+  var power = util.getPower(calcAngle, calcVEL, calcdX, calcdY);
+  //console.log('POWER', power)
+  console.log("this.power " + this.power)
 
 }
 

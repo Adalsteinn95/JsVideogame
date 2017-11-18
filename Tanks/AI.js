@@ -160,6 +160,14 @@ var ai = {
     console.log("dist " + dist);
     entityManager._ships[index].nextX = util.clampRange(oldx + dist, 0, g_canvas.width);
   },
+  //guess the height we need to shott
+  guessHeight: function(tank){
+    //seinna fá inn y hnit á target og y hnit á stærsta fjall á milli targets
+      var num = Math.florr(Math.random()*200 )+40;
+      return tank.cy- num;
+  },
 
-  
+
+
+
 }

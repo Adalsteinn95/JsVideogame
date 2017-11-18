@@ -314,7 +314,25 @@ sinAcos: function(ratio, radius) {
     // o = atan(((v * v) + sqrt(s)) / (g * x));
     var angle = Math.atan((util.square(vel) + Math.sqrt(s)) / (gravity * x));
     return angle;
-  }
+  },
+  //height is the height we need to reach and g is gravity
+  //returns the initial velocity needed
+  getVelY: function(height,g,){
+    return Math.sqrt(2*g*height);
+  },
+  //calculates the time it takes to reach a particular height
+  //ekki notað?
+  getTimeToHeight: function(height, g){
+    return Math.sqrt(2*height/g);
+  },
+  //returns the x vel required to reach a certain distance in the given time
+  getVelX: function(distance, time){
+    return distance/time;
+  },
+
+  
+
+
 
 
 

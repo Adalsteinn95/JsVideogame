@@ -222,7 +222,6 @@ sinAcos: function(ratio, radius) {
   //=====================
 
   playSoundOverlap: function (sound) {
-    console.log("sound played " + sound)
     var click=sound.cloneNode();
     click.play();
   }

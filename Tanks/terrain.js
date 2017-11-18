@@ -9,7 +9,6 @@
 //initial landscape values
 var g_landscape = [];
 var bound = 20;
-var xShift = 1;
 var tilt = function(x, degree) {
     return x * degree;
 }
@@ -50,13 +49,13 @@ initlandScape: function(f, bound, xShift, frame) {
     bound *= Math.random();
     xShift *= Math.random() * bound;
     var roughness = Math.random() * 2;
-    var t =  util.randRange(-25, 25);
+    var t =  util.randRange(-30, 30);
     var ls = [];
     var x = -bound + xShift;
     var whoopsLandscapeIsOutOfBoundsLetsTryAgain = false;
 
     for (var i = 0; i < frame.width; i++) {
-        var y = f(x, tilt) + tilt(x,t);
+        var y = f(x) + tilt(x,t);
         y *= roughness;
         y += frame.height/2;
 

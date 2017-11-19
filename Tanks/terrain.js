@@ -88,22 +88,16 @@ bombLandscape: function(x, radius, tankhit) {
 
     x = Math.floor(x);
     radius = Math.floor(radius);
-
     var diff = x - radius;
-
     var ratio = -1, step = 1/radius;
 
     for (var i = diff; i < 2*radius + diff; i++) {
-
         //if the explosion radius goes outside of the map then ignore
-        if (i < 0 || i > g_canvas.length){
-          continue;
+        if (i >= 0 && i <= g_canvas.width){
+            g_landscape[i] += util.sinAcos(ratio, radius);
         }
-
-        g_landscape[util.clamp(i)] += util.sinAcos(ratio, radius);
         ratio += step;
     }
 }
-
 
 }

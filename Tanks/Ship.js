@@ -66,7 +66,7 @@ Ship.prototype.numSubSteps = 1;
 Ship.prototype.power = 2;
 Ship.prototype.POWER_INCREASE = 0.085;
 Ship.prototype.weaponId =  0;
-Ship.prototype.ammo = 1;
+Ship.prototype.ammo = 20;
 
 //AI stuff
 Ship.prototype.destX = 0;
@@ -123,8 +123,8 @@ Ship.prototype.update = function(du) {
       //get y coordinates
       var xIndex = util.clamp(Math.floor(this.cx));
       this.cy = g_landscape[xIndex];
-      if (this.cy > 600) {
-        this.cy = 600;
+      if (this.cy > g_canvas.height) {
+        this.cy = g_canvas.height;
         this.rotation = 0;
       }
       //ai stuff
@@ -208,8 +208,8 @@ Ship.prototype.applyAccel = function(accelX, accelY, du) {
 
   var xIndex = util.clamp(Math.floor(this.cx));
   this.cy = g_landscape[xIndex];
-  if (this.cy > 600) {
-    this.cy = 600;
+  if (this.cy > g_canvas.height) {
+    this.cy = g_canvas.height;
     this.rotation = 0;
   }
 };
@@ -539,7 +539,8 @@ Ship.prototype.render = function(ctx) {
   this.sprite.scale = origScale;
 
   ///Projectile path
-
-  //util.projectilePath(this.predictCord);
+  if (this.weapon.name === "tracer") {
+      util.projectilePath(this.predictCord);
+  }
 
 };

@@ -251,10 +251,14 @@ Ship.prototype.falldown = function(thrust) {
 };
 
 Ship.prototype.maybeFireBullet = function() {
+
+  //g_audio.fire.pause();
+
   //check if the player has enough ammo for the chosen weapon
   this.canFire = this.checkAmmoCost();
 
   if ((keys[this.KEY_FIRE] && this.myTurn && this.playerId === "Human" && this.canFire) || this.myTurn && this.playerId === "AI" && this.canFire) {
+    g_audio.fire.play();
     g_countdown.stop = true;
 
     this.myTurn = false;

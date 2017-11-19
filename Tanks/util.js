@@ -210,7 +210,14 @@ sinAcos: function(ratio, radius) {
     var dist = this.distSq(x1,y1,x2,y2);
     return Math.sqrt(dist);
 
-  }
+  },
+  //=====================
+  // SOUNDstuff
+  //=====================
 
+  playSoundOverlap: function (sound) {
+    var click=sound.cloneNode();
+    click.play();
+  }
 
 };

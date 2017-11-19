@@ -94,7 +94,7 @@ Bullet.prototype.terrainHit = function(x, y){
             var canTakeHit = hitEntity.takeExplosionHit(this.cx, this.cy);
             if (canTakeHit) canTakeHit.call(hitEntity);
         };
-        terrain.bombLandscape(x, this.weapon.damage);
+        terrain.bombLandscape(x, this.weapon);
         this.lifeSpan = 0;
     }
 
@@ -126,12 +126,6 @@ Bullet.prototype.getRadius = function () {
     return 2;
 };
 
-Bullet.prototype.takeBulletHit = function () {
-    this.kill();
-
-    // Make a noise when I am zapped by another bullet
-    //this.zappedSound.play();
-};
 
 Bullet.prototype.render = function (ctx) {
     if(this.cy < 0) {

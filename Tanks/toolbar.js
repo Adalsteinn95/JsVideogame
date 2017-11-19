@@ -6,8 +6,8 @@ var toolbar = {
     setupIndex : 0,
     idSelected: false,
 
-    KEY_PLUS : '8'.charCodeAt(0),
-    KEY_MINUS : '7'.charCodeAt(0),
+    KEY_PLUS : '39',
+    KEY_MINUS : '37',
     KEY_CONFIRM : '13', //'enter'-keycode
     KEY_BACK : '8', //'backspace'-keycode
     KEY_REROLL : 'R'.charCodeAt(0),
@@ -243,6 +243,7 @@ var toolbar = {
         util.drawTextAt(ctx, 50, 75, "Courier", "20px", "black", "Weapon: " +
                         tank.weapon.name);
     },
+
     renderLifebars : function(ctx) {
       //þarf að breyta originalHealth af að healthi er breytt
       var originalHealth = 100
@@ -283,16 +284,15 @@ var toolbar = {
         ctx.lineWidth = 2;
         util.strokeBox(ctx, box.cx + offsetX, box.cy + offsetY, box.w, box.h, "black")
         var sprite = entityManager._ships[i].flagsprite;
-        sprite.scale = 0.15;
-        sprite.drawCentredAt(ctx, box.cx + offsetX + box.w/2, (box.cy - 15) + offsetY, 0)
+        //sprite.scale = 0.15;
+        //sprite.drawCentredAt(ctx, box.cx + offsetX + box.w/2, (box.cy - 15) + offsetY, 0)
 
+        sprite.drawFixedAt(ctx, box.cx + offsetX, box.cy + offsetY, box.w, box.h);
 
         offsetX += box.w + 20;
       }
-
-
-
     },
+
     renderTime : function(ctx) {
         ctx.textAlign = 'center';
         var oneThird = (g_countdown.timeLeft < (g_countdown.duration / 3) ) 

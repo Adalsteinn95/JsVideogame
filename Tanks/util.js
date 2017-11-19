@@ -173,12 +173,6 @@ clampMinMax: function(x, min, max){
   return num;
 },
 
-// landscape functions
-fun: [
-    function(x) { return 100 + (-x*x); },
-    function(x) { return 100 * Math.cos(x); },
-    function(x) { return (x*x) * Math.sin(x); }
-],
 
 // destruction function
 sinAcos: function(ratio, radius) {

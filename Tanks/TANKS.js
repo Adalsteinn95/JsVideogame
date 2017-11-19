@@ -164,10 +164,8 @@ function preloadDone() {
         g_sprites.flags[i] = new Sprite(g_images[flag]);
     }
 
-
     entityManager.init();
     toolbar.init();
-
     main.init();
 }
 

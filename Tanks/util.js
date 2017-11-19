@@ -230,7 +230,7 @@ sinAcos: function(ratio, radius) {
     return calc;
   },
 
-  //returns the time of floght for a bullet
+/*  //returns the time of floght for a bullet
   timeOfFlight: function(velocity, angle, gravity){
     return ((2*velocity)*Math.sin(angle))/ gravity;
   },
@@ -238,9 +238,9 @@ sinAcos: function(ratio, radius) {
   maxHeightReached: function(vel, angle, gravity){
     return (util.square(vel) * util.square(Math.sin(util.toRadian(angle)))/(2*gravity));
 
-  },
+  },*/
   //return the horizontal range
-  horizontalRange: function(vel, angle, gravity){
+  /*horizontalRange: function(vel, angle, gravity){
     var a = angle;
 
     /*if(a < 0){
@@ -248,7 +248,7 @@ sinAcos: function(ratio, radius) {
     } else if(angle > 3.12){
       a = 3.14;
     }*/
-    return ((util.square(vel) * (Math.sin(2*util.toRadian(a))) / gravity))
+  /*  return ((util.square(vel) * (Math.sin(2*util.toRadian(a))) / gravity))
     //return ((util.square(vel) * (Math.sin(this.clampMinMax(2*a, 0, Math.PI)))/gravity));
 
   },
@@ -269,7 +269,7 @@ sinAcos: function(ratio, radius) {
 //nota nýju jöfnu og calmpa range sem fæst út frá rotation á gun + tankrotation
 //sin^2(x) = sin(x) * sin(x)
 //
-  },
+  },*/
 
   //=====================
   // damage
@@ -281,22 +281,6 @@ sinAcos: function(ratio, radius) {
 
   },
 
-  //=======================
-  // AI vers 2
-  // =====================
-
-  maxHeightTime: function (vel, gravity){
-    return vel/gravity;
-  },
-
-  maxHeight: function(vel, gravity, time ){
-    return vel * time - (0.5*gravity*util.square(time));
-  },
-
-  xTravelTime: function(height, gravity){
-    return Math.sqrt(height / (0.5*gravity));
-
-  },
 
   //==========================
   //AI vers 3
@@ -322,16 +306,30 @@ sinAcos: function(ratio, radius) {
   //  frá pat ekki efast um pat
    //return Math.sqrt(2*height/g);
    //þetta frekar?
-   return (2*vel) /g
+   return (vel) /g
 
+  },
+  //get the time it takes to get down
+  //notum svo tdown = (2dist / g); dist er þá frá max height í targety
+  getTimeDown: function(dist, g){
+    return Math.sqrt(2*dist / g);
   },
   //returns the x vel required to reach a certain distance in the given time
   getVelX: function(distance, time){
     return distance/time;
   },
 
+  //finds the angle required to reach a certain distance given a velocity
+   getAngle1: function(vel, dist, gravity ){
+     //þarf að breyta í radiana ?
+     var angle =  (0.5 * Math.asin((gravity*dist) / util.square(vel)))
+     //console.log('ANGLE', angle);
+     console.log('ANGLE', util.toDegrees(angle));
+     return angle;
+   },
+
  //finds the angle required to reach a certain distance given a velocity
-  getAngle: function(vel, dist, gravity ){
+  getAngle2: function(vel, dist, gravity ){
     //þarf að breyta í radiana ?
     var angle =  util.toRadian(90) - (0.5 * Math.asin((gravity*dist) / util.square(vel)))
     //console.log('ANGLE', angle);
@@ -339,11 +337,10 @@ sinAcos: function(ratio, radius) {
     return angle;
   },
 
-  //    x = vel / sqrt(s^2 + c^2);
-  getPower: function(angle, vel , s, c){
-      //var s = Math.sin(angle);
-      //var c = -Math.cos(angle);
-      return vel/ Math.sqrt(util.square(s) + util.square(c));
+  //   power = V^2 / 1- 3 cos(2a)
+  getPower: function(vel, angle){
+
+      return Math.sqrt(util.square(vel) / (1 - (3*Math.cos(2*angle))));
   },
 
   secondDegreeSolver: function(a,b,c){
@@ -400,29 +397,12 @@ sinAcos: function(ratio, radius) {
     power = startvelX / (DX*launcvel) og power = startvelY / (DY*launchvel);
     hmmm
 
-
-
          //angle of reach = a = 0.5 asin(g*d /v^2)
          --> sin(a/0.5) = g*d / v^2
          --> v^2 = g*d / sin(2a)
          --> v = sqrt(g*d / sin(2a));
 
-
          næsta skref mögulega --> VEL^2 = (x*sin(angle))^2 + (x*-cos(angle))^2
-         var s = sin(angle);
-         var c = -cos(angle);
-
-          vel^2 = (xs)^2 + (xc)^2
-          vel^2 = x^2s^2 +  x^2c^2
-
-          x = 2 og s = 3
-          (2*3)^2 = 36
-          2^2 *3^2 = 4*9 = 36
-
-
-          x = vel / sqrt(s^2 + c^2);
-
-
 
           hvað er power?
           vel_x = power * 4sin(angle);     5.97
@@ -433,13 +413,32 @@ sinAcos: function(ratio, radius) {
           power = vel_x / 4sin(angle)  =  0.034   -- 1.59
           power = 2vel_Y / -4cos(angle) = 2.192   --  2.92
 
-
   */
     //turned
    angleOfReach: function(angle,grav, dist){
      return Math.sqrt((grav*dist) / (Math.sin(2*angle)));
    }
 
+   /*
+      byrja á ða finna max height = s
+      svo vel sem þarf y0 = sqrt(2*a*s)) þar sem a = gravity
+      svo tímann til að ná hæstu hæð sem er tupp = y0 / g
+      notum svo tdown = sqrt(2dist / g); dist er þá frá max height í targety
+      t = tdown + tupp;
+      svo þarf að margfalda til að fá Nominal time.
+      distnace er targetx - this.cx
+      x0 = distance/ t;
+      vle er þá sqrt(x0^2 + y0^2);
+      finnum svo angle:
+      angle 1 = 0.5 * asin(g*d / v);  =21°
+      angle 2 = util.toradian(90) - 0.5 * asin(g*d / v); = 69°
+      power er þá : VEL = sqrt((power*4sin(angle))^2 + (((power/2)* -4cos(angle))^2);
+      --> V^ 2 = (4Xsin(a)^2 - 2Xcos(a)^2)
+      --> power = V^2 / 1- 3 cos(2a)
+
+      erum með 2 angle og fáum þannig 2 power þarf ða sjá hvaða tölur fæst
+
+   */
 
 
 };

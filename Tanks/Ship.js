@@ -423,7 +423,7 @@ Ship.prototype.calculatePath = function() {
 
 Ship.prototype.updatePower = function(du) {
   if (this.myTurn === true) {
-    if(this.power < 0.3){
+    /*if(this.power < 0.3){
       if (keys[this.KEY_POWER]) {
         this.power += this.POWER_INCREASE;
 
@@ -433,7 +433,7 @@ Ship.prototype.updatePower = function(du) {
         this.power -= this.POWER_INCREASE;
 
       }
-    } else {
+    } else {*/
       if (keys[this.KEY_POWER]) {
         this.power += this.POWER_INCREASE;
 
@@ -443,7 +443,7 @@ Ship.prototype.updatePower = function(du) {
 
       }
     }
-  }
+  //}
 };
 
 Ship.prototype.takeBulletHit = function() {
@@ -555,23 +555,23 @@ Ship.prototype.render = function(ctx) {
 if(this.myTurn === true){
   //util.strokeCircle(g_ctx,this.cx - this.offsetX, this.cy - this.offsetY, util.maxHeightReached(util.initialVelocity(startVel[0], startVel[1]), angle,NOMINAL_GRAVITY));
   //util.strokeCircle(g_ctx,this.cx - this.offsetX, this.cy - this.offsetY, 3909);
-  var r = util.maxHeight(startVel[1], NOMINAL_GRAVITY, util.maxHeightTime(startVel[1], NOMINAL_GRAVITY ));
+  //var r = util.maxHeight(startVel[1], NOMINAL_GRAVITY, util.maxHeightTime(startVel[1], NOMINAL_GRAVITY ));
 
-  util.strokeCircle(g_ctx,this.cx - this.offsetX, this.cy - this.offsetY - r -20, 10);
+  //util.strokeCircle(g_ctx,this.cx - this.offsetX, this.cy - this.offsetY - r -20, 10);
   //console.log('THIS.CY - THIS.OFFSETY - R -20', this.cy - this.offsetY - r -20)
-  var hMax =  g_canvas.height - (this.cy - this.offsetY - r -20);
+  //var hMax =  g_canvas.height - (this.cy - this.offsetY - r -20);
 
   //console.log('HMAX', hMax)
 
   //console.log(startVel[1]);
-  var xTime = util.xTravelTime(hMax,NOMINAL_GRAVITY);
+  //var xTime = util.xTravelTime(hMax,NOMINAL_GRAVITY);
   //console.log('XTIME', xTime)
-  var time = xTime +  util.maxHeightTime(-startVel[1], NOMINAL_GRAVITY );
+  //var time = xTime +  util.maxHeightTime(-startVel[1], NOMINAL_GRAVITY );
 
 
 // target x - this.cx / time = velX
 /////////////////7
-  var xDistance = time * startVel[0];
+  /*var xDistance = time * startVel[0];
   //console.log('XDISTANCE', xDistance)
     util.strokeCircle(g_ctx,util.clamp(this.cx - this.offsetX + xDistance) , this.cy - this.offsetY, 10);
   var yOnHit =g_canvas.height - g_landscape[util.clamp(Math.floor(this.cx - this.offsetX + xDistance))-10];
@@ -584,39 +584,51 @@ if(this.myTurn === true){
   //console.log('XDISTANCEnytt', xDistance)
 
   util.fillCircle(g_ctx,util.clamp(this.cx - this.offsetX + xDistance) , this.cy - this.offsetY, 10);
-
-  util.fillCircle(g_ctx, 100 , 430, 10);
+*/g_ctx.fillStyle = 'red';
+  util.fillCircle(g_ctx, 120 , 460, 10);
   util.fillCircle(g_ctx, 300 , 380, 10);
   //round 2
   //max hæðin sem við viljum ná ---ath þurfum fall sem gerir þetta
   var maxHeight = 150;
   //upphafsstaða skotsins
   var y0 = g_canvas.height - 380;
+  //console.log('Y0 ', y0 );
   //staða targets
   var y1 = g_canvas.height - 430;
+  //console.log('Y1', y1);
   //y vel sem þarf til að ná maxheight
-  var Dyvel = util.getVelY(maxHeight, 0.12);
+  var Dyvel = util.getVelY(maxHeight, 0.12); //check
   //console.log('DYVEL', Dyvel)
-  var timetoy = util.getTimeToHeight(Dyvel, 0.12);
-
-  var Dyvel = util.getVelX(maxHeight,timetoy);
-  console.log('DYVEL', Dyvel)
-
-  //tíminn sem kúlan er í loftinu
-  var c = y0 - y1;
-  var time = util.secondDegreeSolver(-0.06,Dyvel,0);
+  var timetoy = util.getTimeToHeight(Dyvel, 0.12); // check
+  console.log('TIMETOY', timetoy)
+  //max height er hæðin frá byrjun að top gerum það - (endy - byrjunary)
+  var timedown = util.getTimeDown(100,0.12)
+  console.log('TIMEDOWN', timedown)
+  var time = timedown + timetoy;
   time *= SECS_TO_NOMINALS;
   console.log('TIME', time)
 
-  var dVelX = util.getVelX(200,time);
-  console.log('VAR CALCVELX', dVelX);
+
+  var dVelX = util.getVelX(180,time);
+  //console.log('VAR CALCVELX', dVelX);
 
   var dVEL = util.initialVelocity(dVelX, Dyvel);
   //console.log('CALCVEL', dVEL);
 
-  var dAngle = util.getAngle(dVEL,200,0.12);
-  //console.log('DANGLE', dAngle)
-  //console.log('rot' + this.spriteGunRotation);
+  var dAngle1 = util.getAngle1(dVEL,200,0.12);
+  //console.log('DANGLE1 ', dAngle1 )
+  var dAngle2 = util.getAngle2(dVEL,200,0.12);
+  //console.log('DANGLE2', dAngle2)
+  //console.log("this.rot " + this.spriteGunRotation);
+
+
+
+  //var power1 = util.getPower(dVEL, dAngle1);
+  //console.log('POWER', power1)
+  var power2 = util.getPower(dVEL, dAngle2);
+  console.log('POWER', power2)
+  console.log('this.power', this.power)
+
 
 
 

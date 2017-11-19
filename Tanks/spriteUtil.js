@@ -18,17 +18,15 @@ var spriteUtil = {
         return arr;
     },
 
-    pushImgUrl : function(url, length) {
-        var arr = [];
-        var sprite;
+    loadImgs: function(obj, url, type) {
 
-        for (var i = 1; i < length + 1; ++i) {
-            var img = url + "expl" + i + ".png";
-            sprite = new Sprite(img)
-            arr.push(sprite);
+        var flag = "flag"
+
+        for (var i = 0; i < 16; i++) {
+            var f = flag + i;
+            obj[f] = url + f + type;
         }
-
-        return arr;
+        return obj;
     },
 
     pushImg : function(imgs) {

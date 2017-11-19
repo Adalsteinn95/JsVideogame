@@ -22,7 +22,8 @@ function Ship(descr) {
   // Default sprite, if not otherwise specified
   this.sprite = this.sprite || g_sprites.ship;
   this.gunsprite = g_sprites.tankgun;
-  this.flagsprite = g_sprites.flag;
+  this.flagX = -19.35;
+  this.flagY = -15;
   this.arrowSprite = g_sprites.arrows;
 
   // Set normal drawing scale, and warp state off
@@ -91,7 +92,6 @@ Ship.prototype.canFire = false;
 Ship.prototype.update = function(du) {
 
   if(this.myTurn){
-
     var check = this.checkAmmoCost();
   }
 
@@ -509,13 +509,15 @@ Ship.prototype.updateWeapon = function() {
 };
 
 Ship.prototype.render = function(ctx) {
+
+
   var origScale = this.sprite.scale;
   // pass my scale into the sprite, for drawing
   this.sprite.scale = this._scale;
 
-  //to tranlate the flag to the right posistion
-  var flagX = -8;
-  var flagY = -11;
+  //var flagX = -19.5;
+  //var flagY = -15;
+
   var xOffset = (Math.cos((this.rotation * Math.PI / 180) + 90)) * this.sprite.width / 4;
   var yOffset = 0;
 
@@ -527,17 +529,21 @@ Ship.prototype.render = function(ctx) {
   this.offsetX = xOffset;
   this.offsetY = yOffset;
 
-  this.sprite.drawCentredAt(ctx, this.cx - (xOffset), this.cy - yOffset, this.rotation);
+  // til ad stytta linurnar adeins
+  var x = this.cx - xOffset;
+  var y = this.cy - yOffset;
+
+  this.sprite.drawCentredAt(ctx, x, y, this.rotation);
 
   //this.spriteGunRotation += this.rotation
-  this.gunsprite.drawGunCentredAt(ctx, this.cx - (xOffset), this.cy - yOffset, this.spriteGunRotation - 90);
+  this.flagsprite.drawFlag(ctx, x, y, 16, 10, this.rotation, this.flagX, this.flagY);
 
-    this.flagsprite.drawIndicatorCentredAt(ctx, this.cx - (xOffset) , this.cy - yOffset , this.rotation, 0.05, flagX, flagY);
+  this.gunsprite.drawGunCentredAt(ctx, x, y, this.spriteGunRotation - 90);
 
   this.sprite.scale = origScale;
 
   ///Projectile path
 
-  util.projectilePath(this.predictCord);
+  //util.projectilePath(this.predictCord);
 
 };

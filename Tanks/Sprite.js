@@ -65,15 +65,28 @@ Sprite.prototype.drawIndicatorCentredAt = function (ctx, cx, cy, rotation, scale
 
     ctx.rotate((rotation * Math.PI/180));
 
-        ctx.translate( flagX, flagY)
-
-    ctx.scale(scale, scale );
+    ctx.translate( flagX, flagY)
 
     // drawImage expects "top-left" coords, so we offset our destination
     // coords accordingly, to draw our sprite centred at the origin
-    ctx.drawImage(this.image,
-                  -w/2, -h/2);
+    ctx.drawImage(this.image, -w/2, -h/2);
 
+    ctx.restore();
+};
+
+Sprite.prototype.drawFlag = function(ctx, cx, cy, w, h, rot = 0, offx = 0, offy = 0) {
+
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(rot * Math.PI/180);
+    ctx.translate(offx, offy);
+
+    var dir = (g_wind < 0) ? -1 : 1;
+    ctx.scale(dir, 1);
+
+    if (dir > 0) ctx.translate(w,0);
+
+    ctx.drawImage(this.image, -w/2, -h/2, w, h);
     ctx.restore();
 };
 

@@ -126,6 +126,7 @@ var ai = {
     var ship = entityManager._ships[gameplayManager.activePlayerIndex];
 
     var targetx = this.getTargetX(ship);
+    console.log(ship.learn);
 
 
     this.timer--;
@@ -135,7 +136,7 @@ var ai = {
 
     }else{
 
-        if (Math.floor(destX) < targetx && targetx - 50 < Math.floor(destX) || Math.floor(destX) < targetx && targetx + 50 < Math.floor(destX)) {
+        if (Math.floor(destX) < targetx && targetx - ship.learn < Math.floor(destX) || Math.floor(destX) < targetx && targetx + ship.learn < Math.floor(destX)) {
           //&& targetx - this.cx > 50 || this.cx - targetx > 50
 
           //console.log(Math.abs(targetx - entityManager._ships[gameplayManager.activePlayerNr].cx));
@@ -168,6 +169,14 @@ var ai = {
             util.stopSound(g_audio.drive);
             ship.maybeFireBullet();
             this.timer = 1000;
+            if(ship.learn === 10){
+              ship.learn += 10;
+            }
+            else if(40 >= ship.learn){
+              ship.learn -= 1;
+            } else {
+              ship.learn -= 20;
+            }
           }
 
         } else {

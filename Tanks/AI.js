@@ -132,7 +132,7 @@ var ai = {
       this.AIMovement(ship);
 
     }else{
-        if (Math.floor(destX) < targetx && targetx - ship.learn < Math.floor(destX) || Math.floor(destX) < targetx && targetx + ship.learn < Math.floor(destX)) {
+      /*  if (Math.floor(destX) < targetx && targetx - ship.learn < Math.floor(destX) || Math.floor(destX) < targetx && targetx + ship.learn < Math.floor(destX)) {
           //&& targetx - this.cx > 50 || this.cx - targetx > 50
 
           //console.log(Math.abs(targetx - entityManager._ships[gameplayManager.activePlayerNr].cx));
@@ -165,7 +165,7 @@ var ai = {
 
             util.stopSound(g_audio.drive);
 
-            ship.maybeFireBullet();
+            //ship.maybeFireBullet();
             this.timer = 5000;
             if(ship.learn === 10){
               ship.learn += 10;
@@ -178,7 +178,7 @@ var ai = {
 
           }
 
-        } else {
+        } else {*/
           destX += startVelX;
           destX = util.clamp(destX, ship);
           //path = this.AIMovement(path, ship);
@@ -192,6 +192,7 @@ var ai = {
             }else {
               ship.nextX -=50;
             }
+            util.clampMinMax(ship.nextX, 30, g_canvas.width - 40);
 
             this.timer = 5000;
 
@@ -199,7 +200,7 @@ var ai = {
           }
 
 
-    }
+    //}
   }
 },
 

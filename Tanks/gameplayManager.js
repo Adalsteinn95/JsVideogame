@@ -12,7 +12,7 @@ var gameplayManager = {
     setupIndex : 0,
 
     alivePlayers : 0,
-    
+
     hasWinner : false,
 
     players : [],
@@ -29,6 +29,7 @@ var gameplayManager = {
     },
 
     init : function() {
+        util.playTheme(g_audio.theme);
         g_countdown.timeLeft = g_countdown.duration;
         console.log('G_COUNTDOWN.TIMELEFT', g_countdown.timeLeft)
         this.loadPlayers();
@@ -129,7 +130,8 @@ var gameplayManager = {
             play with the current wind.
           */
           if(this._.turn % this.alivePlayers === 0) {
-            g_wind = util.randRange(-0.1,0.1);
+
+            g_wind = util.randomWind();
 
           }
 

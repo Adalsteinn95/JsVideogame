@@ -32,6 +32,7 @@ _bullets : [],
 _ships   : [],
 _clouds : [],
 _explosions : [],
+_terrain : [],
 
 // "PRIVATE" METHODS
 
@@ -88,11 +89,12 @@ KILL_ME_NOW : -1,
 // i.e. thing which need `this` to be defined.
 //
 deferredSetup : function () {
-    this._categories = [this._clouds, this._ships, this._explosions,  this._bullets ];
+    this._categories = [this._clouds,this._terrain, this._ships, this._explosions,  this._bullets  ];
 },
 
 init: function() {
     this._generateClouds();
+    this.generateTerrain();
 },
 
 fireBullet: function(cx, cy, velX, velY, rotation,partOfShower, i,volcanoMaster, weapon) {
@@ -121,6 +123,9 @@ _generateArrow : function () {
 generateShip : function(descr) {
 
     this._ships.push(new Ship(descr));
+},
+generateTerrain : function () {
+  this._terrain.push(new Terrain());
 },
 
 killNearestShip : function(xPos, yPos) {
@@ -152,8 +157,6 @@ update: function(du) {
     }
     if(g_countdown.timeLeft < 0) {
       gameplayManager.nextTurn();
-
-
     }
     for (var c = 0; c < this._categories.length; ++c) {
 
@@ -197,7 +200,7 @@ render: function(ctx) {
               //dont render dead tanks
             }
             else{
-              aCategory[i].render(ctx)
+              aCategory[i].render(ctx, g_canvas)
             }
 
         }

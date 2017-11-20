@@ -70,7 +70,7 @@ Bullet.prototype.update = function (du) {
     if (hitEntity) {
         var canTakeHit = hitEntity.takeBulletHit();
         if (canTakeHit) canTakeHit.call(hitEntity);
-        terrain.bombLandscape(this.cx, this.weapon);
+        entityManager.terrain[0].bombLandscape(this.cx, this.weapon);
         this.checkForVolcano();
         this.lifeSpan = 0;
         return;
@@ -83,7 +83,7 @@ Bullet.prototype.update = function (du) {
 
 Bullet.prototype.terrainHit = function(x, y){
     var xIndex = util.clamp(Math.floor(x));
-    if(g_landscape[xIndex] < y){
+    if(entityManager._terrain[0].g_landscape[xIndex] < y){
 
         this.checkForVolcano();
 
@@ -94,7 +94,7 @@ Bullet.prototype.terrainHit = function(x, y){
             if (canTakeHit) canTakeHit.call(hitEntity);
         };
         console.log("hey");
-        terrain.bombLandscape(x, this.weapon);
+        entityManager._terrain[0].bombLandscape(x, this.weapon);
         this.lifeSpan = 0;
     }
 

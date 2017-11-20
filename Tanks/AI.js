@@ -323,6 +323,8 @@ var ai = {
     //angle2 = 135;
     //lagfæring testX
     var rot = this.getNextTankRotation(tank);
+    //we might have to adjust the angle
+    //depending on which direction the tank is rotationg and aiming
     if( rot < 0 && angle1 < 90 && angle2 < 90){
       console.log("ping1")
       angle1 += rot;

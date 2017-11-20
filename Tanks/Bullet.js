@@ -70,7 +70,7 @@ Bullet.prototype.update = function (du) {
     if (hitEntity) {
         var canTakeHit = hitEntity.takeBulletHit();
         if (canTakeHit) canTakeHit.call(hitEntity);
-        entityManager.terrain[0].bombLandscape(this.cx, this.weapon);
+        entityManager._terrain[0].bombLandscape(this.cx, this.weapon);
         this.checkForVolcano();
         this.lifeSpan = 0;
         return;

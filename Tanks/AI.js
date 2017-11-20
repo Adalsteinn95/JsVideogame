@@ -165,7 +165,7 @@ var ai = {
 
             util.stopSound(g_audio.drive);
 
-            //ship.maybeFireBullet();
+            ship.maybeFireBullet();
             this.timer = 5000;
             if(ship.learn === 10){
               ship.learn += 10;
@@ -241,8 +241,8 @@ var ai = {
         max = x1;
       }
       for(min; min < max; min++){
-        if(maxH > g_landscape[min]){
-          maxH = g_landscape[min];
+        if(maxH > entityManager._terrain[0].g_landscape[min]){
+          maxH = entityManager._terrain[0].g_landscape[min];
         }
       };
       return maxH - util.randInt(10,50);
@@ -362,7 +362,7 @@ var ai = {
       xIndex1 = util.clamp(xIndex1);
       xIndex2 = util.clamp(xIndex2);
 
-      rot = util.toDegrees(Math.atan2(g_landscape[xIndex2] - tank.cy, (xIndex2 - tank.nextX)));
+      rot = util.toDegrees(Math.atan2(entityManager._terrain[0].g_landscape[xIndex2] - tank.cy, (xIndex2 - tank.nextX)));
     } else { rot = 0}
     console.log('ROT', rot)
 

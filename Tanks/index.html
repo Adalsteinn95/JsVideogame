@@ -8,17 +8,30 @@
   </head>
 
   <body>
-    <div class="canvasContainer">
-      <canvas class="mainCanvas" id="myCanvas" width="900" height="600" style="border: 1px solid black;">
-	  Sorry, but your browser does not support the HTML5 canvas tag.
-	  </canvas>
+    <div class="main-container">
+      <div class="canvas-container">
+        <canvas class="main-canvas" id="myCanvas" width="900" height="600" style="border: 1px solid black;">
+          Sorry, but your browser does not support the HTML5 canvas tag.
+        </canvas>
+        <canvas class="toolbar" id="toolbar" width="900" height="200" style="border: 1px solid black;">
+          Sorry, but your browser does not support the HTML5 canvas tag.
+        </canvas>
+      </div>
+      <div class="instruction-container">
+        <div class="keyboard-container">
+          <img class="keyboard" src="../myndir/keyboard.png">
+        </div>
+        <div class="instructions">
+          <div class="instruction-item" id="green">Movement</div>
+          <div class="instruction-item">Weapon</div>
+          <div class="instruction-item">Setup Selection</div>
+          <div class="instruction-item">Ajust power</div>
+          <div class="instruction-item">Change weapon</div>
+          <div class="instruction-item">Fire</div>
+          <div class="instruction-item">Volume control</div>
+        </div>
+      </div>
     </div>
-    <div class="toolbarContainer">
-      <canvas class="toolbar" id="toolbar" width="900" height="200" style="border: 1px solid black;">
-      Sorry, but your browser does not support the HTML5 canvas tag.
-      </canvas>
-    </div>
-    <div id="output"></div>
 
     <script src="globals.js"></script>
     <script src="consts.js"></script>

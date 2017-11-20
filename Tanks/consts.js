@@ -38,7 +38,7 @@ var consts = {
       },
       {
         volcanoAmount:15,
-        damage:25,
+        damage:20,
         name: "volcano",
         cost: 4,
         sprite : ''

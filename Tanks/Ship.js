@@ -179,19 +179,30 @@ Ship.prototype.computeThrustMag = function() {
 
   if (this.myTurn === true && this.playerId === "Human"  ) {
     if (keys[this.KEY_THRUST]  && this.cx + this.sprite.width / 2 < g_canvas.width) {
+      util.playSound(g_audio.drive);
       thrust += NOMINAL_THRUST;
       this.dir = true;
     }
-    if (keys[this.KEY_RETRO] && this.cx - this.sprite.width / 2 + 10 > 0) {
+
+
+   else if (keys[this.KEY_RETRO] && this.cx - this.sprite.width / 2 + 10 > 0) {
+      util.playSound(g_audio.drive)
       thrust += NOMINAL_RETRO;
       this.dir = false;
     }
+    else {
+      util.stopSound(g_audio.drive);
+    }
   }
+
+
+
 
   return thrust;
 };
 
 Ship.prototype.applyAccel = function(accelX, accelY, du) {
+
 
   // s = s + v_ave * t
   this.cx += accelX;
@@ -242,7 +253,6 @@ Ship.prototype.falldown = function(thrust) {
 
 Ship.prototype.maybeFireBullet = function() {
 
-  //g_audio.fire.pause();
 
   //check if the player has enough ammo for the chosen weapon
   this.canFire = this.checkAmmoCost();

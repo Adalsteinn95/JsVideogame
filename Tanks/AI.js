@@ -32,6 +32,7 @@ var ai = {
 
   AIMovement: function(AIpath, ship){
     /*movement of the AI */
+    util.playSound(g_audio.drive);
     var thrust;
     if(AIpath === 0){
       /*generate 1 from 50*/
@@ -52,9 +53,14 @@ var ai = {
       }
 
       if( ship.cx - ship.sprite.width / 2 + 10 > 0){
-      ship.applyAccel(thrust);
+          ship.applyAccel(thrust);
+
           AIpath++;
-    } else { AIpath = 150}
+
+    } else {
+       AIpath = 150
+
+     }
 
 
     } else if(AIpath > 0){
@@ -63,14 +69,16 @@ var ai = {
       thrust = 1;
 
       if ((ship.rotation < -50) || (ship.rotation > 50)) {
-
         thrust = ship.falldown(thrust);
       }
 
       if(ship.cx + ship.sprite.width / 2 < g_canvas.width){
       ship.applyAccel(thrust);
+
       AIpath--;
-    }else { AIpath = -150}
+    }else {
+      AIpath = -150
+    }
 
     }
 
@@ -127,6 +135,7 @@ var ai = {
             this.shipUpdate(destX, path, direction, ship);
             //change direction and run movement
           } else {
+            util.stopSound(g_audio.drive);
             ship.maybeFireBullet();
             this.timer = 1000;
           }

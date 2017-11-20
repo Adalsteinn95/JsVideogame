@@ -130,7 +130,6 @@ generateTerrain : function () {
 
 killNearestShip : function(xPos, yPos) {
     var theShip = this._findNearestShip(xPos, yPos).theShip;
-    console.log(theShip);
     if (theShip) {
         theShip.kill();
     }

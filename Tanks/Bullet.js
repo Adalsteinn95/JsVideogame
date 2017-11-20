@@ -6,11 +6,6 @@
 
 /* jshint browser: true, devel: true, globalstrict: true */
 
-/*
-0        1         2         3         4         5         6         7         8
-12345678901234567890123456789012345678901234567890123456789012345678901234567890
-*/
-
 
 // A generic contructor which accepts an arbitrary descriptor object
 function Bullet(descr) {
@@ -18,14 +13,6 @@ function Bullet(descr) {
     // Common inherited setup logic from Entity
     this.setup(descr);
 
-    // Make a noise when I am created (i.e. fired)
-    //this.fireSound.play();
-
-/*
-    // Diagnostics to check inheritance stuff
-    this._bulletProperty = true;
-    console.dir(this);
-*/
 
 }
 
@@ -63,10 +50,6 @@ Bullet.prototype.update = function (du) {
     this.velX += g_wind;
     this.velY += NOMINAL_GRAVITY;
 
-    /*this.rotation += 1 * du;
-    this.rotation = util.wrapRange(this.rotation,
-                                   0, consts.FULL_CIRCLE);
-                                   */
 
     this.wrapPosition();
 

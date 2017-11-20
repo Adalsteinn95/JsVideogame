@@ -98,13 +98,6 @@ Ship.prototype.canFire = false;
 
 Ship.prototype.update = function(du) {
 
-  //if you only want one player to console log do it here
-  /*if(this.myTurn){
-    console.log("ammo " + this.ammo);
-    console.log("cost " + this.weapon.cost)
-    var check = this.checkAmmoCost();
-    console.log(check);
-  }*/
 
   // if a AI player has not done premove calculations then do it here
   if (this.playerId === 'AI' && !this.preMoveCalc) {
@@ -288,7 +281,6 @@ Ship.prototype.maybeFireBullet = function() {
   if ((keys[this.KEY_FIRE] && this.myTurn && this.playerId === "Human" && this.canFire) || this.myTurn && this.playerId === "AI") {
     if (this.weapon.name === "tracer" && !this.lockedIn) {
       this.lockedIn = true;
-      console.log(this.lockedIn);
     } else if (this.lockedIn && this.weapon.name === "tracer" || this.weapon.name !== "tracer") {
       this.lockedIn = false;
       util.playSoundOverlap(g_audio.fire);

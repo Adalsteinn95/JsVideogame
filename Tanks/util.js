@@ -179,9 +179,7 @@ drawTextAt : function(ctx, x, y, font, size, style, msg) {
 // ==============================
 
  angleBetweenPoints: function(x1, y1, x2, y2){
-   console.log('X1, Y1, X2, Y2', x1, y1, x2, y2);
 
-    console.log('Point angle ' +  Math.atan2((x2-x1), (y2-y1)))
     return Math.atan2((x2-x1), (y2-y1));
 
  },

@@ -33,7 +33,7 @@ var ai = {
   AIMovement: function(ship){
     /*movement of the AI */
     var thrust;
-
+    console.log("ping");
     if(Math.floor(ship.cx) > ship.nextX){
 
       ship.updateRotation();
@@ -63,9 +63,15 @@ var ai = {
       }
     },
 
-    AIpower: function(power, ship){
+    AIpower: function(ship){
 
-      if (ship.power >= 6) {
+      if(ship.playerId === 'AI'){
+        /*random power test for AI*/
+        var x = Math.floor(Math.random() * 6) + 1
+        ship.power = x;
+
+      }
+      /*if (ship.power >= 6) {
         power = "decrese";
       }
 
@@ -76,29 +82,26 @@ var ai = {
 
       if (power === "increse") {
         ship.power += ship.POWER_INCREASE;
-        console.log('SHIP.POWER', ship.power)
       }
 
       if (power === "decrese") {
         ship.power -= ship.POWER_INCREASE;
-        console.log('SHIP.POWER', ship.power)
       }
 
-        return power;
+        return power;*/
 
     },
 
   AIrotation: function(AIdirection, ship){
-    console.log('SHIP', ship.playerNr)
 
     /*Rotation of the AI gun*/
-    console.log('SHIP.HIGHANGLE', ship.highAngle)
+  //  console.log('SHIP.HIGHANGLE', ship.highAngle)
     if (Math.floor(util.toDegrees(ship.gunrotation)) >= ship.highAngle) {
 
       AIdirection = "left";
     }
 
-    console.log('SHIP.LOWANGLE', ship.lowAngle)
+  //  console.log('SHIP.LOWANGLE', ship.lowAngle)
     if (Math.floor(util.toDegrees(ship.gunrotation)) <= ship.lowAngle) {
 
 
@@ -122,10 +125,10 @@ var ai = {
     var ship = entityManager._ships[gameplayManager.activePlayerIndex];
 
     var targetx = this.getTargetX(ship);
-    if(this.timer < 0){
-      ship.maybeFireBullet();
-      this.timer = 1000;
-    }
+    // if 4 sec left then just end turn
+  //  if(g_countdown.duration < 4){
+  //    ship.nextTurn();
+  //  }
     this.timer--;
     if(Math.floor(ship.cx) !== ship.nextX){
       //move to where it wants to go
@@ -133,7 +136,7 @@ var ai = {
 
     }else{
 
-        if (Math.floor(destX) < targetx && targetx - 20 < Math.floor(destX) || Math.floor(destX) < targetx && targetx + 20 < Math.floor(destX)) {
+        if (Math.floor(destX) < targetx && targetx - 100 < Math.floor(destX) || Math.floor(destX) < targetx && targetx + 100 < Math.floor(destX)) {
           //&& targetx - this.cx > 50 || this.cx - targetx > 50
 
           //console.log(Math.abs(targetx - entityManager._ships[gameplayManager.activePlayerNr].cx));
@@ -159,7 +162,7 @@ var ai = {
             //calculate new angles
             this.getInitialValues(ship);
             direction = this.AIrotation(direction, ship);
-            //power = this.AIpower(power, ship);
+            this.AIpower( ship);
             this.shipUpdate(destX, path, direction, ship);
             //change direction and run movement
           } else {
@@ -172,7 +175,7 @@ var ai = {
           destX = util.clamp(destX, ship);
           //path = this.AIMovement(path, ship);
           direction = this.AIrotation(direction, ship);
-          //power = this.AIpower(power, ship);
+          this.AIpower(ship);
           this.shipUpdate(destX, path, direction, ship, power);
 
 
@@ -201,7 +204,7 @@ var ai = {
     var dist = Math.floor(Math.random()*100) + 50;
     dist *= num;
 
-    return util.clampRange(oldx + dist, 0, g_canvas.width);
+    return util.clampRange(oldx + dist, 33, g_canvas.width - 23);
 
   },
   //guess the height we need to shott
@@ -235,48 +238,53 @@ var ai = {
 
   //teh AI makes a calculated guess at first and uses that as a starting posistion
   getInitialValues: function(tank){
+    //get a target that the AI wants to hit
     var targetIndex = this.getTarget(tank.playerNr);
-    //console.log('TARGETINDEX', targetIndex)
+
+    //guess a suitable maxheihgt it has to reach
     var y0 = this.guessHeight(tank.nextX, entityManager._ships[targetIndex].cx);
+    //we have to change it because of how the canvas works
     y0 = g_canvas.height - y0;
     y0 -= (g_canvas.height - tank.cy);
-    //console.log('Y0', y0)
+
+    //calculate the distance between the target and the AI future posistion
     var distance = tank.nextX - entityManager._ships[targetIndex].cx;
     distance = -distance;
 
-    //y vel sem þarf til að ná maxheight
-    var yVel = util.getVelY(y0, NOMINAL_GRAVITY); //check
-    //console.log('DYVEL', Dyvel)
-    var timetoy = util.getTimeToHeight(yVel, NOMINAL_GRAVITY); // check
-    //console.log('TIMETOY', timetoy)
+    //yVel required to reach max height
+    var yVel = util.getVelY(y0, NOMINAL_GRAVITY);
+    //time it takes to reach the top
+    var timetoy = util.getTimeToHeight(yVel, NOMINAL_GRAVITY);
+
     //max height er hæðin frá byrjun að top gerum það - (endy - byrjunary)
+    //calculate for teh diffrence in height between the shooter and the target
     var maxH = y0 - ((g_canvas.height - entityManager._ships[targetIndex].cy)-(g_canvas.height - tank.cy) );
-    //console.log('MAXH', maxH)
+    //calculate teh time it takes to reach the ground from top pos
     var timedown = util.getTimeDown(maxH,0.12)
-    //console.log('TIMEDOWN', timedown)
+
+    //total time
     var time = timedown + timetoy;
+    //change to nominals
     time *= SECS_TO_NOMINALS;
-    //console.log('TIME', time)
 
-
+    //the x Velocity
     var xVel = util.getVelX(distance,time, g_wind);
-    //console.log('VAR CALCVELX', dVelX);
-
+    //total velocity
     var vel = util.initialVelocity(xVel, yVel);
 
+    //the 2 posible angles
     var angle1 = util.toDegrees(util.getAngle1(vel,distance,NOMINAL_GRAVITY)) + 90;
-    //console.log('DANGLE1 ', angle1 )
+
     var angle2 = util.toDegrees(util.getAngle2(vel,distance,NOMINAL_GRAVITY)) + 90;
-    //console.log('DANGLE2', angle2)
     var min;
     var max;
     angle1 = util.clampMinMax(angle1, 0,180);
-    console.log('ANGLE1', angle1)
+
     angle2 = util.clampMinMax(angle2, 0,180);
-    console.log('ANGLE2', angle2);
+
 
     //cant calculate angle the use 0- 180
-    if(angle1 == false){
+    if(isNaN(angle1)){
       min = 0;
       max = 180;
     }else if(angle1 < angle2){
@@ -292,8 +300,6 @@ var ai = {
     tank.highAngle = max;
 
   }
-
-
 
 
 }

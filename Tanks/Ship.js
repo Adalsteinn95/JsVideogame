@@ -89,7 +89,7 @@ Ship.prototype.offsetX = 0;
 Ship.prototype.offsetY = 0;
 
 //hitpoints
-Ship.prototype.health = 100;
+Ship.prototype.health = 1000000;
 
 //becomes true when hit, so the explosion doesnt hit multiple times
 //færa í bullet ?
@@ -105,7 +105,6 @@ Ship.prototype.update = function(du) {
     var check = this.checkAmmoCost();
     console.log(check);
   }*/
-  //console.log(this.playerNr + " " + this.lowAngle);
 
   // if a AI player has not done premove calculations then do it here
   if( this.playerId === 'AI' && !this.preMoveCalc){
@@ -214,11 +213,14 @@ Ship.prototype.computeThrustMag = function() {
   var thrust = 0;
 
   if (this.myTurn === true && this.playerId === "Human"  ) {
+
     if (keys[this.KEY_THRUST]  && this.cx + this.sprite.width / 2 < g_canvas.width) {
+
       thrust += NOMINAL_THRUST;
       this.dir = true;
     }
     if (keys[this.KEY_RETRO] && this.cx - this.sprite.width / 2 + 10 > 0) {
+
       thrust += NOMINAL_RETRO;
       this.dir = false;
     }
@@ -383,12 +385,12 @@ Ship.prototype.updateGunRotation = function() {
 
 
 Ship.prototype.calculatePath = function() {
-  if(this.playerId === 'AI'){
+/*  if(this.playerId === 'AI'){
     /*random power test for AI*/
-    var x = Math.floor(Math.random() * 6) + 1
+  /*  var x = Math.floor(Math.random() * 6) + 1
     this.power = x;
 
-  }
+  }*/
 
   /*bullet trail prediction */
   this.predictCord = [];
@@ -546,12 +548,6 @@ Ship.prototype.render = function(ctx) {
   this.offsetX = xOffset;
   this.offsetY = yOffset;
 
-  //calc stöff ATHUGA
-  var dX = +Math.sin(this.spriteGunRotation );
-  var dY = -Math.cos(this.spriteGunRotation );
-
-  var angle = this.spriteGunRotation - this.rotation;
-
   this.sprite.drawCentredAt(ctx, this.cx - (xOffset), this.cy - yOffset, this.rotation);
 
   //this.spriteGunRotation += this.rotation
@@ -560,90 +556,6 @@ Ship.prototype.render = function(ctx) {
     this.flagsprite.drawIndicatorCentredAt(ctx, this.cx - (xOffset) , this.cy - yOffset , this.rotation, 0.05, flagX, flagY);
 
   this.sprite.scale = origScale;
-
-  var startVel = this.getStartVel(dX, dY);
-/*
-if(this.myTurn === true){
-  g_ctx.fillStyle = 'red';
-  util.fillCircle(g_ctx, 120 , 460, 10);
-  util.fillCircle(g_ctx, 300 , 380, 10);
-  //round 2
-  //max hæðin sem við viljum ná ---ath þurfum fall sem gerir þetta
-  var maxHeight = 150;
-  //upphafsstaða skotsins
-  var y0 = g_canvas.height - 380;
-  //console.log('Y0 ', y0 );
-  //staða targets
-  var y1 = g_canvas.height - 430;
-  //console.log('Y1', y1);
-  //y vel sem þarf til að ná maxheight
-  var Dyvel = util.getVelY(maxHeight, 0.12); //check
-  //console.log('DYVEL', Dyvel)
-  var timetoy = util.getTimeToHeight(Dyvel, 0.12); // check
-  //console.log('TIMETOY', timetoy)
-  //max height er hæðin frá byrjun að top gerum það - (endy - byrjunary)
-  var timedown = util.getTimeDown(100,0.12)
-  //console.log('TIMEDOWN', timedown)
-  var time = timedown + timetoy;
-  time *= SECS_TO_NOMINALS;
-  //console.log('TIME', time)
-
-
-  var dVelX = util.getVelX(180,time, g_wind);
-  //console.log('VAR CALCVELX', dVelX);
-
-  var dVEL = util.initialVelocity(dVelX, Dyvel);
-  //console.log('CALCVEL', dVEL);
-
-  var dAngle1 = util.getAngle1(dVEL,200,0.12);
-  //console.log('DANGLE1 ', dAngle1 )
-  var dAngle2 = util.getAngle2(dVEL,200,0.12);
-  //console.log('DANGLE2', dAngle2)
-  //console.log("this.rot " + this.spriteGunRotation);
-
-
-
-  //var power1 = util.getPower(dVEL, dAngle1);
-  //console.log('POWER', power1)
-  var power2 = util.getPower(dVEL, dAngle2);
-  //console.log('POWER', power2)
-  //console.log('this.power', this.power)
-
-*/
-
-
-  //round 1
-  /*var calcVelY = util.getVelY(142, 0.12);
-  //console.log("getvely " + util.getVelY(92, 0.12));
-  var calcTime = util.getTimeToHeight(calcVelY, 0.12);
-  //console.log("gettimetoheight " + util.getTimeToHeight(92, 0.12));
-  //distance er -200
-  var calcVelX = util.getVelX(200,time);
-  //console.log('VAR CALCVELX', calcVelX);
-  var calcVEL = util.initialVelocity(calcVelX, calcVelY);
-  //console.log('CALCVEL', calcVEL)
-  var calcAngle = util.getAngle(calcVEL,-200,0.12);
-  console.log(this.spriteGunRotation);
-  console.log('CALCANGLE', calcAngle);
-
-  var thepower = util.angleOfReach(calcAngle, 0.12, -200);
-  //console.log('THEPOWER', thepower)
-
-  var calcdX = +Math.sin(util.toRadian(calcAngle ));
-  //console.log('CALCDX', calcdX)
-  var calcdY = -Math.cos(util.toRadian(calcAngle ));
-  //console.log('CALCDY', calcdY)
-
-  var thestpower = thepower / calcdX;
-  console.log('THESTPOWER', thestpower);
-
-  var power = util.getPower(calcAngle, calcVEL, calcdX, calcdY);
-  //console.log('POWER', power)
-  console.log("this.power " + this.power)
-
-}
-*/
-
 
   ///Projectile path
 

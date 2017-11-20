@@ -230,46 +230,6 @@ sinAcos: function(ratio, radius) {
     return calc;
   },
 
-/*  //returns the time of floght for a bullet
-  timeOfFlight: function(velocity, angle, gravity){
-    return ((2*velocity)*Math.sin(angle))/ gravity;
-  },
-  //returns max height a bullet reaches with the given velocity
-  maxHeightReached: function(vel, angle, gravity){
-    return (util.square(vel) * util.square(Math.sin(util.toRadian(angle)))/(2*gravity));
-
-  },*/
-  //return the horizontal range
-  /*horizontalRange: function(vel, angle, gravity){
-    var a = angle;
-
-    /*if(a < 0){
-      a = 0;
-    } else if(angle > 3.12){
-      a = 3.14;
-    }*/
-  /*  return ((util.square(vel) * (Math.sin(2*util.toRadian(a))) / gravity))
-    //return ((util.square(vel) * (Math.sin(this.clampMinMax(2*a, 0, Math.PI)))/gravity));
-
-  },
-
-  //return the horizontal range
-  horizontalRange2: function(vel, angle, gravity){
-    var v = util.square(vel);
-
-    var g = 2 * gravity;
-    //ath
-    var y0 = g_sprites.ship.height / 2 ;
-    var a = util.square(Math.sin(util.clampMinMax(angle,0, Math.PI)));
-    var a2 = Math.sin(util.clampMinMax(2*angle, 0, Math.PI));
-
-    //v^2 / 2g
-    return ((v/g) * (1 + (Math.sqrt(1 + (g*y0/(v*a))))* a2));
-
-//nota nýju jöfnu og calmpa range sem fæst út frá rotation á gun + tankrotation
-//sin^2(x) = sin(x) * sin(x)
-//
-  },*/
 
   //=====================
   // damage
@@ -283,10 +243,11 @@ sinAcos: function(ratio, radius) {
 
 
   //==========================
-  //AI vers 3
+  //AI
   // ===========================
 
-  findAngle: function ( vel, gravity, x, y){
+  //ekki notað?
+  _findAngle: function ( vel, gravity, x, y){
     //s = (v * v * v * v) - g * (g * (x * x) + 2 * y * (v * v));
     var s = (util.square(util.square(vel))) - gravity * ( gravity * (util.square(x)) + 2 * y * (util.square(vel)));
 
@@ -323,8 +284,7 @@ sinAcos: function(ratio, radius) {
    getAngle1: function(vel, dist, gravity ){
      //þarf að breyta í radiana ?
      var angle =  (0.5 * Math.asin((gravity*dist) / util.square(vel)))
-     //console.log('ANGLE', angle);
-     //console.log('ANGLE', util.toDegrees(angle));
+
      return angle;
    },
 
@@ -332,8 +292,7 @@ sinAcos: function(ratio, radius) {
   getAngle2: function(vel, dist, gravity ){
     //þarf að breyta í radiana ?
     var angle =  util.toRadian(90) - (0.5 * Math.asin((gravity*dist) / util.square(vel)))
-    //console.log('ANGLE', angle);
-    //console.log('ANGLE', util.toDegrees(angle));
+
     return angle;
   },
 
@@ -352,6 +311,8 @@ sinAcos: function(ratio, radius) {
 
   },
 
+
+//GLÓSUR NOTES
   /*
   ATH SIN OG COS
   fáum x * cos(a) = velX
@@ -414,10 +375,7 @@ sinAcos: function(ratio, radius) {
           power = 2vel_Y / -4cos(angle) = 2.192   --  2.92
 
   */
-    //turned
-   angleOfReach: function(angle,grav, dist){
-     return Math.sqrt((grav*dist) / (Math.sin(2*angle)));
-   }
+
 
    /*
       byrja á ða finna max height = s
@@ -436,7 +394,7 @@ sinAcos: function(ratio, radius) {
       --> V^ 2 = (4Xsin(a)^2 - 2Xcos(a)^2)
       --> power = V^2 / 1- 3 cos(2a)
 
-      erum með 2 angle og fáum þannig 2 power þarf ða sjá hvaða tölur fæst
+      erum með 2 angle sem við leitum á milli
 
    */
 

@@ -214,9 +214,6 @@ toRadian: function (angle) {
  return angle * ( Math.PI / 180);
 },
 
-
-
-
 // destruction function
 sinAcos: function(ratio, radius) {
     return Math.sin(Math.acos(ratio)) * radius;
@@ -252,7 +249,6 @@ sinAcos: function(ratio, radius) {
     return calc;
   },
 
-
   //=====================
   // damage
   //=====================
@@ -262,7 +258,6 @@ sinAcos: function(ratio, radius) {
     return Math.sqrt(dist);
 
   },
-
 
   //==========================
   //AI
@@ -332,72 +327,6 @@ sinAcos: function(ratio, radius) {
     } else return result2;
 
   },
-
-
-//GLÓSUR NOTES
-  /*
-  ATH SIN OG COS
-  fáum x * cos(a) = velX
-  og x * sin(a) = velY
-  sqrt(velY^2 + velX^2) = vel
-  þ.a ssqrt(xcos(a)^2 + xsin(a)^2) = vel
-
-  gætum við átt að nota angle = 0 og angle = 90 þá fáum við
-  sqrt(xcos(0)^2 + xsin(90)^2) = vel
-  sqrt(x^2 + x^2) = vel
-   2x = vel
-   x = vel/2.
-
-   Þá fáum við power i guess og getum þá gert:
-
-
-   ///
-   Fáum vely frá getvely sejum = yy
-   Faum þá travel tímann með gettimetoheight (*2?) = t
-   fáum þannig xvel með getvelx = xx
-   vel er þá sqrt(xx^2 + yy^2).
-   hornið er þá 0.5*arcsin(g*d/v^2).
-
-   búum til fall sem gískar á maxheight needed köllum það MHN
-   var height = MHN();
-   var distance = targetx - this.cx
-   var velY = getVelY(height, gravity);
-   var time = getTimeToHeight(height, gravity); // athuga þetta fall
-   var velX = getVelX(distance, time);
-   var vel = initialvelocity(velX, velY);
-   var angel =  getAngle(vel, distance, gravity);
-
-   Þá vitum við hvaða angle á að nota: og hvaða vel við viljum
-   þ.a til að finna út hvaða power við viljum nota .......
-
-
-    Við vitum þá DX og DY jafnan fyrir startvelx og y er :
-    þar sem power er unknown
-    sartvelx = (DX*launchvel) * power
-    startvelY = DY*launchvel) * power   // afhverju gerðum við /2 ?
-
-    vitum allt nema power þannig við fáum :
-    power = startvelX / (DX*launcvel) og power = startvelY / (DY*launchvel);
-    hmmm
-
-         //angle of reach = a = 0.5 asin(g*d /v^2)
-         --> sin(a/0.5) = g*d / v^2
-         --> v^2 = g*d / sin(2a)
-         --> v = sqrt(g*d / sin(2a));
-
-         næsta skref mögulega --> VEL^2 = (x*sin(angle))^2 + (x*-cos(angle))^2
-
-          hvað er power?
-          vel_x = power * 4sin(angle);     5.97
-          vel_Y = power/2 * -4cos(angle);   1.08
-
-          þannig að
-          gildin sem ég fæ: vel_x = 0.13, vel_Y = 1.5 , angle = 70;
-          power = vel_x / 4sin(angle)  =  0.034   -- 1.59
-          power = 2vel_Y / -4cos(angle) = 2.192   --  2.92
-
-  */
-
 
    /*
       byrja á ða finna max height = s

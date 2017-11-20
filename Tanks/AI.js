@@ -367,4 +367,44 @@ var ai = {
   },
 
 
+     /*
+        byrja á ða finna max height = s
+        svo vel sem þarf y0 = sqrt(2*a*s)) þar sem a = gravity
+        svo tímann til að ná hæstu hæð sem er tupp = y0 / g
+        notum svo tdown = sqrt(2dist / g); dist er þá frá max height í targety
+        t = tdown + tupp;
+        svo þarf að margfalda til að fá Nominal time.
+        distnace er targetx - this.cx
+        x0 = distance/ t;
+        vle er þá sqrt(x0^2 + y0^2);
+        finnum svo angle:
+        angle 1 = 0.5 * asin(g*d / v);  =21°
+        angle 2 = util.toradian(90) - 0.5 * asin(g*d / v); = 69°
+        power er þá : VEL = sqrt((power*4sin(angle))^2 + (((power/2)* -4cos(angle))^2);
+        --> V^ 2 = (4Xsin(a)^2 - 2Xcos(a)^2)
+        --> power = V^2 / 1- 3 cos(2a)
+
+        erum með 2 angle sem við leitum á milli
+
+        start by finding a suitable maxheihgt = s
+        then yvel 0 sqrt(2*g*s) where g = KEY_GRAVITY
+        then time upp. tupp = y0 / g
+        then time down. tdown = sqrt(2dist / g)
+        t = tdown + tupp.
+        then get the nominal time : t *= nominaltime
+        distance = targetx - this.cx
+        xo = distance / t
+        v = sqrt(x0^2 + yo^2)
+        find 2 angles to search between
+        angle 1 = 0.5 * asin(g*d / v);
+        angle 2 = util.toradian(90) - 0.5 * asin(g*d / v);
+        starting power is then V = sqrt((power*4sin(angle))^2 + (((power/2)* -4cos(angle))^2);
+        --> V^ 2 = (4Xsin(a)^2 - 2Xcos(a)^2)
+        --> power = V^2 / 1- 3 cos(2a)
+
+        where a is the angle
+
+     */
+
+
 }

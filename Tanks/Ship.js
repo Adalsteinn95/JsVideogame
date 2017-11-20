@@ -80,6 +80,7 @@ Ship.prototype.powerDir = "decrese";
 Ship.prototype.calcAngle;
 Ship.prototype.lowAngle;
 Ship.prototype.highAngle;
+Ship.prototype.learn = 100;
 
 
 //is it this players turn?

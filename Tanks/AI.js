@@ -4,7 +4,7 @@
 
 var ai = {
 
-  timer:  1000,
+  timer:  5000,
 
   runAI: function(destX, startVelX, direction, path,){
     //fær inn öll gildi frá ships sem þarf og kallar svo á hin föllinn með þeim
@@ -127,15 +127,12 @@ var ai = {
 
     var targetx = this.getTargetX(ship);
 
-
-    this.timer--;
     if(Math.floor(ship.cx) !== ship.nextX){
       //move to where it wants to go
       this.AIMovement(ship);
 
     }else{
-
-        /*if (Math.floor(destX) < targetx && targetx - 50 < Math.floor(destX) || Math.floor(destX) < targetx && targetx + 50 < Math.floor(destX)) {
+        if (Math.floor(destX) < targetx && targetx - ship.learn < Math.floor(destX) || Math.floor(destX) < targetx && targetx + ship.learn < Math.floor(destX)) {
           //&& targetx - this.cx > 50 || this.cx - targetx > 50
 
           //console.log(Math.abs(targetx - entityManager._ships[gameplayManager.activePlayerNr].cx));
@@ -167,20 +164,42 @@ var ai = {
           } else {
 
             util.stopSound(g_audio.drive);
-            //ship.maybeFireBullet();
-            this.timer = 1000;
+
+            ship.maybeFireBullet();
+            this.timer = 5000;
+            if(ship.learn === 10){
+              ship.learn += 10;
+            }
+            else if(40 >= ship.learn){
+              ship.learn -= 1;
+            } else {
+              ship.learn -= 20;
+            }
+
           }
 
-        } else {*/
+        } else {
           destX += startVelX;
           destX = util.clamp(destX, ship);
           //path = this.AIMovement(path, ship);
           direction = this.AIrotation(direction, ship);
           this.AIpower(ship);
           this.shipUpdate(destX, path, direction, ship, power);
+          this.timer--;
+          if(this.timer < 4800){
+            if ( ship.path === 'right'){
+              ship.nextX += 50
+            }else {
+              ship.nextX -=50;
+            }
+
+            this.timer = 5000;
+
+            this.AIMovement(ship);
+          }
 
 
-    //}
+    }
   }
 },
 
@@ -239,7 +258,7 @@ var ai = {
 
   pickWeapon: function(tank){
     var int = util.randInt(1,101);
-    console.log('NT', int);
+
     if ( int < 65){
 
       tank.weapon = consts.weapons[0];

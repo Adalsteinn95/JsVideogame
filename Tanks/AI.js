@@ -126,10 +126,8 @@ var ai = {
     var ship = entityManager._ships[gameplayManager.activePlayerIndex];
 
     var targetx = this.getTargetX(ship);
-    // if 4 sec left then just end turn
-  //  if(g_countdown.duration < 4){
-  //    ship.nextTurn();
-  //  }
+
+
     this.timer--;
     if(Math.floor(ship.cx) !== ship.nextX){
       //move to where it wants to go
@@ -137,7 +135,7 @@ var ai = {
 
     }else{
 
-        if (Math.floor(destX) < targetx && targetx - 100 < Math.floor(destX) || Math.floor(destX) < targetx && targetx + 100 < Math.floor(destX)) {
+        if (Math.floor(destX) < targetx && targetx - 50 < Math.floor(destX) || Math.floor(destX) < targetx && targetx + 50 < Math.floor(destX)) {
           //&& targetx - this.cx > 50 || this.cx - targetx > 50
 
           //console.log(Math.abs(targetx - entityManager._ships[gameplayManager.activePlayerNr].cx));
@@ -238,6 +236,25 @@ var ai = {
     return a;
   },
 
+  pickWeapon: function(tank){
+    var int = util.randInt(1,101);
+    console.log('NT', int)
+    if ( int < 65){
+
+      tank.weapon = consts.weapons[0];
+
+    } else if (int < 80){
+      tank.weapon = consts.weapons[1];
+
+    } else if ( int < 95){
+      tank.weapon = consts.weapons[4]
+
+    } else {
+      tank.weapon = consts.weapons[2];
+
+    }
+  },
+
   //teh AI makes a calculated guess at first and uses that as a starting posistion
   getInitialValues: function(tank){
     //get a target that the AI wants to hit
@@ -278,6 +295,12 @@ var ai = {
     var angle1 = util.toDegrees(util.getAngle1(vel,distance,NOMINAL_GRAVITY)) + 90;
 
     var angle2 = util.toDegrees(util.getAngle2(vel,distance,NOMINAL_GRAVITY)) + 90;
+
+    //lagfæring testX
+    angle1 -= tank.rotation;
+    console.log('TANK.ROTATION', tank.rotation)
+    angle2 -= tank.rotation;
+
     var min;
     var max;
     angle1 = util.clampMinMax(angle1, 0,180);

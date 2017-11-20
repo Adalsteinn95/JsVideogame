@@ -98,14 +98,11 @@ var ai = {
     /*Rotation of the AI gun*/
   //  console.log('SHIP.HIGHANGLE', ship.highAngle)
     if (Math.floor(util.toDegrees(ship.gunrotation)) >= ship.highAngle) {
-
       AIdirection = "left";
     }
 
   //  console.log('SHIP.LOWANGLE', ship.lowAngle)
     if (Math.floor(util.toDegrees(ship.gunrotation)) <= ship.lowAngle) {
-
-
       AIdirection = "right";
     }
 

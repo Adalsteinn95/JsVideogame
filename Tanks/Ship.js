@@ -50,7 +50,6 @@ Ship.prototype.KEY_PREVGUN = 'Z'.charCodeAt(0);
 Ship.prototype.KEY_NEXTGUN = 'X'.charCodeAt(0);
 Ship.prototype.KEY_ENDTURN = 'V'.charCodeAt(0);
 
-
 Ship.prototype.KEY_FIRE = ' '.charCodeAt(0);
 
 // Initial, inheritable, default values
@@ -65,7 +64,7 @@ Ship.prototype.launchVel = 4;
 Ship.prototype.numSubSteps = 1;
 Ship.prototype.power = 2;
 Ship.prototype.POWER_INCREASE = 0.085;
-Ship.prototype.weaponId =  0;
+Ship.prototype.weaponId = 0;
 Ship.prototype.ammo = 20;
 
 //AI stuff
@@ -81,7 +80,6 @@ Ship.prototype.calcAngle;
 Ship.prototype.lowAngle;
 Ship.prototype.highAngle;
 Ship.prototype.learn = 100;
-
 
 //is it this players turn?
 Ship.prototype.myTurn = false;
@@ -100,7 +98,6 @@ Ship.prototype.canFire = false;
 
 Ship.prototype.update = function(du) {
 
-
   //if you only want one player to console log do it here
   /*if(this.myTurn){
     console.log("ammo " + this.ammo);
@@ -110,24 +107,23 @@ Ship.prototype.update = function(du) {
   }*/
 
   // if a AI player has not done premove calculations then do it here
-  if( this.playerId === 'AI' && !this.preMoveCalc){
+  if (this.playerId === 'AI' && !this.preMoveCalc) {
 
-      //calculate the next posistion for the AI
-      this.nextX = ai.whereToMove(Math.floor(this.cx), util.clampRange(this.playerNr,0,8));
-      //calculate the initial Values.
-      ai.getInitialValues(this);
+    //calculate the next posistion for the AI
+    this.nextX = ai.whereToMove(Math.floor(this.cx), util.clampRange(this.playerNr, 0, 8));
+    //calculate the initial Values.
+    ai.getInitialValues(this);
 
-      //set starting guessed angle
-      this.spriteGunRotation = util.toRadian(this.highAngle);
+    //set starting guessed angle
+    this.spriteGunRotation = util.toRadian(this.highAngle);
 
-      ai.pickWeapon(this);
+    ai.pickWeapon(this);
 
+    //calculations done
+    this.preMoveCalc = true;
+  }
 
-      //calculations done
-      this.preMoveCalc = true;
-    }
-
-  if(this.myTurn){
+  if (this.myTurn) {
     var check = this.checkAmmoCost();
 
   }
@@ -140,29 +136,28 @@ Ship.prototype.update = function(du) {
 
   this.endTurn();
 
-
-  if(this.playerId === "AI" && this.myTurn === true){
-      //calculate teh path to get the DestX
-      spatialManager.register(this);
-      this.calculatePath();
-      //
-      ai.AIupdate(this.destX, this.startVelX, this.AIdirection, this.AIpath, this.powerDir);
-      //get y coordinates
-      var xIndex = util.clamp(Math.floor(this.cx));
-      this.cy = entityManager._terrain[0].g_landscape[xIndex];
-      if (this.cy > g_canvas.height) {
-        this.cy = g_canvas.height;
-        this.rotation = 0;
-      }
-      //ai stuff
+  if (this.playerId === "AI" && this.myTurn === true) {
+    //calculate teh path to get the DestX
+    spatialManager.register(this);
+    this.calculatePath();
+    //
+    ai.AIupdate(this.destX, this.startVelX, this.AIdirection, this.AIpath, this.powerDir);
+    //get y coordinates
+    var xIndex = util.clamp(Math.floor(this.cx));
+    this.cy = entityManager._terrain[0].g_landscape[xIndex];
+    if (this.cy > g_canvas.height) {
+      this.cy = g_canvas.height;
+      this.rotation = 0;
+    }
+    //ai stuff
   } else {
 
-  //changes weapon for player
+    //changes weapon for player
     this.updateWeapon();
     //changes the power for the player
     this.updatePower(du);
 
-  //óþarfi bæta við ef við höfum tank on tank hitbox
+    //óþarfi bæta við ef við höfum tank on tank hitbox
     //spatialManager.unregister(this);
 
     // Perform movement substeps
@@ -215,33 +210,25 @@ Ship.prototype.computeThrustMag = function() {
 
   var thrust = 0;
 
-  if (this.myTurn === true && this.playerId === "Human"  ) {
+  if (this.myTurn === true && this.playerId === "Human") {
 
-    if (keys[this.KEY_THRUST]  && this.cx + this.sprite.width / 2 < g_canvas.width) {
+    if (keys[this.KEY_THRUST] && this.cx + this.sprite.width / 2 < g_canvas.width) {
       util.playSound(g_audio.drive);
       thrust += NOMINAL_THRUST;
       this.dir = true;
-    }
-
-
-   else if (keys[this.KEY_RETRO] && this.cx - this.sprite.width / 2 + 10 > 0) {
+    } else if (keys[this.KEY_RETRO] && this.cx - this.sprite.width / 2 + 10 > 0) {
       util.playSound(g_audio.drive)
       thrust += NOMINAL_RETRO;
       this.dir = false;
-    }
-    else {
+    } else {
       util.stopSound(g_audio.drive);
     }
   }
-
-
-
 
   return thrust;
 };
 
 Ship.prototype.applyAccel = function(accelX, accelY, du) {
-
 
   // s = s + v_ave * t
   this.cx += accelX;
@@ -290,57 +277,63 @@ Ship.prototype.falldown = function(thrust) {
 
 };
 
-Ship.prototype.maybeFireBullet = function() {
+Ship.prototype.lockedIn = false;
 
+Ship.prototype.maybeFireBullet = function() {
 
   //check if the player has enough ammo for the chosen weapon
   this.canFire = this.checkAmmoCost();
 
   if ((keys[this.KEY_FIRE] && this.myTurn && this.playerId === "Human" && this.canFire) || this.myTurn && this.playerId === "AI") {
-    util.playSoundOverlap(g_audio.fire);
-    g_countdown.stop = true;
+    if (this.weapon.name === "tracer" && !this.lockedIn) {
+      this.lockedIn = true;
+      console.log(this.lockedIn);
+    } else if (this.lockedIn && this.weapon.name === "tracer" || this.weapon.name !== "tracer") {
+      this.lockedIn = false;
+      util.playSoundOverlap(g_audio.fire);
+      g_countdown.stop = true;
 
-    g_weapon = this.weapon;
+      g_weapon = this.weapon;
 
-    this.myTurn = false;
+      this.myTurn = false;
 
-    var dX = +Math.sin(util.toRadian(this.spriteGunRotation));
-    var dY = -Math.cos(util.toRadian(this.spriteGunRotation));
+      var dX = +Math.sin(util.toRadian(this.spriteGunRotation));
+      var dY = -Math.cos(util.toRadian(this.spriteGunRotation));
 
-    var launchDist = this.getRadius();
+      var launchDist = this.getRadius();
 
-    var startVel = this.getStartVel(dX, dY);
+      var startVel = this.getStartVel(dX, dY);
 
-    var volcanoMaster = this.weapon.name === "volcano";
+      var volcanoMaster = this.weapon.name === "volcano";
 
-    //if shower then need to spawn more bullets right away
-    if(this.weapon.name === "shower") {
-      for (var i = -this.weapon.showerAmount/2; i < this.weapon.showerAmount/2; i++) {
-        entityManager.fireBullet((this.cx + dX * launchDist) - this.offsetX, (this.cy + dY * launchDist) - this.offsetY , startVel[0], startVel[1], this.spriteGunRotation,true,i,false, this.weapon);
+      //if shower then need to spawn more bullets right away
+      if (this.weapon.name === "shower") {
+        for (var i = -this.weapon.showerAmount / 2; i < this.weapon.showerAmount / 2; i++) {
+          entityManager.fireBullet((this.cx + dX * launchDist) - this.offsetX, (this.cy + dY * launchDist) - this.offsetY, startVel[0], startVel[1], this.spriteGunRotation, true, i, false, this.weapon);
+
+        }
+      } else {
+        entityManager.fireBullet((this.cx + dX * launchDist) - this.offsetX, (this.cy + dY * launchDist) - this.offsetY, startVel[0], startVel[1], this.spriteGunRotation, false, 0, volcanoMaster, this.weapon);
 
       }
-    } else {
-      entityManager.fireBullet((this.cx + dX * launchDist) - this.offsetX, (this.cy + dY * launchDist) - this.offsetY, startVel[0], startVel[1], this.spriteGunRotation, false, 0, volcanoMaster, this.weapon);
-
+      volcanoMaster = false;
+      //decreacse amunition by the bullet cost
+      this.ammo -= this.weapon.cost;
+      this.canFire = false;
     }
-    volcanoMaster = false;
-    //decreacse amunition by the bullet cost
-    this.ammo -= this.weapon.cost;
-    this.canFire = false;
   }
 };
 
 Ship.prototype.endTurn = function() {
 
+  if (keys[this.KEY_ENDTURN] && this.myTurn) {
 
-    if (keys[this.KEY_ENDTURN] && this.myTurn) {
-
-      this.canFire = false;
-      this.ammo *= 2;
-      this.myTurn = false;
-      gameplayManager.nextTurn();
-      keys[this.KEY_ENDTURN] = false;
-    }
+    this.canFire = false;
+    this.ammo *= 2;
+    this.myTurn = false;
+    gameplayManager.nextTurn();
+    keys[this.KEY_ENDTURN] = false;
+  }
 
 }
 
@@ -358,17 +351,18 @@ var NOMINAL_ROTATE_RATE = 0.01;
 
 Ship.prototype.updateRotation = function() {
 
-  if(this.cy < g_canvas.height){
+  if (this.cy < g_canvas.height) {
 
     //ATHUGA
-  var xIndex1 = Math.floor(this.cx - 5);
-  var xIndex2 = Math.floor(this.cx + 5);
-  xIndex1 = util.clamp(xIndex1);
-  xIndex2 = util.clamp(xIndex2);
+    var xIndex1 = Math.floor(this.cx - 5);
+    var xIndex2 = Math.floor(this.cx + 5);
+    xIndex1 = util.clamp(xIndex1);
+    xIndex2 = util.clamp(xIndex2);
 
-
-  this.rotation = util.toDegrees(Math.atan2(entityManager._terrain[0].g_landscape[xIndex2] - this.cy, (xIndex2 - this.cx)));
-} else { this.rotation = 0}
+    this.rotation = util.toDegrees(Math.atan2(entityManager._terrain[0].g_landscape[xIndex2] - this.cy, (xIndex2 - this.cx)));
+  } else {
+    this.rotation = 0
+  }
 
 };
 
@@ -380,7 +374,7 @@ Ship.prototype.getStartVel = function(dX, dY) {
   var relVelY = dY * relVel;
 
   var startVelX = this.power * relVelX;
-  var startVelY =  relVelY * (this.power / 2);
+  var startVelY = relVelY * (this.power / 2);
 
   var startVel = [startVelX, startVelY];
   return startVel;
@@ -401,58 +395,54 @@ Ship.prototype.updateGunRotation = function() {
   }
 };
 
-
 Ship.prototype.calculatePath = function() {
-/*  if(this.playerId === 'AI'){
+  /*  if(this.playerId === 'AI'){
     /*random power test for AI*/
   /*  var x = Math.floor(Math.random() * 6) + 1
     this.power = x;
 
   }*/
+  if (this.lockedIn === true) {
+    /*bullet trail prediction */
+    this.predictCord = [];
+    var dX = +Math.sin(util.toRadian(this.spriteGunRotation));
+    var dY = -Math.cos(util.toRadian(this.spriteGunRotation));
+    var launchDist = this.getRadius();
 
-  /*bullet trail prediction */
-  this.predictCord = [];
-  var dX = +Math.sin(util.toRadian(this.spriteGunRotation ));
-  var dY = -Math.cos(util.toRadian(this.spriteGunRotation ));
-  var launchDist = this.getRadius();
+    var startVel = this.getStartVel(dX, dY);
 
-  var startVel = this.getStartVel(dX, dY);
+    var testX = this.cx - this.offsetX + dX * launchDist;
+    var testY = this.cy - this.offsetY + dY * launchDist;
+    var veltestY = startVel[1];
+    var veltestX = startVel[0];
 
-  var testX = this.cx - this.offsetX + dX * launchDist;
-  var testY = this.cy - this.offsetY + dY * launchDist;
-  var veltestY = startVel[1];
-  var veltestX = startVel[0];
-
-  this.predictCord.push({testX, testY});
-
-  while (testX < g_canvas.width || testX > g_canvas.width) {
-
-    testX += veltestX;
-    testY += veltestY;
-
-    testX = util.clamp(testX);
-    testY = testY;
-
-    if (entityManager._terrain[0].g_landscape[Math.floor(testX)] < testY) {
-      break;
-    };
-    //projectile path
     this.predictCord.push({testX, testY});
 
+    while (testX < g_canvas.width || testX > g_canvas.width) {
 
-    veltestY += NOMINAL_GRAVITY;
-    veltestX += g_wind;
+      testX += veltestX;
+      testY += veltestY;
 
-//ath
-    this.destX = util.clamp(testX);
-    this.startVelX = startVel[0];
+      testX = util.clamp(testX);
+      testY = testY;
 
+      if (entityManager._terrain[0].g_landscape[Math.floor(testX)] < testY) {
+        break;
+      };
+      //projectile path
+      this.predictCord.push({testX, testY});
+
+      veltestY += NOMINAL_GRAVITY;
+      veltestX += g_wind;
+
+      //ath
+      this.destX = util.clamp(testX);
+      this.startVelX = startVel[0];
+    }
 
   }
 
-
 };
-
 
 Ship.prototype.updatePower = function(du) {
   if (this.myTurn === true) {
@@ -467,51 +457,50 @@ Ship.prototype.updatePower = function(du) {
 
       }
     } else {*/
-      if (keys[this.KEY_POWER]) {
-        this.power += this.POWER_INCREASE;
+    if (keys[this.KEY_POWER]) {
+      this.power += this.POWER_INCREASE;
 
-      }
-      if (keys[this.KEY_LESSPOWER]) {
-        this.power -= this.POWER_INCREASE;
-
-      }
     }
+    if (keys[this.KEY_LESSPOWER]) {
+      this.power -= this.POWER_INCREASE;
+
+    }
+  }
   //}
 };
 
 Ship.prototype.takeBulletHit = function() {
-    this.health -= g_weapon.damage;
-    this.health = this.health < 0 ? 0 : this.health;
-    this.checkForDeath();
+  this.health -= g_weapon.damage;
+  this.health = this.health < 0
+    ? 0
+    : this.health;
+  this.checkForDeath();
 
 };
 
 Ship.prototype.takeExplosionHit = function(bombX, bombY) {
-  if(!this.isHit){
+  if (!this.isHit) {
 
-      var test = util.distCircles(this.cx, this.cy , bombX, bombY, this.getRadius(), g_weapon.damage);
+    var test = util.distCircles(this.cx, this.cy, bombX, bombY, this.getRadius(), g_weapon.damage);
 
-      var range = Math.abs(util.distFromExplosion(this.cx, this.cy , bombX, bombY));
+    var range = Math.abs(util.distFromExplosion(this.cx, this.cy, bombX, bombY));
 
-      this.health += test;
-      this.isHit = true;
-      this.health = this.health < 0 ? 0 : this.health;
-      this.checkForDeath();
-    }
+    this.health += test;
+    this.isHit = true;
+    this.health = this.health < 0
+      ? 0
+      : this.health;
+    this.checkForDeath();
+  }
 
 };
 
 Ship.prototype.checkForDeath = function() {
-    if (this.health <= 0){
-      //add the death animation to the entity manager
-      entityManager._explosions.push(new Death({
-              cx : this.cx,
-              cy : this.cy,
-              radius : this.getRadius(),
-              rotation : this.rotation
-          }) );
-      this._isDeadNow = true;
-    }
+  if (this.health <= 0) {
+    //add the death animation to the entity manager
+    entityManager._explosions.push(new Death({cx: this.cx, cy: this.cy, radius: this.getRadius(), rotation: this.rotation}));
+    this._isDeadNow = true;
+  }
 
 };
 
@@ -519,8 +508,8 @@ Ship.prototype.checkForDeath = function() {
 Ship.prototype.checkAmmoCost = function() {
 
   var weaponCost = this.weapon.cost;
-  if(this.ammo >= weaponCost){
-      return true;
+  if (this.ammo >= weaponCost) {
+    return true;
 
   }
 
@@ -530,30 +519,28 @@ Ship.prototype.checkAmmoCost = function() {
 //ATHUGA
 Ship.prototype.updateWeapon = function() {
   if (this.myTurn === true) {
-    if (keys[this.KEY_NEXTGUN]) {
+    if (keys[this.KEY_NEXTGUN] && !this.lockedIn) {
       ++this.weaponId;
-      this.weaponId = util.clampRange(this.weaponId,0,consts.weapons.length-1)
+      this.weaponId = util.clampRange(this.weaponId, 0, consts.weapons.length - 1)
 
     }
-    if (keys[this.KEY_PREVGUN]) {
+    if (keys[this.KEY_PREVGUN] && !this.lockedIn) {
       --this.weaponId;
-      this.weaponId = util.clampRange(this.weaponId,0,consts.weapons.length-1)
+      this.weaponId = util.clampRange(this.weaponId, 0, consts.weapons.length - 1)
 
     }
 
   }
 
   this.weapon = consts.weapons[this.weaponId];
+
 };
 
 Ship.prototype.render = function(ctx) {
 
-
   var origScale = this.sprite.scale;
   // pass my scale into the sprite, for drawing
   this.sprite.scale = this._scale;
-
-
 
   var xOffset = (Math.cos((this.rotation * Math.PI / 180) + 90)) * this.sprite.width / 4;
   var yOffset = 0;
@@ -580,8 +567,8 @@ Ship.prototype.render = function(ctx) {
   this.sprite.scale = origScale;
 
   ///Projectile path
-  if (this.weapon.name === "tracer") {
-      util.projectilePath(this.predictCord);
+  if (this.weapon.name === "tracer" && this.lockedIn === true) {
+    util.projectilePath(this.predictCord);
   }
 
 };

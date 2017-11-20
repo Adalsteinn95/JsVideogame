@@ -124,7 +124,7 @@ var gameplayManager = {
           this._.turn++;
           this.resetIsHit();
           this.updateNextPlayer();
-          this.findNextPlayer();
+          if (this.countAlive() > 0) this.findNextPlayer();
 
           entityManager._ships[this.activePlayerIndex].myTurn = true;
           entityManager._ships[this.activePlayerIndex].preMoveCalc = false;

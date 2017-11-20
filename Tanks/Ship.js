@@ -145,7 +145,7 @@ Ship.prototype.update = function(du) {
       ai.AIupdate(this.destX, this.startVelX, this.AIdirection, this.AIpath, this.powerDir);
       //get y coordinates
       var xIndex = util.clamp(Math.floor(this.cx));
-      this.cy = g_landscape[xIndex];
+      this.cy = entityManager._terrain[0].g_landscape[xIndex];
       if (this.cy > g_canvas.height) {
         this.cy = g_canvas.height;
         this.rotation = 0;
@@ -243,7 +243,7 @@ Ship.prototype.applyAccel = function(accelX, accelY, du) {
   this.cx += accelX;
 
   var xIndex = util.clamp(Math.floor(this.cx));
-  this.cy = g_landscape[xIndex];
+  this.cy = entityManager._terrain[0].g_landscape[xIndex];
   if (this.cy > g_canvas.height) {
     this.cy = g_canvas.height;
     this.rotation = 0;
@@ -363,7 +363,7 @@ Ship.prototype.updateRotation = function(du) {
   xIndex2 = util.clamp(xIndex2);
 
 
-  this.rotation = util.toDegrees(Math.atan2(g_landscape[xIndex2] - this.cy, (xIndex2 - this.cx)));
+  this.rotation = util.toDegrees(Math.atan2(entityManager._terrain[0].g_landscape[xIndex2] - this.cy, (xIndex2 - this.cx)));
 } else { this.rotation = 0}
 
 };
@@ -429,7 +429,7 @@ Ship.prototype.calculatePath = function() {
     testX = util.clamp(testX);
     testY = testY;
 
-    if (g_landscape[Math.floor(testX)] < testY) {
+    if (entityManager._terrain[0].g_landscape[Math.floor(testX)] < testY) {
       break;
     };
     //projectile path

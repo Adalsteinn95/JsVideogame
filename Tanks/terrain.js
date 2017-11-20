@@ -7,35 +7,39 @@
 /* jshint browser: true, devel: true, globalstrict: true */
 
 //initial landscape values
-var g_landscape = [];
-var bound = 20;
-var tilt = function(x, degree) {
+function Terrain(descr) {
+
+
+};
+Terrain.prototype.g_landscape = [];
+Terrain.prototype.bound = 20;
+Terrain.prototype.tilt = function(x, degree) {
     return x * degree;
 }
 
-var terrain = {
-
 // landscape functions
-fun: [
+Terrain.prototype.fun =  [
     function(x) { return 100 * Math.cos(x); },
     function(x) { return ((x*x) * Math.sin(x)); }
 ],
 
-rememberResets: function () {
+Terrain.prototype.rememberResets =  function () {
     // Remember my reset positions
     this.reset_landscape = this.landscape;
 },
 
-
-render: function(ctx, ls, frame) {
+Terrain.prototype.update = function() {
+  //nothing to do here
+}
+Terrain.prototype.render =  function(ctx,frame) {
 
     ctx.fillStyle = "#228B22";
     var i = 0;
     ctx.beginPath();
-    ctx.moveTo(0, ls[0]);
+    ctx.moveTo(0, this.g_landscape[0]);
 
-    for (i in ls) {
-        ctx.lineTo(i, ls[i]);
+    for (i in this.g_landscape) {
+        ctx.lineTo(i, this.g_landscape[i]);
     }
 
     ctx.lineTo(frame.width, frame.height);
@@ -45,17 +49,18 @@ render: function(ctx, ls, frame) {
     ctx.fill();
 },
 
-initlandScape: function(f, bound, xShift, frame) {
-    bound *= Math.random();
-    xShift *= Math.random() * bound;
+Terrain.prototype.initlandScape = function(f, xShift, frame) {
+    this.bound = 20;
+    this.bound *= Math.random();
+    xShift *= Math.random() * this.bound;
     var roughness = Math.random() * 2;
     var t =  util.randRange(-30, 30);
-    var ls = [];
-    var x = -bound + xShift;
+    this.g_landscape = [];
+    var x = -this.bound + xShift;
     var whoopsLandscapeIsOutOfBoundsLetsTryAgain = false;
 
     for (var i = 0; i < frame.width; i++) {
-        var y = f(x) + tilt(x,t);
+        var y = f(x) + this.tilt(x,t);
         y *= roughness;
         y += frame.height/2;
 
@@ -64,17 +69,17 @@ initlandScape: function(f, bound, xShift, frame) {
             whoopsLandscapeIsOutOfBoundsLetsTryAgain = true;
             break;
         }
-        ls.push(y);
-        x += ((2*bound)/frame.width);
+        this.g_landscape.push(y);
+        x += ((2*this.bound)/frame.width);
     }
     if (whoopsLandscapeIsOutOfBoundsLetsTryAgain) {
         return false;
     } else {
-        return ls;
+        return this.g_landscape;
     }
 },
 
-bombLandscape: function(x, weapon) {
+Terrain.prototype.bombLandscape =  function(x, weapon) {
     var radius = weapon.damage
     if(weapon.name === "atom") {
       util.playSoundOverlap(g_audio.atom);
@@ -90,7 +95,7 @@ bombLandscape: function(x, weapon) {
 
     entityManager._explosions.push(new Explosion({
             cx : x,
-            cy : g_landscape[Math.floor(x)],
+            cy : entityManager._terrain[0].g_landscape[Math.floor(x)],
             radius : explosionRadius
         }));
 
@@ -102,10 +107,8 @@ bombLandscape: function(x, weapon) {
     for (var i = diff; i < 2*radius + diff; i++) {
         //if the explosion radius goes outside of the map then ignore
         if (i >= 0 && i <= g_canvas.width){
-            g_landscape[i] += util.sinAcos(ratio, radius);
+            entityManager._terrain[0].g_landscape[i] += util.sinAcos(ratio, radius);
         }
         ratio += step;
     }
-}
-
 }

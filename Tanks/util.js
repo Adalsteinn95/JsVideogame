@@ -70,6 +70,22 @@ randRange: function(min, max) {
 randInt: function(min, max) {
     return Math.floor(this.randRange(min, max));
 },
+/*function to get random wind,
+  it is more likely that there will be litle wind
+*/
+randomWind: function() {
+  var randomNum = Math.random();
+  if(randomNum < 0.65) {
+    return util.randRange(-0.05,0.05);
+
+  }
+  else if(randomNum < 0.9) {
+    return util.randRange(-0.1,0.1);
+  }
+  else {
+    return util.randRange(-0.2,0.2);
+  }
+},
 
 
 // MISC
@@ -424,6 +440,17 @@ sinAcos: function(ratio, radius) {
   playSoundOverlap: function (sound) {
     var click=sound.cloneNode();
     this.playSound(click)
+  },
+  playTheme : function (sound) {
+    if(!g_musicOn && !g_audio.theme.paused) {
+      this.stopSound(g_audio.theme);
+
+    }
+    else if(g_musicOn && g_audio.theme.paused && toolbar.setupReady){
+      g_audio.theme.volume = 0.2;
+      this.playSound(g_audio.theme);
+    }
+
   }
 
 };

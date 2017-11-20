@@ -48,8 +48,8 @@ var g_countdown = {
 
 }
 var g_renderSpatialDebug = true;
-var g_mute = false;
-var g_musicOn = true;;
+var g_mute = true;
+var g_musicOn = false;
 
 
 var KEY_GRAVITY = keyCode('G');

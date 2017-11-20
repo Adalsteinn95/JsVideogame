@@ -161,13 +161,17 @@ function preloadDone() {
       g_sprites.tankgun = new Sprite(g_images.tankgun);
 
       g_sprites.normal = new Sprite(g_images.normal);
-      g_sprites.normal.scale = 0.15;
+      g_sprites.normal.scale = 0.05;
+      g_sprites.normal.rotation = 180;
       g_sprites.volcano = new Sprite(g_images.volcano);
-      g_sprites.volcano.scale = 0.15;
+      g_sprites.volcano.scale = 0.05;
+      g_sprites.volcano.rotation = 180;
       g_sprites.shower = new Sprite(g_images.shower);
-      g_sprites.shower.scale = 0.15;
+      g_sprites.shower.scale = 0.05;
+      g_sprites.shower.rotation = 180;
       g_sprites.atom = new Sprite(g_images.atom);
-      g_sprites.atom.scale = 0.15;
+      g_sprites.atom.scale = 0.05;
+      g_sprites.atom.rotation = 180;
       g_sprites.cloud1 = new Sprite(g_images.cloud1);
       g_sprites.cloud2 = new Sprite(g_images.cloud2);
       g_sprites.cloud3 = new Sprite(g_images.cloud3);

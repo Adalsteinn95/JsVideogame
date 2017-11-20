@@ -98,7 +98,7 @@ Bullet.prototype.terrainHit = function(x, y){
             var canTakeHit = hitEntity.takeExplosionHit(this.cx, this.cy);
             if (canTakeHit) canTakeHit.call(hitEntity);
         };
-        console.log("hey");
+
         terrain.bombLandscape(x, this.weapon);
         this.lifeSpan = 0;
     }
@@ -133,12 +133,7 @@ Bullet.prototype.getRadius = function () {
 
 Bullet.prototype.updateBulletRotation = function() {
 
-  console.log('THIS.ROTATION', this.rotation);
   this.rotation = util.toDegrees(Math.atan2(this.oldcy - this.cy, this.oldcx - this.cx));
-  console.log('THIS.CY', this.cy)
-  console.log('THIS.OLDCY', this.oldcy)
-  console.log('THIS.ROTATION', this.rotation);
-
 
 };
 
@@ -151,9 +146,8 @@ Bullet.prototype.render = function (ctx) {
 
       );
     }
-        console.log('THIS.WEAPON.SPRITE', this.weapon.sprite)
     this.weapon.sprite.drawWrappedCentredAt(
-        ctx, this.cx, this.cy, this.rotation
+        ctx, this.cx, this.cy, this.rotation + this.weapon.sprite.rotation
 
     );
 };

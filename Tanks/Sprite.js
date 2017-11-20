@@ -21,6 +21,7 @@ function Sprite(image, cx = 0, cy = 0, width = image.width, height = image.heigh
     this.width = width;
     this.height = height;
     this.scale = 1;
+    this.rotation = 0;
 
 }
 
@@ -54,7 +55,7 @@ Sprite.prototype.drawCentredAt = function (ctx, cx, cy, rotation) {
 
 Sprite.prototype.drawIndicatorCentredAt = function (ctx, cx, cy, rotation, scale, flagX, flagY) {
 
-    if (rotation === undefined) rotation = 0;
+    if (rotation === undefined) rotation = this.rotation;
 
     var w = this.width,
         h = this.height;
@@ -93,7 +94,7 @@ Sprite.prototype.drawFlag = function(ctx, cx, cy, w, h, rot = 0, offx = 0, offy 
 
 Sprite.prototype.drawClippedCentredAt = function (
     ctx, cx, cy, rotation, w = this.width, h = this.height) {
-    if (rotation === undefined) rotation = 0;
+    if (rotation === undefined) rotation = this.rotation;
 
     ctx.save();
     ctx.translate(-w, -h);
@@ -106,7 +107,7 @@ Sprite.prototype.drawClippedCentredAt = function (
 
 Sprite.prototype.drawGunCentredAt = function (ctx, cx, cy, rotation) {
 
-    if (rotation === undefined) rotation = 0;
+    if (rotation === undefined) rotation = this.rotation;
 
     var w = this.width,
         h = this.height;

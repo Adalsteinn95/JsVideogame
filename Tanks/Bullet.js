@@ -151,8 +151,8 @@ Bullet.prototype.render = function (ctx) {
 
       );
     }
-    console.log('THIS.ROTATION', this.rotation)
-    g_sprites.bullet.drawWrappedCentredAt(
+        console.log('THIS.WEAPON.SPRITE', this.weapon.sprite)
+    this.weapon.sprite.drawWrappedCentredAt(
         ctx, this.cx, this.cy, this.rotation
 
     );

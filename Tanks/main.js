@@ -47,6 +47,14 @@ main.iter = function (frameTime) {
     if (!this._isGameOver) this._requestNextIteration();
 };
 
+main.weaponUpdate = function (){
+  consts.weapons[0].sprite = g_sprites.normal;
+  consts.weapons[1].sprite = g_sprites.shower;
+  consts.weapons[2].sprite = g_sprites.atom;
+  consts.weapons[3].sprite = g_sprites.normal;
+  consts.weapons[4].sprite = g_sprites.volcano;
+},
+
 main._updateClocks = function (frameTime) {
 
     // First-time initialisation

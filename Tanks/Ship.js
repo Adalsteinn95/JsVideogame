@@ -294,9 +294,10 @@ Ship.prototype.maybeFireBullet = function() {
 
 
   //check if the player has enough ammo for the chosen weapon
+
   this.canFire = this.checkAmmoCost();
 
-  if ((keys[this.KEY_FIRE] && this.myTurn && this.playerId === "Human" && this.canFire) || this.myTurn && this.playerId === "AI" && this.canFire) {
+  if ((keys[this.KEY_FIRE] && this.myTurn && this.playerId === "Human" && this.canFire) || this.myTurn && this.playerId === "AI" ) {
     util.playSoundOverlap(g_audio.fire);
     g_countdown.stop = true;
 

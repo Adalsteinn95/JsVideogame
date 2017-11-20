@@ -119,7 +119,7 @@ var ai = {
       this.AIMovement(ship);
 
     }else{
-      console.log('SHIP.LEARN', ship.learn)
+      /*console.log('SHIP.LEARN', ship.learn)
         if (Math.floor(destX) < targetx && targetx - ship.learn < Math.floor(destX) || Math.floor(destX) < targetx && targetx + ship.learn < Math.floor(destX)) {
           //&& targetx - this.cx > 50 || this.cx - targetx > 50
 
@@ -166,7 +166,7 @@ var ai = {
 
           }
 
-        } else {
+        } else {*/
           destX += startVelX;
           destX = util.clamp(destX, ship);
           //path = this.AIMovement(path, ship);
@@ -188,7 +188,7 @@ var ai = {
             this.getInitialValues(ship);
           }
 
-    }
+  //  }
   }
 },
 
@@ -303,15 +303,17 @@ var ai = {
 
     //the 2 posible angles
     var angle1 = util.toDegrees(util.getAngle1(vel,distance,NOMINAL_GRAVITY)) + 90;
+    console.log('ANGLE1pre', angle1)
 
     var angle2 = util.toDegrees(util.getAngle2(vel,distance,NOMINAL_GRAVITY)) + 90;
+    console.log('ANGLE2pre', angle2)
 
     //angle1 = 45;
     //angle2 = 135;
     //lagfæring testX
-    angle1 += this.getNextTankRotation(tank);
+    angle1 += util.clampMinMax(this.getNextTankRotation(tank),0,180);
 
-    angle2 += this.getNextTankRotation(tank);
+    angle2 += util.clampMinMax(this.getNextTankRotation(tank),0,180);
 
     var min;
     var max;
@@ -336,7 +338,9 @@ var ai = {
 
     //sets the angle that the ai will search in.
     tank.lowAngle = min;
+    console.log('MIN', min)
     tank.highAngle = max;
+    console.log('MAX', max)
 
   },
 
@@ -351,8 +355,10 @@ var ai = {
 
       rot = util.toDegrees(Math.atan2(entityManager._terrain[0].g_landscape[xIndex2] - tank.cy, (xIndex2 - tank.nextX)));
     } else { rot = 0}
+    console.log('ROT', rot)
+    console.log('ROT', util.clampMinMax(rot - 90, 0, 180))
 
-    return rot - 90;
+    return util.clampMinMax(rot - 90, 0, 180);
   },
 
 

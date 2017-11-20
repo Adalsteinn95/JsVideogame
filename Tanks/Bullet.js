@@ -68,7 +68,6 @@ Bullet.prototype.update = function (du) {
     // Handle collisions for bullet against tank
     var hitEntity = this.findHitEntity();
     if (hitEntity) {
-      console.log("ping");
         var canTakeHit = hitEntity.takeBulletHit();
         if (canTakeHit) canTakeHit.call(hitEntity);
         terrain.bombLandscape(this.cx, this.weapon.damage/2, true);
@@ -94,7 +93,7 @@ Bullet.prototype.terrainHit = function(x, y){
             var canTakeHit = hitEntity.takeExplosionHit(this.cx, this.cy);
             if (canTakeHit) canTakeHit.call(hitEntity);
         };
-        terrain.bombLandscape(x, this.weapon);
+        terrain.bombLandscape(x, this.weapon.damage);
         this.lifeSpan = 0;
     }
 

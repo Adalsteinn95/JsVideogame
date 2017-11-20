@@ -45,6 +45,7 @@ randRange: function(min, max) {
     return (min + Math.random() * (max - min));
 },
 
+// returns integer in range: min to max-1
 randInt: function(min, max) {
     return Math.floor(this.randRange(min, max));
 },

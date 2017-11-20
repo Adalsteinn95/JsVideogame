@@ -40,12 +40,12 @@ Ship.prototype.rememberResets = function() {
   this.reset_rotation = this.rotation;
 };
 
+Ship.prototype.KEY_POWER = 'K'.charCodeAt(0);
+Ship.prototype.KEY_LESSPOWER = 'J'.charCodeAt(0);
 Ship.prototype.KEY_THRUST = 'D'.charCodeAt(0);
 Ship.prototype.KEY_RETRO = 'A'.charCodeAt(0);
 Ship.prototype.KEY_LEFT = 'S'.charCodeAt(0);
 Ship.prototype.KEY_RIGHT = 'W'.charCodeAt(0);
-Ship.prototype.KEY_POWER = '5'.charCodeAt(0);
-Ship.prototype.KEY_LESSPOWER = '4'.charCodeAt(0);
 Ship.prototype.KEY_PREVGUN = 'Z'.charCodeAt(0);
 Ship.prototype.KEY_NEXTGUN = 'X'.charCodeAt(0);
 Ship.prototype.KEY_ENDTURN = 'V'.charCodeAt(0);
@@ -66,7 +66,7 @@ Ship.prototype.numSubSteps = 1;
 Ship.prototype.power = 2;
 Ship.prototype.POWER_INCREASE = 0.085;
 Ship.prototype.weaponId =  0;
-Ship.prototype.ammo = 1;
+Ship.prototype.ammo = 20;
 
 //AI stuff
 Ship.prototype.destX = 0;
@@ -82,7 +82,7 @@ Ship.prototype.offsetX = 0;
 Ship.prototype.offsetY = 0;
 
 //hitpoints
-Ship.prototype.health = 100;
+Ship.prototype.health = 200;
 
 //becomes true when hit, so the explosion doesnt hit multiple times
 //færa í bullet ?
@@ -104,16 +104,6 @@ Ship.prototype.update = function(du) {
   this.endTurn();
 
 
-  //update weapon if it has been changed ÞARF AÐ BREYTA
-  //used to check for dmg, need to know what weapon is being fired
-  //can be fixed by getting the damage for the explosion entity or Bullet
-  //ATHUGA
-  if (this.weapon !== g_weapon) {
-      //önnur föll kalla á g_weapon
-      g_weapon = this.weapon;
-
-  };
-
   if(this.playerId === "AI" && this.myTurn === true){
       //calculate teh path to get the DestX
       spatialManager.register(this);
@@ -123,8 +113,8 @@ Ship.prototype.update = function(du) {
       //get y coordinates
       var xIndex = util.clamp(Math.floor(this.cx));
       this.cy = g_landscape[xIndex];
-      if (this.cy > 600) {
-        this.cy = 600;
+      if (this.cy > g_canvas.height) {
+        this.cy = g_canvas.height;
         this.rotation = 0;
       }
       //ai stuff
@@ -208,8 +198,8 @@ Ship.prototype.applyAccel = function(accelX, accelY, du) {
 
   var xIndex = util.clamp(Math.floor(this.cx));
   this.cy = g_landscape[xIndex];
-  if (this.cy > 600) {
-    this.cy = 600;
+  if (this.cy > g_canvas.height) {
+    this.cy = g_canvas.height;
     this.rotation = 0;
   }
 };
@@ -260,6 +250,8 @@ Ship.prototype.maybeFireBullet = function() {
   if ((keys[this.KEY_FIRE] && this.myTurn && this.playerId === "Human" && this.canFire) || this.myTurn && this.playerId === "AI" && this.canFire) {
     util.playSoundOverlap(g_audio.fire);
     g_countdown.stop = true;
+
+    g_weapon = this.weapon;
 
     this.myTurn = false;
 
@@ -437,7 +429,8 @@ Ship.prototype.updatePower = function(du) {
 };
 
 Ship.prototype.takeBulletHit = function() {
-
+    console.log(g_weapon.damage);
+    console.log(this.weapon.damage);
     this.health -= g_weapon.damage;
     this.health = this.health < 0 ? 0 : this.health;
     this.checkForDeath();
@@ -455,13 +448,13 @@ Ship.prototype.takeExplosionHit = function(bombX, bombY) {
       this.health -= Math.abs(test);
       console.log("lífið " + this.health);
       this.isHit = true;
+      this.health = this.health < 0 ? 0 : this.health;
       this.checkForDeath();
     }
 
 };
 
 Ship.prototype.checkForDeath = function() {
-    console.log("ping");
     if (this.health <= 0){
       //add the death animation to the entity manager
       entityManager._explosions.push(new Death({
@@ -505,7 +498,6 @@ Ship.prototype.updateWeapon = function() {
   }
 
   this.weapon = consts.weapons[this.weaponId];
-
 };
 
 Ship.prototype.render = function(ctx) {
@@ -543,7 +535,8 @@ Ship.prototype.render = function(ctx) {
   this.sprite.scale = origScale;
 
   ///Projectile path
-
-  //util.projectilePath(this.predictCord);
+  if (this.weapon.name === "tracer") {
+      util.projectilePath(this.predictCord);
+  }
 
 };

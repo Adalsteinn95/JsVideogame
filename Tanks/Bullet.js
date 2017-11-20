@@ -38,6 +38,8 @@ Bullet.prototype.cx = 200;
 Bullet.prototype.cy = 200;
 Bullet.prototype.velX = 1;
 Bullet.prototype.velY = 1;
+Bullet.prototype.oldcx = 200;
+Bullet.prototype.oldcy = 200;
 
 
 // Convert times from milliseconds to "nominal" time units.
@@ -53,15 +55,18 @@ Bullet.prototype.update = function (du) {
 
       return entityManager.KILL_ME_NOW;
     }
-
+    this.oldcx = this.cx;
+    this.oldcy = this.cy;
     this.cx += this.velX;
     this.cy += this.velY;
+    this.updateBulletRotation();
     this.velX += g_wind;
     this.velY += NOMINAL_GRAVITY;
 
-    this.rotation += 1 * du;
+    /*this.rotation += 1 * du;
     this.rotation = util.wrapRange(this.rotation,
                                    0, consts.FULL_CIRCLE);
+                                   */
 
     this.wrapPosition();
 
@@ -126,6 +131,17 @@ Bullet.prototype.getRadius = function () {
     return 2;
 };
 
+Bullet.prototype.updateBulletRotation = function() {
+
+  console.log('THIS.ROTATION', this.rotation);
+  this.rotation = util.toDegrees(Math.atan2(this.oldcy - this.cy, this.oldcx - this.cx));
+  console.log('THIS.CY', this.cy)
+  console.log('THIS.OLDCY', this.oldcy)
+  console.log('THIS.ROTATION', this.rotation);
+
+
+};
+
 
 Bullet.prototype.render = function (ctx) {
     if(this.cy < 0) {
@@ -135,8 +151,9 @@ Bullet.prototype.render = function (ctx) {
 
       );
     }
-
+    console.log('THIS.ROTATION', this.rotation)
     g_sprites.bullet.drawWrappedCentredAt(
         ctx, this.cx, this.cy, this.rotation
+
     );
 };

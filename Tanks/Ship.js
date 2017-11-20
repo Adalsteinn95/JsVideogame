@@ -401,14 +401,7 @@ Ship.prototype.updateGunRotation = function() {
   }
 };
 
-
 Ship.prototype.calculatePath = function() {
-/*  if(this.playerId === 'AI'){
-    /*random power test for AI*/
-  /*  var x = Math.floor(Math.random() * 6) + 1
-    this.power = x;
-
-  }*/
 
   /*bullet trail prediction */
   this.predictCord = [];
@@ -439,14 +432,12 @@ Ship.prototype.calculatePath = function() {
     //projectile path
     this.predictCord.push({testX, testY});
 
-
     veltestY += NOMINAL_GRAVITY;
     veltestX += g_wind;
 
 //ath
     this.destX = util.clamp(testX);
     this.startVelX = startVel[0];
-
 
   }
 
@@ -456,7 +447,7 @@ Ship.prototype.calculatePath = function() {
 
 Ship.prototype.updatePower = function(du) {
   if (this.myTurn === true) {
-    /*if(this.power < 0.3){
+    if(this.power < 0.3){
       if (keys[this.KEY_POWER]) {
         this.power += this.POWER_INCREASE;
 
@@ -466,7 +457,7 @@ Ship.prototype.updatePower = function(du) {
         this.power -= this.POWER_INCREASE;
 
       }
-    } else {*/
+    } else {
       if (keys[this.KEY_POWER]) {
         this.power += this.POWER_INCREASE;
 
@@ -476,7 +467,7 @@ Ship.prototype.updatePower = function(du) {
 
       }
     }
-  //}
+  }
 };
 
 Ship.prototype.takeBulletHit = function() {

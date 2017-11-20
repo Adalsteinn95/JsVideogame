@@ -197,6 +197,7 @@ renderGameOver: function(ctx, id) {
     this.drawTextAt(ctx, x, y + 50, font, size, style, msg);
     if (eatKey(restart)) {
         gameReset();
+        gameplayManager.gameOver = false;
     }
 },
 

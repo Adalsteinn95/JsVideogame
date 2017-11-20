@@ -72,7 +72,15 @@ Ship.prototype.ammo = 20;
 Ship.prototype.destX = 0;
 Ship.prototype.startVelX = 0;
 Ship.prototype.AIdirection = "right";
-Ship.prototype.AIpath = 0;
+Ship.prototype.AIpath = 'left';
+Ship.prototype.preMoveCalc = false;
+Ship.prototype.nextX;
+Ship.prototype.nextY;
+Ship.prototype.powerDir = "decrese";
+Ship.prototype.calcAngle;
+Ship.prototype.lowAngle;
+Ship.prototype.highAngle;
+
 
 //is it this players turn?
 Ship.prototype.myTurn = false;
@@ -91,8 +99,33 @@ Ship.prototype.canFire = false;
 
 Ship.prototype.update = function(du) {
 
+
+  //if you only want one player to console log do it here
+  /*if(this.myTurn){
+    console.log("ammo " + this.ammo);
+    console.log("cost " + this.weapon.cost)
+    var check = this.checkAmmoCost();
+    console.log(check);
+  }*/
+
+  // if a AI player has not done premove calculations then do it here
+  if( this.playerId === 'AI' && !this.preMoveCalc){
+
+      //calculate the next posistion for the AI
+      this.nextX = ai.whereToMove(Math.floor(this.cx), util.clampRange(this.playerNr,0,8));
+      //calculate the initial Values.
+      ai.getInitialValues(this);
+
+      //set starting guessed angle
+      this.spriteGunRotation = util.toRadian(this.highAngle);
+
+      //calculations done
+      this.preMoveCalc = true;
+    }
+
   if(this.myTurn){
     var check = this.checkAmmoCost();
+
   }
 
   if (this._isDeadNow === true) {
@@ -109,7 +142,7 @@ Ship.prototype.update = function(du) {
       spatialManager.register(this);
       this.calculatePath();
       //
-      ai.AIupdate(this.destX, this.startVelX, this.AIdirection, this.AIpath);
+      ai.AIupdate(this.destX, this.startVelX, this.AIdirection, this.AIpath, this.powerDir);
       //get y coordinates
       var xIndex = util.clamp(Math.floor(this.cx));
       this.cy = g_landscape[xIndex];
@@ -145,6 +178,7 @@ Ship.prototype.update = function(du) {
 
     spatialManager.register(this);
   }
+
 };
 
 Ship.prototype.computeSubStep = function(du) {
@@ -178,6 +212,7 @@ Ship.prototype.computeThrustMag = function() {
   var thrust = 0;
 
   if (this.myTurn === true && this.playerId === "Human"  ) {
+
     if (keys[this.KEY_THRUST]  && this.cx + this.sprite.width / 2 < g_canvas.width) {
       util.playSound(g_audio.drive);
       thrust += NOMINAL_THRUST;
@@ -267,6 +302,7 @@ Ship.prototype.maybeFireBullet = function() {
 
     var dX = +Math.sin(util.toRadian(this.spriteGunRotation));
     var dY = -Math.cos(util.toRadian(this.spriteGunRotation));
+
     var launchDist = this.getRadius();
 
     var startVel = this.getStartVel(dX, dY);
@@ -339,17 +375,15 @@ Ship.prototype.getStartVel = function(dX, dY) {
   var relVelX = dX * relVel;
   var relVelY = dY * relVel;
 
-  var startVelX = this.power * relVelX + this.velX * this.power;
-  var startVelY = -this.power * this.velY + relVelY * (this.power / 2);
+  var startVelX = this.power * relVelX;
+  var startVelY =  relVelY * (this.power / 2);
 
   var startVel = [startVelX, startVelY];
   return startVel;
 
-}
+};
 
 Ship.prototype.updateGunRotation = function() {
-
-
 
   if (this.myTurn === true) {
     if (keys[this.KEY_LEFT] && util.toDegrees(this.gunrotation) > 0) {
@@ -364,18 +398,16 @@ Ship.prototype.updateGunRotation = function() {
 };
 
 
-
-
 Ship.prototype.calculatePath = function() {
-  if(this.playerId === 'AI'){
+/*  if(this.playerId === 'AI'){
     /*random power test for AI*/
-    var x = Math.floor(Math.random() * 6) + 1
+  /*  var x = Math.floor(Math.random() * 6) + 1
     this.power = x;
 
-  }
+  }*/
+
   /*bullet trail prediction */
   this.predictCord = [];
-
   var dX = +Math.sin(util.toRadian(this.spriteGunRotation ));
   var dY = -Math.cos(util.toRadian(this.spriteGunRotation ));
   var launchDist = this.getRadius();
@@ -385,7 +417,9 @@ Ship.prototype.calculatePath = function() {
   var testX = this.cx - this.offsetX + dX * launchDist;
   var testY = this.cy - this.offsetY + dY * launchDist;
   var veltestY = startVel[1];
-  var veltestX = startVel[0]
+  var veltestX = startVel[0];
+
+  this.predictCord.push({testX, testY});
 
   while (testX < g_canvas.width || testX > g_canvas.width) {
 
@@ -401,6 +435,7 @@ Ship.prototype.calculatePath = function() {
     //projectile path
     this.predictCord.push({testX, testY});
 
+
     veltestY += NOMINAL_GRAVITY;
     veltestX += g_wind;
 
@@ -408,14 +443,16 @@ Ship.prototype.calculatePath = function() {
     this.destX = util.clamp(testX);
     this.startVelX = startVel[0];
 
+
   }
+
 
 };
 
 
 Ship.prototype.updatePower = function(du) {
   if (this.myTurn === true) {
-    if(this.power < 0.3){
+    /*if(this.power < 0.3){
       if (keys[this.KEY_POWER]) {
         this.power += this.POWER_INCREASE;
 
@@ -425,7 +462,7 @@ Ship.prototype.updatePower = function(du) {
         this.power -= this.POWER_INCREASE;
 
       }
-    } else {
+    } else {*/
       if (keys[this.KEY_POWER]) {
         this.power += this.POWER_INCREASE;
 
@@ -435,7 +472,7 @@ Ship.prototype.updatePower = function(du) {
 
       }
     }
-  }
+  //}
 };
 
 Ship.prototype.takeBulletHit = function() {
@@ -448,13 +485,11 @@ Ship.prototype.takeBulletHit = function() {
 Ship.prototype.takeExplosionHit = function(bombX, bombY) {
   if(!this.isHit){
 
-      var test = util.distCircles(this.cx, this.cy , bombX, bombY, this.getRadius(), g_weapon.damage)
-      console.log(test);
-      var range = Math.abs(util.distFromExplosion(this.cx, this.cy , bombX, bombY));
-      console.log("fjarlægð frá sprengju " + range);
+      var test = util.distCircles(this.cx, this.cy , bombX, bombY, this.getRadius(), g_weapon.damage);
 
-      this.health -= Math.abs(test);
-      console.log("lífið " + this.health);
+      var range = Math.abs(util.distFromExplosion(this.cx, this.cy , bombX, bombY));
+
+      this.health += test;
       this.isHit = true;
       this.health = this.health < 0 ? 0 : this.health;
       this.checkForDeath();
@@ -473,7 +508,6 @@ Ship.prototype.checkForDeath = function() {
           }) );
       this._isDeadNow = true;
     }
-
 
 };
 
@@ -515,8 +549,7 @@ Ship.prototype.render = function(ctx) {
   // pass my scale into the sprite, for drawing
   this.sprite.scale = this._scale;
 
-  //var flagX = -19.5;
-  //var flagY = -15;
+
 
   var xOffset = (Math.cos((this.rotation * Math.PI / 180) + 90)) * this.sprite.width / 4;
   var yOffset = 0;

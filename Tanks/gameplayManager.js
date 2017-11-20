@@ -116,7 +116,7 @@ var gameplayManager = {
           } else if (this.countAlive() < 1) {
                   this.winnerId = "nobody";
                   this.gameOver = true;
-          }      
+          }
 
           this.turnCircle++;
           this._.turn++;
@@ -125,6 +125,7 @@ var gameplayManager = {
           this.findNextPlayer();
 
           entityManager._ships[this.activePlayerIndex].myTurn = true;
+          entityManager._ships[this.activePlayerIndex].preMoveCalc = false;
           //get more ammo
           if(entityManager._ships[this.activePlayerIndex].ammo < 1){
               entityManager._ships[this.activePlayerIndex].ammo++;

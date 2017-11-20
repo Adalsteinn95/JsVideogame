@@ -26,9 +26,6 @@ Audio.prototype.asyncLoad = function(src, asyncCallback) {
     // NB: The failure case can be identified by the "degenerate" nature
     // of the resulting "loaded" image e.g. test for this.width === 0
     //
-  //  console.log(this.loadeddata)
-
-
 
     this.oncanplaythrough = asyncCallback;
     this.onerror = asyncCallback;
@@ -40,7 +37,6 @@ Audio.prototype.asyncLoad = function(src, asyncCallback) {
     // in-cache, but will most likely happen some time later when the load has
     // occurred and the resulting event is processesd in the queue.
 
-    //console.log("requesting image src of ", src);
     this.src = src;
 };
 
@@ -82,7 +78,6 @@ function audioPreload(requiredAudio,
     //
     audioPreloadHandler = function () {
 
-        //console.log("audioPreloadHandler called with this=", this);
         loadedAudio[this.name] = this;
 
         if (0 === this.width) {
@@ -96,10 +91,6 @@ function audioPreload(requiredAudio,
         numAudioHandled += 1;
 
         if (numAudioHandled === numAudioRequired) {
-            /*console.log("all preload images handled");
-            console.log("loadedAudio=", loadedAudio);
-            console.log("");
-            console.log("performing completion callback");*/
 
             completionCallback();
 
@@ -122,7 +113,6 @@ function audioPreload(requiredAudio,
 
         if (requiredAudio.hasOwnProperty(currentName)) {
 
-            //console.log("preloading image", currentName);
             currentAudio = new Audio();
             currentAudio.name = currentName;
 

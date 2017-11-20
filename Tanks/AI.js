@@ -86,12 +86,10 @@ var ai = {
   AIrotation: function(AIdirection, ship){
 
     /*Rotation of the AI gun*/
-  //  console.log('SHIP.HIGHANGLE', ship.highAngle)
     if (Math.floor(util.toDegrees(ship.gunrotation)) >= ship.highAngle) {
       AIdirection = "left";
     }
 
-  //  console.log('SHIP.LOWANGLE', ship.lowAngle)
     if (Math.floor(util.toDegrees(ship.gunrotation)) <= ship.lowAngle) {
       AIdirection = "right";
     }
@@ -119,13 +117,9 @@ var ai = {
       this.AIMovement(ship);
 
     }else{
-      /*console.log('SHIP.LEARN', ship.learn)
         if (Math.floor(destX) < targetx && targetx - ship.learn < Math.floor(destX) || Math.floor(destX) < targetx && targetx + ship.learn < Math.floor(destX)) {
-          //&& targetx - this.cx > 50 || this.cx - targetx > 50
 
-          //console.log(Math.abs(targetx - entityManager._ships[gameplayManager.activePlayerNr].cx));
           if(Math.abs(targetx - ship.cx) < 50){
-            console.log("dont shoot");
             //move and rotate and change power instead
             destX += startVelX;
             destX = util.clamp(destX, ship);
@@ -152,7 +146,6 @@ var ai = {
           } else {
 
             util.stopSound(g_audio.drive);
-            console.log('should fire');
             ship.maybeFireBullet();
             this.timer = 5000;
             if(ship.learn === 10){
@@ -166,10 +159,10 @@ var ai = {
 
           }
 
-        } else {*/
+        } else {
           destX += startVelX;
           destX = util.clamp(destX, ship);
-          //path = this.AIMovement(path, ship);
+
           direction = this.AIrotation(direction, ship);
           this.AIpower(ship);
           this.shipUpdate(destX, path, direction, ship, power);
@@ -193,7 +186,7 @@ var ai = {
             this.getInitialValues(ship);
           }
 
-  //  }
+    }
   }
 },
 
@@ -308,29 +301,20 @@ var ai = {
 
     //the 2 posible angles
     var angle1 = util.toDegrees(util.getAngle1(vel,distance,NOMINAL_GRAVITY)) ;
-    //console.log('ANGLE1pre', angle1)
 
     var angle2 = util.toDegrees(util.getAngle2(vel,distance,NOMINAL_GRAVITY));
-    //console.log('ANGLE2pre', angle2)
-
 
     angle1 = util.clampMinMax(angle1-90, 0,180);
-    //console.log('ANGLE1her', angle1)
 
     angle2 = util.clampMinMax(angle2-90, 0,180);
-    //console.log('ANGLE2her', angle2)
-    //angle1 = 45;
-    //angle2 = 135;
-    //lagfæring testX
+
     var rot = this.getNextTankRotation(tank);
     //we might have to adjust the angle
     //depending on which direction the tank is rotationg and aiming
     if( rot < 0 && angle1 < 90 && angle2 < 90){
-      console.log("ping1")
       angle1 += rot;
       angle2 += rot;
     }else if ( rot > 0 && angle1 > 90 && angle2 > 90){
-      console.log("ping2")
       angle1 -= rot;
       angle2 -= rot;
     }
@@ -338,11 +322,8 @@ var ai = {
     var min;
     var max;
     angle1 = util.clampMinMax(angle1, 0,180);
-    //console.log('ANGLE1', angle1)
 
     angle2 = util.clampMinMax(angle2, 0,180);
-    //console.log('ANGLE2', angle2)
-
 
     //cant calculate angle the use 0- 180
     if(isNaN(angle1)){
@@ -358,9 +339,7 @@ var ai = {
 
     //sets the angle that the ai will search in.
     tank.lowAngle = min;
-    console.log('MIN', min)
     tank.highAngle = max;
-    console.log('MAX', max)
 
   },
 
@@ -375,7 +354,6 @@ var ai = {
 
       rot = util.toDegrees(Math.atan2(entityManager._terrain[0].g_landscape[xIndex2] - entityManager._terrain[0].g_landscape[xIndex1], (xIndex2 - xIndex1)));
     } else { rot = 0}
-    console.log('ROT', rot)
 
     return rot;
   },

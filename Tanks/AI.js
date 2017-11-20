@@ -4,7 +4,7 @@
 
 var ai = {
 
-  timer:  1000,
+  timer:  5000,
 
   runAI: function(destX, startVelX, direction, path,){
     //fær inn öll gildi frá ships sem þarf og kallar svo á hin föllinn með þeim
@@ -127,14 +127,11 @@ var ai = {
 
     var targetx = this.getTargetX(ship);
 
-
-    this.timer--;
     if(Math.floor(ship.cx) !== ship.nextX){
       //move to where it wants to go
       this.AIMovement(ship);
 
     }else{
-
         if (Math.floor(destX) < targetx && targetx - ship.learn < Math.floor(destX) || Math.floor(destX) < targetx && targetx + ship.learn < Math.floor(destX)) {
           //&& targetx - this.cx > 50 || this.cx - targetx > 50
 
@@ -167,7 +164,7 @@ var ai = {
           } else {
             util.stopSound(g_audio.drive);
             ship.maybeFireBullet();
-            this.timer = 1000;
+            this.timer = 5000;
             if(ship.learn === 10){
               ship.learn += 10;
             }
@@ -185,6 +182,18 @@ var ai = {
           direction = this.AIrotation(direction, ship);
           this.AIpower(ship);
           this.shipUpdate(destX, path, direction, ship, power);
+          this.timer--;
+          if(this.timer < 4800){
+            if ( ship.path === 'right'){
+              ship.nextX += 50
+            }else {
+              ship.nextX -=50;
+            }
+
+            this.timer = 5000;
+
+            this.AIMovement(ship);
+          }
 
 
     }

@@ -97,7 +97,7 @@ init: function() {
     this.generateTerrain();
 },
 
-fireBullet: function(cx, cy, velX, velY, rotation,partOfShower, i,volcanoMaster, weapon) {
+fireBullet: function(cx, cy, velX, velY, rotation,partOfShower, i,volcanoMaster, weapon, sprite) {
     this._bullets.push(new Bullet({
         cx   : cx,
         cy   : cy,
@@ -108,7 +108,7 @@ fireBullet: function(cx, cy, velX, velY, rotation,partOfShower, i,volcanoMaster,
         partOfShower: partOfShower,
         showerIndex : i,
         volcanoMaster : volcanoMaster,
-        weapon : weapon
+        weapon : weapon,
     }));
 },
 

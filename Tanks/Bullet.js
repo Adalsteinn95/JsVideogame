@@ -38,6 +38,8 @@ Bullet.prototype.cx = 200;
 Bullet.prototype.cy = 200;
 Bullet.prototype.velX = 1;
 Bullet.prototype.velY = 1;
+Bullet.prototype.oldcx = 200;
+Bullet.prototype.oldcy = 200;
 
 
 // Convert times from milliseconds to "nominal" time units.
@@ -53,15 +55,18 @@ Bullet.prototype.update = function (du) {
 
       return entityManager.KILL_ME_NOW;
     }
-
+    this.oldcx = this.cx;
+    this.oldcy = this.cy;
     this.cx += this.velX;
     this.cy += this.velY;
+    this.updateBulletRotation();
     this.velX += g_wind;
     this.velY += NOMINAL_GRAVITY;
 
-    this.rotation += 1 * du;
+    /*this.rotation += 1 * du;
     this.rotation = util.wrapRange(this.rotation,
                                    0, consts.FULL_CIRCLE);
+                                   */
 
     this.wrapPosition();
 
@@ -93,7 +98,7 @@ Bullet.prototype.terrainHit = function(x, y){
             var canTakeHit = hitEntity.takeExplosionHit(this.cx, this.cy);
             if (canTakeHit) canTakeHit.call(hitEntity);
         };
-        console.log("hey");
+
         entityManager._terrain[0].bombLandscape(x, this.weapon);
         this.lifeSpan = 0;
     }
@@ -117,13 +122,19 @@ Bullet.prototype.checkForVolcano = function() {
       var randVelX = util.randRange(-2,2)
       var randVelY = util.randRange(-2,-4)
 
-      entityManager.fireBullet(this.cx, this.cy, randVelX, randVelY, this.gunrotation,true,i,false, this.weapon);
+      entityManager.fireBullet(this.cx, this.cy- g_sprites.ship.height / 2, randVelX, randVelY, this.gunrotation,true,i,false, this.weapon);
     }
   }
 };
 
 Bullet.prototype.getRadius = function () {
     return 2;
+};
+
+Bullet.prototype.updateBulletRotation = function() {
+
+  this.rotation = util.toDegrees(Math.atan2(this.oldcy - this.cy, this.oldcx - this.cx));
+
 };
 
 
@@ -135,8 +146,8 @@ Bullet.prototype.render = function (ctx) {
 
       );
     }
+    this.weapon.sprite.drawWrappedCentredAt(
+        ctx, this.cx, this.cy, this.rotation + this.weapon.sprite.rotation
 
-    g_sprites.bullet.drawWrappedCentredAt(
-        ctx, this.cx, this.cy, this.rotation
     );
 };

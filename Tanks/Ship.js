@@ -282,6 +282,7 @@ Ship.prototype.lockedIn = false;
 Ship.prototype.maybeFireBullet = function() {
 
   //check if the player has enough ammo for the chosen weapon
+
   this.canFire = this.checkAmmoCost();
 
   if ((keys[this.KEY_FIRE] && this.myTurn && this.playerId === "Human" && this.canFire) || this.myTurn && this.playerId === "AI") {
@@ -396,12 +397,7 @@ Ship.prototype.updateGunRotation = function() {
 };
 
 Ship.prototype.calculatePath = function() {
-  /*  if(this.playerId === 'AI'){
-    /*random power test for AI*/
-  /*  var x = Math.floor(Math.random() * 6) + 1
-    this.power = x;
 
-  }*/
   if (this.lockedIn === true) {
     /*bullet trail prediction */
     this.predictCord = [];
@@ -446,7 +442,7 @@ Ship.prototype.calculatePath = function() {
 
 Ship.prototype.updatePower = function(du) {
   if (this.myTurn === true) {
-    /*if(this.power < 0.3){
+    if(this.power < 0.3){
       if (keys[this.KEY_POWER]) {
         this.power += this.POWER_INCREASE;
 
@@ -456,9 +452,9 @@ Ship.prototype.updatePower = function(du) {
         this.power -= this.POWER_INCREASE;
 
       }
-    } else {*/
-    if (keys[this.KEY_POWER]) {
-      this.power += this.POWER_INCREASE;
+    } else {
+      if (keys[this.KEY_POWER]) {
+        this.power += this.POWER_INCREASE;
 
     }
     if (keys[this.KEY_LESSPOWER]) {
@@ -466,7 +462,7 @@ Ship.prototype.updatePower = function(du) {
 
     }
   }
-  //}
+  }
 };
 
 Ship.prototype.takeBulletHit = function() {

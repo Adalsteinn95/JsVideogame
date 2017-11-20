@@ -40,10 +40,10 @@ Ship.prototype.rememberResets = function() {
   this.reset_rotation = this.rotation;
 };
 
-Ship.prototype.KEY_THRUST = 'W'.charCodeAt(0);
-Ship.prototype.KEY_RETRO = 'S'.charCodeAt(0);
-Ship.prototype.KEY_LEFT = 'A'.charCodeAt(0);
-Ship.prototype.KEY_RIGHT = 'D'.charCodeAt(0);
+Ship.prototype.KEY_THRUST = 'D'.charCodeAt(0);
+Ship.prototype.KEY_RETRO = 'A'.charCodeAt(0);
+Ship.prototype.KEY_LEFT = 'S'.charCodeAt(0);
+Ship.prototype.KEY_RIGHT = 'W'.charCodeAt(0);
 Ship.prototype.KEY_POWER = '5'.charCodeAt(0);
 Ship.prototype.KEY_LESSPOWER = '4'.charCodeAt(0);
 Ship.prototype.KEY_PREVGUN = 'Z'.charCodeAt(0);
@@ -258,7 +258,7 @@ Ship.prototype.maybeFireBullet = function() {
   this.canFire = this.checkAmmoCost();
 
   if ((keys[this.KEY_FIRE] && this.myTurn && this.playerId === "Human" && this.canFire) || this.myTurn && this.playerId === "AI" && this.canFire) {
-    g_audio.fire.play();
+    util.playSoundOverlap(g_audio.fire);
     g_countdown.stop = true;
 
     this.myTurn = false;

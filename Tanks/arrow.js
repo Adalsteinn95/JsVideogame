@@ -5,7 +5,7 @@ function Arrow(descr) {
 
       this.sprite = g_sprites.arrows;
 
-    this.index = - 40;
+    this.index = 0;
     this.dir = -1;
 }
 
@@ -13,18 +13,20 @@ Arrow.prototype = new Entity();
 
 Arrow.prototype.render = function(ctx) {
     var cell = this.sprite;
+    this.rotation = -90;
+    cell.scale = 0.025;
     cell.drawCentredAt(
         ctx, this.cx , this.cy , this.rotation );
 
 };
 Arrow.prototype.update = function() {
     this.cx = entityManager._ships[gameplayManager.activePlayerIndex].cx;
-    this.cy = entityManager._ships[gameplayManager.activePlayerIndex].cy + this.index;
+    this.cy = entityManager._ships[gameplayManager.activePlayerIndex].cy + this.index - 40;
     //-20 til 0
-      if(this.index < -60 || this.index > -40){
+      if(this.index < -20 || this.index > 0){
         this.dir *= -1;
       }
+      //console.log('THIS.INDEX', this.index / -20)
       this.index += this.dir;
 
-    this.delay++;
 };

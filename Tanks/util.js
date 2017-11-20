@@ -214,10 +214,17 @@ sinAcos: function(ratio, radius) {
   //=====================
   // SOUNDstuff
   //=====================
+  playSound : function(audio) {
+
+    if(!g_mute) {
+      audio.play();
+    }
+
+  },
 
   playSoundOverlap: function (sound) {
     var click=sound.cloneNode();
-    click.play();
+    this.playSound(click)
   }
 
 };

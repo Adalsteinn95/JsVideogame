@@ -45,9 +45,9 @@ var g_countdown = {
 
 }
 var g_renderSpatialDebug = true;
+var g_mute = false;
 
 
-var KEY_MIXED   = keyCode('M');
 var KEY_GRAVITY = keyCode('G');
 var KEY_AVE_VEL = keyCode('V');
 var KEY_SPATIAL = keyCode('X');
@@ -61,6 +61,8 @@ var KEY_1 = keyCode('1');
 var KEY_2 = keyCode('2');
 
 var KEY_K = keyCode('K');
+var KEY_MUTE = keyCode('M');
+
 var button = document.getElementById("weaponbutton");
 button.addEventListener("click", function() {
   var e = document.getElementById("weaponSelect");
@@ -69,10 +71,8 @@ button.addEventListener("click", function() {
 
 function processDiagnostics() {
 
-    if (eatKey(KEY_MIXED))
-        g_allowMixedActions = !g_allowMixedActions;
-
     if (eatKey(KEY_GRAVITY)) g_useGravity = !g_useGravity;
+    if(eatKey(KEY_MUTE)) g_mute = !g_mute;
 
 }
 
@@ -130,7 +130,7 @@ function requestPreloads() {
         explosion : "../myndir/explosives/explosionsheet.png",
 
         tankDeath : "../myndir/tankexplode/tankDeath.png",
-        pointer : "../myndir/pointer/arrowSmall.png",
+        pointer : "../myndir/arrow.png",
         atom : "../myndir/explosives/atomsheet.png",
         bulletArrow: "../myndir/arrow.png"
     };
@@ -138,7 +138,6 @@ function requestPreloads() {
     requiredImages = spriteUtil.loadImgs(requiredImages, "../myndir/flags/", ".png");
 
 
-    };
     var requiredAudio = {
       fire : "../sound/fire.mp3",
       shotCollision : "../sound/shotcollision.mp3",

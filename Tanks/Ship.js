@@ -330,7 +330,7 @@ Ship.prototype.endTurn = function() {
   if (keys[this.KEY_ENDTURN] && this.myTurn) {
 
     this.canFire = false;
-    this.ammo *= 2;
+    this.ammo += 5;
     this.myTurn = false;
     gameplayManager.nextTurn();
     keys[this.KEY_ENDTURN] = false;

@@ -13,7 +13,9 @@ var gameplayManager = {
 
     alivePlayers : 0,
 
-    hasWinner : false,
+    gameOver : false,
+    winnerId: null,
+
 
     players : [],
 
@@ -37,6 +39,7 @@ var gameplayManager = {
         entityManager._generateClouds();
         entityManager._generateArrow();
         entityManager._ships[0].myTurn = true;
+        this.alivePlayers = this.players.length;
     },
 
     setup : function() {
@@ -46,6 +49,10 @@ var gameplayManager = {
     render : function(ctx) {
         if (!this.discardDoor) {
             this.gameDoor(ctx);
+        }
+        if (this.gameOver) {
+            g_countdown.stop = true;
+            util.renderGameOver(g_ctx, this.winnerId);
         }
     },
 
@@ -97,44 +104,42 @@ var gameplayManager = {
       return i;
     },
 
-      nextTurn: function (){
-        g_countdown.stop = false;
-        g_countdown.timeLeft = g_countdown.duration;
+      nextTurn: function () {
+          g_countdown.stop = false;
+          g_countdown.timeLeft = g_countdown.duration;
 
-        entityManager._ships[this.activePlayerIndex].myTurn = false;
+          entityManager._ships[this.activePlayerIndex].myTurn = false;
 
-        if(this.checkForWinner()){
-          console.log("we have a winner, player nr: " + (this.activePlayerIndex+1) );
-          entityManager._ships[this.activePlayerIndex].myTurn = true;
-          return;
+          if (this.countAlive() === 1) {
+              var winner = this.findWinner();
+              this.winnerId = (winner.playerNr+1);
+              this.gameOver = true;
+              entityManager._ships[this.activePlayerIndex].myTurn = true;
+          } else if (this.countAlive() < 1) {
+                  this.winnerId = "nobody";
+                  this.gameOver = true;
+          }
 
-        }
-        this.turnCircle++;
+          this.turnCircle++;
           this._.turn++;
           this.resetIsHit();
           this.updateNextPlayer();
-
-        /*  while(this.checkIfAlive(this.activePlayerIndex)){
-            this.updateNextPlayer();
-          };*/
           this.findNextPlayer();
 
           entityManager._ships[this.activePlayerIndex].myTurn = true;
+          entityManager._ships[this.activePlayerIndex].preMoveCalc = false;
           //get more ammo
           if(entityManager._ships[this.activePlayerIndex].ammo < 1){
-            entityManager._ships[this.activePlayerIndex].ammo++;
-        }
+              entityManager._ships[this.activePlayerIndex].ammo++;
+          }
           /*
-            get new wind direction and power,
-            only when all alive players have had the chance to
-            play with the current wind.
+          get new wind direction and power,
+          only when all alive players have had the chance to
+          play with the current wind.
           */
           if(this._.turn % this.alivePlayers === 0) {
-
             g_wind = util.randomWind();
-
           }
-
       },
 
       resetIsHit: function (){
@@ -143,25 +148,14 @@ var gameplayManager = {
         }
       },
 
-      checkForWinner: function(){
-          var cnt = 0;
-          var target = this.players.length -1;
-          this.alivePlayers = 0;
-        for(var i = 0; i< this.players.length; i++){
-          if(entityManager._ships[i]._isDeadNow){
-            cnt++;
-
+      findWinner: function() {
+          var players = entityManager._ships;
+          for (var i in players) {
+              if (!players[i]._isDeadNow) {
+                  return players[i];
+              }
           }
-          else {
-            this.alivePlayers++;
-          }
-        }
-        if (cnt >= target){
-          return true
-        }
-
-        return false;
-
+          return false;
       },
 
       updateNextPlayer: function(){
@@ -180,6 +174,15 @@ var gameplayManager = {
         while(this.checkIfAlive(this.activePlayerIndex)){
           this.updateNextPlayer();
         }
-      }
+    },
+
+    countAlive: function() {
+        var count = 0;
+        var players = entityManager._ships
+        for (var i in players) {
+            if (!players[i]._isDeadNow) count++;
+        }
+        return count;
+    }
 
 }

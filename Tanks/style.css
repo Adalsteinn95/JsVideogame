@@ -1,0 +1,13 @@
+body {
+    background-color: #6488A0;
+}
+
+.canvasContainer {
+    margin: 20px;
+    margin-bottom: 0px;
+}
+
+.toolbarContainer {
+    margin: 20px;
+    margin-top: 0px;
+}

@@ -66,10 +66,6 @@ var KEY_MUTE = keyCode('M');
 var KEY_MUSIC = keyCode('N');
 
 var button = document.getElementById("weaponbutton");
-button.addEventListener("click", function() {
-  var e = document.getElementById("weaponSelect");
-
-});
 
 function processDiagnostics() {
 

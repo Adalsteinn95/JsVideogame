@@ -580,8 +580,8 @@ Ship.prototype.render = function(ctx) {
   this.sprite.scale = origScale;
 
   ///Projectile path
-  if (this.weapon.name === "tracer") {
+  //if (this.weapon.name === "tracer") {
       util.projectilePath(this.predictCord);
-  }
+//  }
 
 };

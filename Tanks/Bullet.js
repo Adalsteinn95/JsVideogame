@@ -117,7 +117,7 @@ Bullet.prototype.checkForVolcano = function() {
       var randVelX = util.randRange(-2,2)
       var randVelY = util.randRange(-2,-4)
 
-      entityManager.fireBullet(this.cx, this.cy, randVelX, randVelY, this.gunrotation,true,i,false, this.weapon);
+      entityManager.fireBullet(this.cx, this.cy- g_sprites.ship.height / 2, randVelX, randVelY, this.gunrotation,true,i,false, this.weapon);
     }
   }
 };

@@ -21,26 +21,26 @@ var consts = {
         showerAmount : 7,
         damage: 25,
         name: "shower",
-        cost: 2,
+        cost: 4,
         sprite : ''
       },
       {
-        damage: 180,
+        damage: 150,
         name: "atom",
         cost: 10,
         sprite :  ''
       },
       {
-        damage: 10,
+        damage: 20,
         name: "tracer",
-        cost: 4,
+        cost: 2,
         sprite : ''
       },
       {
         volcanoAmount:15,
         damage:25,
         name: "volcano",
-        cost: 3,
+        cost: 4,
         sprite : ''
       }
     ]

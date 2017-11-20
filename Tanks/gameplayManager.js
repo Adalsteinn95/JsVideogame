@@ -12,8 +12,7 @@ var gameplayManager = {
     setupIndex : 0,
 
     alivePlayers : 0,
-    turnCircle : 0,
-
+    
     hasWinner : false,
 
     players : [],
@@ -124,13 +123,13 @@ var gameplayManager = {
           if(entityManager._ships[this.activePlayerIndex].ammo < 1){
             entityManager._ships[this.activePlayerIndex].ammo++;
         }
-          //get new wind direction and power
-          console.log('THIS.ALIVEPLAYERS', this.alivePlayers)
-          console.log('THIS.TURNCIRCLE)', this.turnCircle)
-          if(this.alivePlayers === this.turnCircle) {
-            console.log('CONDITION PASSED')
+          /*
+            get new wind direction and power,
+            only when all alive players have had the chance to
+            play with the current wind.
+          */
+          if(this._.turn % this.alivePlayers === 0) {
             g_wind = util.randRange(-0.1,0.1);
-            this.turnCircle = 0;
 
           }
 

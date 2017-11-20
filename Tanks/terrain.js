@@ -76,7 +76,6 @@ initlandScape: function(f, bound, xShift, frame) {
 
 bombLandscape: function(x, weapon, tankhit) {
     var radius = weapon.damage
-    console.log('G_WEAPON.NAME', g_weapon.name)
     if(weapon.name === "atom") {
       util.playSoundOverlap(g_audio.atom);
     }

@@ -355,7 +355,7 @@ Ship.prototype.reset = function() {
 
 var NOMINAL_ROTATE_RATE = 0.01;
 
-Ship.prototype.updateRotation = function(du) {
+Ship.prototype.updateRotation = function() {
 
   if(this.cy < g_canvas.height){
 

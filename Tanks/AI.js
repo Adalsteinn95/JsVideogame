@@ -126,7 +126,6 @@ var ai = {
     var ship = entityManager._ships[gameplayManager.activePlayerIndex];
 
     var targetx = this.getTargetX(ship);
-    console.log(ship.learn);
 
 
     this.timer--;
@@ -247,7 +246,7 @@ var ai = {
 
   pickWeapon: function(tank){
     var int = util.randInt(1,101);
-    console.log('NT', int)
+
     if ( int < 65){
 
       tank.weapon = consts.weapons[0];

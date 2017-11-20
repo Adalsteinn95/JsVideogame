@@ -9,7 +9,7 @@ function Death(descr) {
 
 }
 
-var delay = 10
+var delay = 5
 Death.prototype = new Entity();
 
 Death.prototype.render = function(ctx) {
@@ -21,7 +21,7 @@ Death.prototype.render = function(ctx) {
 Death.prototype.update = function(du) {
 
     if(this.delay % delay === 0){
-      this.index++;
+        this.index++;
     }
 
     this.delay++;

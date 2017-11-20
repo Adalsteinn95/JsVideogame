@@ -1,0 +1,90 @@
+body {
+  background-color: #6488A0;
+}
+
+.canvas-container {
+  margin: 20px;
+  margin-bottom: 0px;
+  max-width: 900px;
+}
+
+.toolbar {
+  margin-top: 0px;
+}
+
+.main-container {
+  display: flex;
+}
+
+.keyboard-container {
+  display: flex;
+}
+
+.instruction-container {
+  margin: 20px auto;
+  max-width: 35%;
+  min-width: 15%;
+}
+
+.keyboard {
+  width: 100%;
+  height: 100%;
+
+}
+
+.instructions {
+  font-family: "Changa", "courier";
+  margin: 14px auto;
+  max-width: 50%;
+  text-align: center;
+  padding: 10px;
+  background-color: #52768e;
+}
+
+.instruction-item {
+  margin: 5px auto;
+  padding: 5px;
+  border: 5px solid;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+#green {
+  background-color: #548b59;
+  border-color: #3b7240;
+}
+
+#light-blue {
+  background-color: #7acbcf;
+  border-color: #54a7ac;
+}
+
+#purple {
+  background-color: #5f5c95;
+  border-color: #4a487c;
+}
+
+#yellow {
+  background-color: #ffed7f;
+  border-color: #dcc553;
+}
+
+#yellow2 {
+  background-color: #ffce76;
+  border-color: #dcc553;
+}
+
+#red {
+  background-color: #a53029;
+  border-color: #91211f;
+}
+
+#orange {
+  background-color: #fc9b71;
+  border-color: #e17b52;
+}
+
+#blue {
+  background-color: #2a77a8;
+  border-color: #006493;
+}

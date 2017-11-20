@@ -4,28 +4,38 @@
   <head>
     <meta charset="UTF-8">
     <title>Tanks cool wow!</title>
+    <link href="https://fonts.googleapis.com/css?family=Changa" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
   </head>
 
   <body>
-    <div>
-      <canvas id="myCanvas" width="900" height="600" style="border: 1px solid black;">
-	  Sorry, but your browser does not support the HTML5 canvas tag.
-	  </canvas>
+    <div class="main-container">
+      <div class="canvas-container">
+        <canvas class="main-canvas" id="myCanvas" width="900" height="600" style="border: 1px solid black;">
+          Sorry, but your browser does not support the HTML5 canvas tag.
+        </canvas>
+        <canvas class="toolbar" id="toolbar" width="900" height="200" style="border: 1px solid black;">
+          Sorry, but your browser does not support the HTML5 canvas tag.
+        </canvas>
+      </div>
+      <div class="instruction-container">
+        <div class="keyboard-container">
+          <img class="keyboard" src="../myndir/keyboard.png">
+        </div>
+        <div class="instructions">
+          <h4>Setup</h4>
+          <div class="instruction-item" id="orange">Setup Selection</div>
+          <div class="instruction-item" id="yellow2">Confirm</div>
+          <div class="instruction-item" id="blue">Reroll Map</div>
+          <h4>Gameplay</h4>
+          <div class="instruction-item" id="green">Tank Movement</div>
+          <div class="instruction-item" id="light-blue">Weapon Selection</div>
+          <div class="instruction-item" id="purple">Ajust Power</div>
+          <div class="instruction-item" id="red">Fire</div>
+          <div class="instruction-item" id="yellow">Volume Control</div>
+        </div>
+      </div>
     </div>
-    <div>
-      <canvas id="toolbar" width="900" height="200" style="border: 1px solid black;">
-      Sorry, but your browser does not support the HTML5 canvas tag.
-      </canvas>
-    </div>
-    <div id="output"></div>
-    <select id="weaponSelect">
-      <option selected value="normal">normal</option>
-      <option value="shower">shower</option>
-      <option value="atom">atom</option>
-      <option value="tracer">tracer</option>
-      <option value="volcano">volcano</option>
-    </select>
-    <button id="weaponbutton">Select</button>
 
     <script src="globals.js"></script>
     <script src="consts.js"></script>

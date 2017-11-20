@@ -36,7 +36,6 @@ var spriteUtil = {
         for (var i = 0; i < imgs.length ; ++i) {
 
             sprite = new Sprite(imgs[i])
-            console.log(sprite);
             arr.push(sprite);
         }
 

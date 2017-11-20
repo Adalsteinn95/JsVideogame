@@ -109,7 +109,7 @@ reset : function() {
 
 },
 
-fireBullet: function(cx, cy, velX, velY, rotation,partOfShower, i,volcanoMaster, weapon) {
+fireBullet: function(cx, cy, velX, velY, rotation,partOfShower, i,volcanoMaster, weapon, sprite) {
     this._bullets.push(new Bullet({
         cx   : cx,
         cy   : cy,
@@ -120,7 +120,7 @@ fireBullet: function(cx, cy, velX, velY, rotation,partOfShower, i,volcanoMaster,
         partOfShower: partOfShower,
         showerIndex : i,
         volcanoMaster : volcanoMaster,
-        weapon : weapon
+        weapon : weapon,
     }));
 },
 
@@ -142,7 +142,6 @@ generateTerrain : function () {
 
 killNearestShip : function(xPos, yPos) {
     var theShip = this._findNearestShip(xPos, yPos).theShip;
-    console.log(theShip);
     if (theShip) {
         theShip.kill();
     }

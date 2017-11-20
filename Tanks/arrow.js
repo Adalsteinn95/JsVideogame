@@ -27,7 +27,7 @@ Arrow.prototype.update = function() {
       if(this.index < -20 || this.index > 0){
         this.dir *= -1;
       }
-      //console.log('THIS.INDEX', this.index / -20)
+
       this.index += this.dir;
 
     }

@@ -24,11 +24,6 @@ functions... shared data properties are potentially quite confusing.
 
 function Entity() {
 
-/*
-    // Diagnostics to check inheritance stuff
-    this._entityProperty = true;
-    console.dir(this);
-*/
 
 };
 

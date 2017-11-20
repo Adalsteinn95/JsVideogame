@@ -40,7 +40,10 @@ var g_useAveVel = true;
 var g_weapon = consts.weapons[0];
 var g_wind = util.randRange(-0.1,0.1)
 var g_countdown = {
+
   duration: 30000 / NOMINAL_UPDATE_INTERVAL,
+
+
   stop: false,
 
 }
@@ -48,6 +51,7 @@ var g_renderSpatialDebug = true;
 var g_mute = false;
 var g_musicOn = true;
 var g_reset = false;
+
 
 
 var KEY_GRAVITY = keyCode('G');
@@ -67,10 +71,6 @@ var KEY_MUTE = keyCode('M');
 var KEY_MUSIC = keyCode('N');
 
 var button = document.getElementById("weaponbutton");
-button.addEventListener("click", function() {
-  var e = document.getElementById("weaponSelect");
-
-});
 
 function processDiagnostics() {
 
@@ -134,11 +134,18 @@ function requestPreloads() {
 
         tankDeath : "../myndir/tankexplode/tankDeath.png",
         pointer : "../myndir/arrow.png",
-        atom : "../myndir/explosives/atomsheet.png",
+        //atom : "../myndir/explosives/atomsheet.png",
         bulletArrow: "../myndir/arrow.png",
+
+        normal: "../myndir/Bullets/normal.png",
+        shower: "../myndir/Bullets/shower.png",
+        atom: "../myndir/Bullets/atom.png",
+        volcano: "../myndir/Bullets/volcano.png",
+
         music : "../myndir/music.png",
         sound : "../myndir/sound.png",
         off : "../myndir/off.png"
+
 
     };
 
@@ -167,15 +174,25 @@ function preloadDone() {
       g_sprites.ship  = new Sprite(g_images.ship);
       g_sprites.tankgun = new Sprite(g_images.tankgun);
 
-      g_sprites.bullet = new Sprite(g_images.ship);
-      g_sprites.bullet.scale = 0.25;
+      g_sprites.normal = new Sprite(g_images.normal);
+      g_sprites.normal.scale = 0.02;
+      g_sprites.normal.rotation = 180;
+      g_sprites.volcano = new Sprite(g_images.volcano);
+      g_sprites.volcano.scale = 0.02;
+      g_sprites.volcano.rotation = 180;
+      g_sprites.shower = new Sprite(g_images.shower);
+      g_sprites.shower.scale = 0.02;
+      g_sprites.shower.rotation = 180;
+      g_sprites.atom = new Sprite(g_images.atom);
+      g_sprites.atom.scale = 0.02;
+      g_sprites.atom.rotation = 180;
       g_sprites.cloud1 = new Sprite(g_images.cloud1);
       g_sprites.cloud2 = new Sprite(g_images.cloud2);
       g_sprites.cloud3 = new Sprite(g_images.cloud3);
 
     g_sprites.xplode = spriteUtil.decomposeSheet(100,100,9,9,81, g_images.explosion);
     g_sprites.tankDeath = spriteUtil.decomposeSheet(81,40,6,2,12, g_images.tankDeath);
-    g_sprites.atom = spriteUtil.decomposeSheet(96, 96, 5, 3, 14, g_images.atom);
+    //g_sprites.atom = spriteUtil.decomposeSheet(96, 96, 5, 3, 14, g_images.atom);
     g_sprites.arrows = new Sprite(g_images.pointer);
     g_sprites.bulletArrow = new Sprite(g_images.bulletArrow);
     g_sprites.music = new Sprite(g_images.music);
@@ -190,6 +207,7 @@ function preloadDone() {
         g_sprites.flags[i] = new Sprite(g_images[flag]);
     }
 
+    main.weaponUpdate();
     entityManager.init();
     toolbar.init();
     main.init();

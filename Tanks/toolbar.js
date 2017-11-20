@@ -389,7 +389,7 @@ var toolbar = {
         gradient.addColorStop(0,"#7CFC00");
         gradient.addColorStop(0.5, "#FFD700");
         gradient.addColorStop(1, "#FF3030");
-        var tankPower = tank.power
+        var tankPower = (tank.playerId === "AI") ? 4 : tank.power;
         tankPower = (tankPower > 6 || tankPower < 0.3) ? Math.floor(tankPower) : tankPower;
         var x = (tankPower / 6) * box.w;
         util.fillBox(ctx, box.cx, box.cy, x, box.h, gradient);

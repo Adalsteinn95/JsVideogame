@@ -3,7 +3,7 @@
 function Arrow(descr) {
     this.setup(descr);
 
-      this.sprite = g_sprites.arrows;
+    this.sprite = g_sprites.arrows;
 
     this.index = 0;
     this.dir = -1;
@@ -12,10 +12,9 @@ function Arrow(descr) {
 Arrow.prototype = new Entity();
 
 Arrow.prototype.render = function(ctx) {
-    var cell = this.sprite;
     this.rotation = -90;
-    cell.scale = 0.025;
-    cell.drawCentredAt(
+    this.sprite.scale = 0.025;
+    this.sprite.drawCentredAt(
         ctx, this.cx , this.cy , this.rotation );
 
 };

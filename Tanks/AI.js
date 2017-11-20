@@ -16,7 +16,7 @@ var ai = {
 
   },
 
-  getTarget: function(ship){
+  getTargetX: function(ship){
 
     var targetx = ship.playerNr + 1;
     targetx %= entityManager._ships.length;
@@ -33,8 +33,6 @@ var ai = {
   AIMovement: function(ship){
     /*movement of the AI */
     var thrust;
-    console.log("currentx " + Math.floor(ship.cx))
-    console.log("nextX " + ship.nextX);
 
     if(Math.floor(ship.cx) > ship.nextX){
 
@@ -65,14 +63,44 @@ var ai = {
       }
     },
 
+    AIpower: function(power, ship){
+
+      if (ship.power >= 6) {
+        power = "decrese";
+      }
+
+      if (ship.power <= 1) {
+
+        power = "increse";
+      }
+
+      if (power === "increse") {
+        ship.power += ship.POWER_INCREASE;
+        console.log('SHIP.POWER', ship.power)
+      }
+
+      if (power === "decrese") {
+        ship.power -= ship.POWER_INCREASE;
+        console.log('SHIP.POWER', ship.power)
+      }
+
+        return power;
+
+    },
+
   AIrotation: function(AIdirection, ship){
+    console.log('SHIP', ship.playerNr)
 
     /*Rotation of the AI gun*/
-    if (Math.floor(util.toDegrees(ship.gunrotation)) >= 180) {
+    console.log('SHIP.HIGHANGLE', ship.highAngle)
+    if (Math.floor(util.toDegrees(ship.gunrotation)) >= ship.highAngle) {
+
       AIdirection = "left";
     }
 
-    if (Math.floor(util.toDegrees(ship.gunrotation)) <= 0) {
+    console.log('SHIP.LOWANGLE', ship.lowAngle)
+    if (Math.floor(util.toDegrees(ship.gunrotation)) <= ship.lowAngle) {
+
 
       AIdirection = "right";
     }
@@ -90,10 +118,10 @@ var ai = {
       return AIdirection;
   },
 
-  AIupdate: function (destX, startVelX, direction, path){
+  AIupdate: function (destX, startVelX, direction, path, power){
     var ship = entityManager._ships[gameplayManager.activePlayerIndex];
 
-    var targetx = this.getTarget(ship);
+    var targetx = this.getTargetX(ship);
     if(this.timer < 0){
       ship.maybeFireBullet();
       this.timer = 1000;
@@ -111,11 +139,27 @@ var ai = {
           //console.log(Math.abs(targetx - entityManager._ships[gameplayManager.activePlayerNr].cx));
           if(Math.abs(targetx - ship.cx) < 50){
             console.log("dont shoot");
-            //move and rotate instead
+            //move and rotate and change power instead
             destX += startVelX;
             destX = util.clamp(destX, ship);
-          //  path = this.AIMovement(path, ship);
+
+            if (ship.nextX > g_canvas.width -100){
+              ship.path = 'left';
+            } else if ( ship.nextX < 100){
+              ship.path = 'right';
+            }
+
+            if ( ship.path === 'right'){
+              ship.nextX += 50
+            }else {
+              ship.nextX -=50;
+            }
+            //move it
+            this.AIMovement(ship);
+            //calculate new angles
+            this.getInitialValues(ship);
             direction = this.AIrotation(direction, ship);
+            //power = this.AIpower(power, ship);
             this.shipUpdate(destX, path, direction, ship);
             //change direction and run movement
           } else {
@@ -128,18 +172,21 @@ var ai = {
           destX = util.clamp(destX, ship);
           //path = this.AIMovement(path, ship);
           direction = this.AIrotation(direction, ship);
-          this.shipUpdate(destX, path, direction, ship);
+          //power = this.AIpower(power, ship);
+          this.shipUpdate(destX, path, direction, ship, power);
+
 
     }
   }
 },
 
-  shipUpdate: function(destX, path, direction, ship){
+  shipUpdate: function(destX, path, direction, ship, power){
 
     //update all the variables in ship
     ship.destX = destX;
     ship.AIdirection = direction;
-    ship.AIpath = path;
+    //ship.AIpath = path;
+    ship.powerDir = power;
   },
 
 //oldx = the current x coord of the ai tank, index is its player index
@@ -152,20 +199,99 @@ var ai = {
     num *= Math.floor(Math.random()*2) == 1 ? 1 : -1;
 
     var dist = Math.floor(Math.random()*100) + 50;
-    console.log("dist " + dist);
     dist *= num;
-    console.log("dist " + dist);
-    //ATHUGA
-    /////
-    console.log("dist " + dist);
-    entityManager._ships[index].nextX = util.clampRange(oldx + dist, 0, g_canvas.width);
+
+    return util.clampRange(oldx + dist, 0, g_canvas.width);
+
   },
   //guess the height we need to shott
-  guessHeight: function(tank){
-    //seinna fá inn y hnit á target og y hnit á stærsta fjall á milli targets
-      var num = Math.florr(Math.random()*200 )+40;
-      return tank.cy- num;
+  guessHeight: function(x1, x2){
+      var min;
+      var max;
+      var maxH = 0;
+      if( x1 < x2){
+        min = x1;
+        max = x2
+      } else {
+        min = x2;
+        max = x1;
+      }
+      for(min; min < max; min++){
+        if(maxH > g_landscape[min]){
+          maxH = g_landscape[min];
+        }
+      };
+      return maxH - util.randInt(10,50);
   },
+
+  getTarget: function(index){
+    var length = entityManager._ships.length;
+    var a = util.randInt(0,length-1);
+    while(entityManager._ships[a]._isDeadNow || a === index ){
+      a = util.randInt(0,length);
+    }
+    return a;
+  },
+
+  //teh AI makes a calculated guess at first and uses that as a starting posistion
+  getInitialValues: function(tank){
+    var targetIndex = this.getTarget(tank.playerNr);
+    //console.log('TARGETINDEX', targetIndex)
+    var y0 = this.guessHeight(tank.nextX, entityManager._ships[targetIndex].cx);
+    y0 = g_canvas.height - y0;
+    y0 -= (g_canvas.height - tank.cy);
+    //console.log('Y0', y0)
+    var distance = tank.nextX - entityManager._ships[targetIndex].cx;
+    distance = -distance;
+
+    //y vel sem þarf til að ná maxheight
+    var yVel = util.getVelY(y0, NOMINAL_GRAVITY); //check
+    //console.log('DYVEL', Dyvel)
+    var timetoy = util.getTimeToHeight(yVel, NOMINAL_GRAVITY); // check
+    //console.log('TIMETOY', timetoy)
+    //max height er hæðin frá byrjun að top gerum það - (endy - byrjunary)
+    var maxH = y0 - ((g_canvas.height - entityManager._ships[targetIndex].cy)-(g_canvas.height - tank.cy) );
+    //console.log('MAXH', maxH)
+    var timedown = util.getTimeDown(maxH,0.12)
+    //console.log('TIMEDOWN', timedown)
+    var time = timedown + timetoy;
+    time *= SECS_TO_NOMINALS;
+    //console.log('TIME', time)
+
+
+    var xVel = util.getVelX(distance,time, g_wind);
+    //console.log('VAR CALCVELX', dVelX);
+
+    var vel = util.initialVelocity(xVel, yVel);
+
+    var angle1 = util.toDegrees(util.getAngle1(vel,distance,NOMINAL_GRAVITY)) + 90;
+    //console.log('DANGLE1 ', angle1 )
+    var angle2 = util.toDegrees(util.getAngle2(vel,distance,NOMINAL_GRAVITY)) + 90;
+    //console.log('DANGLE2', angle2)
+    var min;
+    var max;
+    angle1 = util.clampMinMax(angle1, 0,180);
+    console.log('ANGLE1', angle1)
+    angle2 = util.clampMinMax(angle2, 0,180);
+    console.log('ANGLE2', angle2);
+
+    //cant calculate angle the use 0- 180
+    if(angle1 == false){
+      min = 0;
+      max = 180;
+    }else if(angle1 < angle2){
+      min = angle1;
+      max = angle2
+    }else {
+      min = angle2;
+      max = angle1;
+    }
+
+    //sets the angle that the ai will search in.
+    tank.lowAngle = min;
+    tank.highAngle = max;
+
+  }
 
 
 

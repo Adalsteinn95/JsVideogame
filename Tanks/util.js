@@ -315,8 +315,8 @@ sinAcos: function(ratio, radius) {
     return Math.sqrt(2*dist / g);
   },
   //returns the x vel required to reach a certain distance in the given time
-  getVelX: function(distance, time){
-    return distance/time;
+  getVelX: function(distance, time, wind){
+    return (distance/time) - wind;
   },
 
   //finds the angle required to reach a certain distance given a velocity
@@ -324,7 +324,7 @@ sinAcos: function(ratio, radius) {
      //þarf að breyta í radiana ?
      var angle =  (0.5 * Math.asin((gravity*dist) / util.square(vel)))
      //console.log('ANGLE', angle);
-     console.log('ANGLE', util.toDegrees(angle));
+     //console.log('ANGLE', util.toDegrees(angle));
      return angle;
    },
 
@@ -333,7 +333,7 @@ sinAcos: function(ratio, radius) {
     //þarf að breyta í radiana ?
     var angle =  util.toRadian(90) - (0.5 * Math.asin((gravity*dist) / util.square(vel)))
     //console.log('ANGLE', angle);
-    console.log('ANGLE', util.toDegrees(angle));
+    //console.log('ANGLE', util.toDegrees(angle));
     return angle;
   },
 

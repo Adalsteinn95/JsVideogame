@@ -71,10 +71,14 @@ Ship.prototype.ammo = 1;
 Ship.prototype.destX = 0;
 Ship.prototype.startVelX = 0;
 Ship.prototype.AIdirection = "right";
-Ship.prototype.AIpath = 0;
+Ship.prototype.AIpath = 'left';
 Ship.prototype.preMoveCalc = false;
 Ship.prototype.nextX;
 Ship.prototype.nextY;
+Ship.prototype.powerDir = "decrese";
+Ship.prototype.calcAngle;
+Ship.prototype.lowAngle;
+Ship.prototype.highAngle;
 
 
 //is it this players turn?
@@ -101,12 +105,20 @@ Ship.prototype.update = function(du) {
     var check = this.checkAmmoCost();
     console.log(check);
   }*/
+  //console.log(this.playerNr + " " + this.lowAngle);
 
   // if a AI player has not done premove calculations then do it here
   if( this.playerId === 'AI' && !this.preMoveCalc){
-      //spatialID -1 gets the index of the ship on entitymanager
-      console.log(this._spatialID);
-      ai.whereToMove(Math.floor(this.cx), util.clampRange(this._spatialID-1,0,8));
+
+      //calculate the next posistion for the AI
+      this.nextX = ai.whereToMove(Math.floor(this.cx), util.clampRange(this.playerNr,0,8));
+      //calculate the initial Values.
+      ai.getInitialValues(this);
+
+      //set starting guessed angle
+      this.spriteGunRotation = util.toRadian(this.highAngle);
+
+      //calculations done
       this.preMoveCalc = true;
   }
 
@@ -133,7 +145,7 @@ Ship.prototype.update = function(du) {
       spatialManager.register(this);
       this.calculatePath();
       //
-      ai.AIupdate(this.destX, this.startVelX, this.AIdirection, this.AIpath);
+      ai.AIupdate(this.destX, this.startVelX, this.AIdirection, this.AIpath, this.powerDir);
       //get y coordinates
       var xIndex = util.clamp(Math.floor(this.cx));
       this.cy = g_landscape[xIndex];
@@ -274,7 +286,7 @@ Ship.prototype.maybeFireBullet = function() {
 
     var dX = +Math.sin(util.toRadian(this.spriteGunRotation));
     var dY = -Math.cos(util.toRadian(this.spriteGunRotation));
-    console.log('THIS.SPRITEGUNROTATION', this.spriteGunRotation)
+
     var launchDist = this.getRadius();
 
     var startVel = this.getStartVel(dX, dY);
@@ -377,6 +389,7 @@ Ship.prototype.calculatePath = function() {
     this.power = x;
 
   }
+
   /*bullet trail prediction */
   this.predictCord = [];
   var dX = +Math.sin(util.toRadian(this.spriteGunRotation ));
@@ -400,7 +413,7 @@ Ship.prototype.calculatePath = function() {
     testX = util.clamp(testX);
     testY = testY;
 
-    if (/*g_landscape[Math.floor(testX)]*/g_canvas.height < testY) {
+    if (g_landscape[Math.floor(testX)] < testY) {
       break;
     };
     //projectile path
@@ -448,6 +461,7 @@ Ship.prototype.updatePower = function(du) {
 
 Ship.prototype.takeBulletHit = function() {
 
+
     this.health -= g_weapon.damage;
     this.checkForDeath();
 
@@ -457,12 +471,10 @@ Ship.prototype.takeExplosionHit = function(bombX, bombY) {
   if(!this.isHit){
 
       var test = util.distCircles(this.cx, this.cy , bombX, bombY, this.getRadius(), g_weapon.damage);
-      console.log(test);
+
       var range = Math.abs(util.distFromExplosion(this.cx, this.cy , bombX, bombY));
-      console.log("fjarlægð frá sprengju " + range);
 
       this.health += test;
-      console.log("lífið " + this.health);
       this.isHit = true;
       this.checkForDeath();
     }
@@ -470,7 +482,6 @@ Ship.prototype.takeExplosionHit = function(bombX, bombY) {
 };
 
 Ship.prototype.checkForDeath = function() {
-    console.log("ping");
     if (this.health <= 0){
       //add the death animation to the entity manager
       entityManager._explosions.push(new Death({
@@ -551,40 +562,9 @@ Ship.prototype.render = function(ctx) {
   this.sprite.scale = origScale;
 
   var startVel = this.getStartVel(dX, dY);
-
+/*
 if(this.myTurn === true){
-  //util.strokeCircle(g_ctx,this.cx - this.offsetX, this.cy - this.offsetY, util.maxHeightReached(util.initialVelocity(startVel[0], startVel[1]), angle,NOMINAL_GRAVITY));
-  //util.strokeCircle(g_ctx,this.cx - this.offsetX, this.cy - this.offsetY, 3909);
-  //var r = util.maxHeight(startVel[1], NOMINAL_GRAVITY, util.maxHeightTime(startVel[1], NOMINAL_GRAVITY ));
-
-  //util.strokeCircle(g_ctx,this.cx - this.offsetX, this.cy - this.offsetY - r -20, 10);
-  //console.log('THIS.CY - THIS.OFFSETY - R -20', this.cy - this.offsetY - r -20)
-  //var hMax =  g_canvas.height - (this.cy - this.offsetY - r -20);
-
-  //console.log('HMAX', hMax)
-
-  //console.log(startVel[1]);
-  //var xTime = util.xTravelTime(hMax,NOMINAL_GRAVITY);
-  //console.log('XTIME', xTime)
-  //var time = xTime +  util.maxHeightTime(-startVel[1], NOMINAL_GRAVITY );
-
-
-// target x - this.cx / time = velX
-/////////////////7
-  /*var xDistance = time * startVel[0];
-  //console.log('XDISTANCE', xDistance)
-    util.strokeCircle(g_ctx,util.clamp(this.cx - this.offsetX + xDistance) , this.cy - this.offsetY, 10);
-  var yOnHit =g_canvas.height - g_landscape[util.clamp(Math.floor(this.cx - this.offsetX + xDistance))-10];
-  //console.log('YONHIT', yOnHit)
-
-  hMax = g_canvas.height - (yOnHit - r -20);
-  xTime = util.xTravelTime(hMax,NOMINAL_GRAVITY);
-  time = xTime +  util.maxHeightTime(-startVel[1], NOMINAL_GRAVITY );
-  xDistance = time * startVel[0];
-  //console.log('XDISTANCEnytt', xDistance)
-
-  util.fillCircle(g_ctx,util.clamp(this.cx - this.offsetX + xDistance) , this.cy - this.offsetY, 10);
-*/g_ctx.fillStyle = 'red';
+  g_ctx.fillStyle = 'red';
   util.fillCircle(g_ctx, 120 , 460, 10);
   util.fillCircle(g_ctx, 300 , 380, 10);
   //round 2
@@ -600,16 +580,16 @@ if(this.myTurn === true){
   var Dyvel = util.getVelY(maxHeight, 0.12); //check
   //console.log('DYVEL', Dyvel)
   var timetoy = util.getTimeToHeight(Dyvel, 0.12); // check
-  console.log('TIMETOY', timetoy)
+  //console.log('TIMETOY', timetoy)
   //max height er hæðin frá byrjun að top gerum það - (endy - byrjunary)
   var timedown = util.getTimeDown(100,0.12)
-  console.log('TIMEDOWN', timedown)
+  //console.log('TIMEDOWN', timedown)
   var time = timedown + timetoy;
   time *= SECS_TO_NOMINALS;
-  console.log('TIME', time)
+  //console.log('TIME', time)
 
 
-  var dVelX = util.getVelX(180,time);
+  var dVelX = util.getVelX(180,time, g_wind);
   //console.log('VAR CALCVELX', dVelX);
 
   var dVEL = util.initialVelocity(dVelX, Dyvel);
@@ -626,10 +606,10 @@ if(this.myTurn === true){
   //var power1 = util.getPower(dVEL, dAngle1);
   //console.log('POWER', power1)
   var power2 = util.getPower(dVEL, dAngle2);
-  console.log('POWER', power2)
-  console.log('this.power', this.power)
+  //console.log('POWER', power2)
+  //console.log('this.power', this.power)
 
-
+*/
 
 
   //round 1
@@ -660,8 +640,10 @@ if(this.myTurn === true){
   var power = util.getPower(calcAngle, calcVEL, calcdX, calcdY);
   //console.log('POWER', power)
   console.log("this.power " + this.power)
-*/
+
 }
+*/
+
 
   ///Projectile path
 

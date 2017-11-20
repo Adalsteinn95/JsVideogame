@@ -46,7 +46,8 @@ var g_countdown = {
 }
 var g_renderSpatialDebug = true;
 var g_mute = false;
-var g_musicOn = true;;
+var g_musicOn = true;
+var g_reset = false;
 
 
 var KEY_GRAVITY = keyCode('G');
@@ -103,10 +104,6 @@ function renderSimulation(ctx) {
         entityManager.render(ctx);
 
         //if (g_renderSpatialDebug) spatialManager.render(ctx);
-    }
-
-    else {
-        gameplayManager.setup();
     }
 
     gameplayManager.render(ctx)
@@ -198,6 +195,12 @@ function preloadDone() {
     main.init();
 
     }
+}
+function gameReset() {
+  g_reset = true;
+  entityManager.reset();
+  toolbar.reset();
+  gameplayManager.reset();
 }
 
 // Kick it off

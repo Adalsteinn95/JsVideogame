@@ -96,6 +96,18 @@ init: function() {
     this._generateClouds();
     this.generateTerrain();
 },
+reset : function() {
+  //splice from this._categories
+  this._bullets = [];
+  this._ships   = [];
+  this._clouds = [];
+  this._explosions = [];
+  this._clouds = [],
+  this._terrain = [],
+
+  this.init();
+
+},
 
 fireBullet: function(cx, cy, velX, velY, rotation,partOfShower, i,volcanoMaster, weapon) {
     this._bullets.push(new Bullet({
@@ -125,7 +137,7 @@ generateShip : function(descr) {
     this._ships.push(new Ship(descr));
 },
 generateTerrain : function () {
-  this._terrain.push(new Terrain());
+    this._terrain.push(new Terrain());
 },
 
 killNearestShip : function(xPos, yPos) {
@@ -164,8 +176,14 @@ update: function(du) {
         var i = 0;
 
         while (i < aCategory.length) {
-
+          if(aCategory === this._ships && aCategory[i]._isDeadNow){
+            //dont update dead tanks
+          }
+          else {
             var status = aCategory[i].update(du);
+
+          }
+
 
             if (status === this.KILL_ME_NOW) {
                 // remove the dead guy, and shuffle the others down to

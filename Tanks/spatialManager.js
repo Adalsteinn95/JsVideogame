@@ -27,6 +27,12 @@ _entities : [],
 
 // PUBLIC METHODS
 
+reset : function () {
+  spatialManager._entities = [];
+  spatialManager._nextSpatialID = 1;
+
+},
+
 getNewSpatialID : function() {
 
     var tmp = spatialManager._nextSpatialID;

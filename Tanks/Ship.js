@@ -17,14 +17,12 @@ function Ship(descr) {
   // Common inherited setup logic from Entity
   this.setup(descr);
 
-  this.rememberResets();
 
   // Default sprite, if not otherwise specified
   this.sprite = this.sprite || g_sprites.ship;
   this.gunsprite = g_sprites.tankgun;
   this.flagX = -19.35;
   this.flagY = -15;
-  this.arrowSprite = g_sprites.arrows;
 
   // Set normal drawing scale, and warp state off
   this._scale = 1;
@@ -33,12 +31,6 @@ function Ship(descr) {
 
 Ship.prototype = new Entity();
 
-Ship.prototype.rememberResets = function() {
-  // Remember my reset positions
-  this.reset_cx = this.cx;
-  this.reset_cy = this.cy;
-  this.reset_rotation = this.rotation;
-};
 
 Ship.prototype.KEY_POWER = 'K'.charCodeAt(0);
 Ship.prototype.KEY_LESSPOWER = 'J'.charCodeAt(0);
@@ -134,8 +126,7 @@ Ship.prototype.update = function(du) {
     for (var i = 0; i < steps; ++i) {
       this.computeSubStep(dStep);
     }
-
-    this.calculatePath();
+    //this.calculatePath();
 
     // Handle firing
 
@@ -367,6 +358,9 @@ Ship.prototype.updateGunRotation = function() {
 
 
 Ship.prototype.calculatePath = function() {
+  if(this._isDeadNow || entityManager._terrain.length === 0) {
+    return;
+  }
   if(this.playerId === 'AI'){
     /*random power test for AI*/
     var x = Math.floor(Math.random() * 6) + 1
@@ -386,6 +380,7 @@ Ship.prototype.calculatePath = function() {
   var testY = this.cy - this.offsetY + dY * launchDist;
   var veltestY = startVel[1];
   var veltestX = startVel[0]
+
 
   while (testX < g_canvas.width || testX > g_canvas.width) {
 

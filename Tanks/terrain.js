@@ -36,10 +36,10 @@ Terrain.prototype.render =  function(ctx,frame) {
     ctx.fillStyle = "#228B22";
     var i = 0;
     ctx.beginPath();
-    ctx.moveTo(0, this.g_landscape[0]);
+    ctx.moveTo(0, entityManager._terrain[0].g_landscape[0]);
 
-    for (i in this.g_landscape) {
-        ctx.lineTo(i, this.g_landscape[i]);
+    for (i in entityManager._terrain[0].g_landscape) {
+        ctx.lineTo(i, entityManager._terrain[0].g_landscape[i]);
     }
 
     ctx.lineTo(frame.width, frame.height);

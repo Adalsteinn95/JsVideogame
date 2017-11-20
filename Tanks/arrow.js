@@ -19,13 +19,17 @@ Arrow.prototype.render = function(ctx) {
 
 };
 Arrow.prototype.update = function() {
-    this.cx = entityManager._ships[gameplayManager.activePlayerIndex].cx;
-    this.cy = entityManager._ships[gameplayManager.activePlayerIndex].cy + this.index - 40;
-    //-20 til 0
+  console.log(gameplayManager.activePlayerIndex)
+  if(entityManager._ships[gameplayManager.activePlayerIndex]){
+      this.cx = entityManager._ships[gameplayManager.activePlayerIndex].cx;
+      this.cy = entityManager._ships[gameplayManager.activePlayerIndex].cy + this.index - 40;
+      //-20 til 0
       if(this.index < -20 || this.index > 0){
         this.dir *= -1;
       }
       //console.log('THIS.INDEX', this.index / -20)
       this.index += this.dir;
+
+    }
 
 };

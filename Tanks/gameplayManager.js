@@ -31,16 +31,36 @@ var gameplayManager = {
     init : function() {
         util.playTheme(g_audio.theme);
         g_countdown.timeLeft = g_countdown.duration;
-        console.log('G_COUNTDOWN.TIMELEFT', g_countdown.timeLeft)
         this.loadPlayers();
         this.setupReady = true;
         entityManager._generateClouds();
         entityManager._generateArrow();
-        entityManager._ships[0].myTurn = true;
+        if(entityManager._ships.length > 0) {
+          entityManager._ships[0].myTurn = true;
+        }
     },
+    reset : function() {
+      this.inputLock = false,
 
-    setup : function() {
+      this.doorTranslate = 0,
+      this.isDoorLocked = true,
+      this.discardDoor = false,
 
+      this.setupReady = false,
+      this.setupIndex = 0,
+      this.alivePlayers = 0,
+
+      this.hasWinner = false,
+
+      this.players = [],
+
+
+      this._ = {
+          turn : 0
+      }
+      this.activePlayerIndex = 0,
+
+      this.init();
     },
 
     render : function(ctx) {

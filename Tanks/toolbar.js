@@ -82,6 +82,22 @@ var toolbar = {
         this.rerollMap();
         this.drawBackground(dash_ctx);
     },
+    reset : function() {
+      this.setupReady = false;
+      this.setupIndex = 0;
+      this.idSelected = false;
+      this.playerIdSetup  =  [];
+      this.playerFlagSetup =  [];
+      this._numPlayers = 2
+      this._.numPlayers = 2;
+      this._.maxPlayers = 4;
+      this._.minPlayers = 2;
+      this._.playerIndex = 0;
+      this._.humanOrAI = true;
+
+      this.init();
+
+    },
 
     drawBackground : function(ctx) {
         ctx.fillStyle = "#666";
@@ -189,7 +205,8 @@ var toolbar = {
     renderFlagSetup: function(ctx) {
         var box = this._.flagSetup;
         var img = g_sprites.flags[box.index];
-        ctx.drawImage(img.image, box.cx, box.cy, box.w, box.h);
+        ctx.drawImage(img.image, box.cx, box.
+          cy, box.w, box.h);
     },
 
     pushPlayers: function(playerIds, flagIds) {

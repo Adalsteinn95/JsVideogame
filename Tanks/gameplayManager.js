@@ -12,7 +12,7 @@ var gameplayManager = {
     setupIndex : 0,
 
     alivePlayers : 0,
-
+    
     hasWinner : false,
 
     players : [],
@@ -108,6 +108,7 @@ var gameplayManager = {
           return;
 
         }
+        this.turnCircle++;
           this._.turn++;
           this.resetIsHit();
           this.updateNextPlayer();
@@ -122,8 +123,15 @@ var gameplayManager = {
           if(entityManager._ships[this.activePlayerIndex].ammo < 1){
             entityManager._ships[this.activePlayerIndex].ammo++;
         }
-          //get new wind direction and power
-          g_wind = util.randRange(-0.1,0.1);
+          /*
+            get new wind direction and power,
+            only when all alive players have had the chance to
+            play with the current wind.
+          */
+          if(this._.turn % this.alivePlayers === 0) {
+            g_wind = util.randRange(-0.1,0.1);
+
+          }
 
       },
 
@@ -136,9 +144,14 @@ var gameplayManager = {
       checkForWinner: function(){
           var cnt = 0;
           var target = this.players.length -1;
+          this.alivePlayers = 0;
         for(var i = 0; i< this.players.length; i++){
           if(entityManager._ships[i]._isDeadNow){
             cnt++;
+
+          }
+          else {
+            this.alivePlayers++;
           }
         }
         if (cnt >= target){

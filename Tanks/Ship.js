@@ -40,12 +40,12 @@ Ship.prototype.rememberResets = function() {
   this.reset_rotation = this.rotation;
 };
 
-Ship.prototype.KEY_THRUST = 'W'.charCodeAt(0);
-Ship.prototype.KEY_RETRO = 'S'.charCodeAt(0);
-Ship.prototype.KEY_LEFT = 'A'.charCodeAt(0);
-Ship.prototype.KEY_RIGHT = 'D'.charCodeAt(0);
 Ship.prototype.KEY_POWER = 'K'.charCodeAt(0);
 Ship.prototype.KEY_LESSPOWER = 'J'.charCodeAt(0);
+Ship.prototype.KEY_THRUST = 'D'.charCodeAt(0);
+Ship.prototype.KEY_RETRO = 'A'.charCodeAt(0);
+Ship.prototype.KEY_LEFT = 'S'.charCodeAt(0);
+Ship.prototype.KEY_RIGHT = 'W'.charCodeAt(0);
 Ship.prototype.KEY_PREVGUN = 'Z'.charCodeAt(0);
 Ship.prototype.KEY_NEXTGUN = 'X'.charCodeAt(0);
 Ship.prototype.KEY_ENDTURN = 'V'.charCodeAt(0);
@@ -241,10 +241,14 @@ Ship.prototype.falldown = function(thrust) {
 };
 
 Ship.prototype.maybeFireBullet = function() {
+
+  //g_audio.fire.pause();
+
   //check if the player has enough ammo for the chosen weapon
   this.canFire = this.checkAmmoCost();
 
   if ((keys[this.KEY_FIRE] && this.myTurn && this.playerId === "Human" && this.canFire) || this.myTurn && this.playerId === "AI" && this.canFire) {
+    util.playSoundOverlap(g_audio.fire);
     g_countdown.stop = true;
 
     g_weapon = this.weapon;

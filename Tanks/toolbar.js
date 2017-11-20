@@ -215,7 +215,7 @@ var toolbar = {
         ctx.save();
         ctx.translate(box.cx, box.cy);
         ctx.scale(0.2, 0.2);
-        terrain.render(ctx, g_landscape, g_canvas);
+        entityManager._terrain[0].render(ctx, g_canvas);
         ctx.restore();
 
         util.strokeBox(ctx, box.cx, box.cy, box.w, box.h, "black");
@@ -226,6 +226,7 @@ var toolbar = {
 
         if (eatKey(this.KEY_CONFIRM)) {
             this.setupReady = true;
+            util.playTheme(g_audio.theme);
             gameplayManager.init();
             gameplayManager.isDoorLocked = false;
         }
@@ -233,11 +234,12 @@ var toolbar = {
 
     rerollMap : function() {
         //Hann finnur map í svona 1.5 ítrunum að meðaltali
+        var terrain = entityManager._terrain[0]
         while (true) {
             var f = util.randInt(0, terrain.fun.length);
             var shift = (Math.floor(Math.random() * 2)) === 1 ? 1 : -1;
-            g_landscape = terrain.initlandScape(terrain.fun[f], bound, shift, g_canvas)
-            if (!g_landscape) {
+            terrain.g_landscape = terrain.initlandScape(terrain.fun[f], shift, g_canvas)
+            if (!terrain.g_landscape) {
                 continue;
             } else {
                 break;
@@ -264,6 +266,7 @@ var toolbar = {
         this.renderLifebars(ctx);
         this.renderRotation(ctx, tank);
         this.renderTime(g_ctx);
+        this.renderSound(g_ctx);
     },
 
     renderWeapon : function(ctx, tank) {
@@ -300,6 +303,7 @@ var toolbar = {
 
         if (gameplayManager.activePlayerIndex === i) {
             ctx.lineWidth = 5;
+
         }
         util.strokeBox(ctx, box.cx + offsetX, box.cy + offsetY, box.w, box.h, "black")
 
@@ -348,7 +352,7 @@ var toolbar = {
         ctx.strokeStyle = "#222";
         ctx.beginPath();
         ctx.moveTo(box.cx + box.w/2, box.cy);
-        var point = wind/100 * (box.w/2) * dir;
+        var point = wind/200 * (box.w/2) * dir;
         ctx.lineTo(box.cx + box.w/2 + point, box.cy + box.h/2);
         ctx.lineTo(box.cx + box.w/2, box.cy + box.h);
         ctx.stroke();
@@ -416,6 +420,29 @@ var toolbar = {
         ctx.closePath();
         */
         ctx.restore();
+    },
+    renderSound : function(ctx) {
+        g_sprites.music.drawFixedAt(ctx, g_canvas.width - 60, 5,20,20);
+        g_sprites.sound.drawFixedAt(ctx, g_canvas.width - 30, 5,20,20);
+
+        //music off, sound off
+        if(!g_musicOn && g_mute) {
+          g_sprites.off.drawFixedAt(ctx, g_canvas.width - 60-3, 5-3.5,30,30);
+          g_sprites.off.drawFixedAt(ctx, g_canvas.width - 30-3, 5-3.5,30,30);
+
+        }
+        //music off, sound on
+        else if(!g_musicOn && !g_mute) {
+          g_sprites.off.drawFixedAt(ctx, g_canvas.width - 60-3, 5-3.5,30,30);
+
+
+        }
+        //music on, sound off
+        else if(g_musicOn && g_mute){
+          g_sprites.off.drawFixedAt(ctx, g_canvas.width - 30-3, 5-3.5,30,30);
+
+        }
+
     }
 
 

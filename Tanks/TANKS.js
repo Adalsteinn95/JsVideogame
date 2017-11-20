@@ -22,7 +22,7 @@ function gatherInputs() {
 function updateSimulation(du) {
 
     processDiagnostics();
-    terrain.render(ctx, g_landscape, g_canvas);
+    //terrain.render(ctx, entityManager._terrain[0].g_landscape, g_canvas);
     entityManager.update(du);
 
     // Prevent perpetual firing and gun change!
@@ -40,12 +40,16 @@ var g_useAveVel = true;
 var g_weapon = consts.weapons[0];
 var g_wind = util.randRange(-0.1,0.1)
 var g_countdown = {
+
   duration: 30000 / NOMINAL_UPDATE_INTERVAL,
+
+
   stop: false,
 
 }
 var g_renderSpatialDebug = true;
 var g_mute = false;
+var g_musicOn = true;;
 
 
 var KEY_GRAVITY = keyCode('G');
@@ -62,6 +66,7 @@ var KEY_2 = keyCode('2');
 
 var KEY_K = keyCode('K');
 var KEY_MUTE = keyCode('M');
+var KEY_MUSIC = keyCode('N');
 
 var button = document.getElementById("weaponbutton");
 
@@ -69,6 +74,10 @@ function processDiagnostics() {
 
     if (eatKey(KEY_GRAVITY)) g_useGravity = !g_useGravity;
     if(eatKey(KEY_MUTE)) g_mute = !g_mute;
+    if(eatKey(KEY_MUSIC)){
+      g_musicOn = !g_musicOn
+      util.playTheme(g_audio.theme);
+    }
 
 }
 
@@ -89,7 +98,7 @@ var first = true;
 function renderSimulation(ctx) {
 
     if (gameplayManager.setupReady) {
-        terrain.render(ctx, g_landscape, g_canvas);
+        //terrain.render(ctx, entityManager._terrain[0].g_landscape, g_canvas);
         entityManager.render(ctx);
 
         //if (g_renderSpatialDebug) spatialManager.render(ctx);
@@ -134,6 +143,12 @@ function requestPreloads() {
         shower: "../myndir/Bullets/shower.png",
         atom: "../myndir/Bullets/atom.png",
         volcano: "../myndir/Bullets/volcano.png",
+
+        music : "../myndir/music.png",
+        sound : "../myndir/sound.png",
+        off : "../myndir/off.png"
+
+
     };
 
     requiredImages = spriteUtil.loadImgs(requiredImages, "../myndir/flags/", ".png");
@@ -143,7 +158,8 @@ function requestPreloads() {
       fire : "../sound/fire.mp3",
       shotCollision : "../sound/shotcollision.mp3",
       atom : "../sound/atom.mp3",
-      drive : "../sound/drive.mp3"
+      drive : "../sound/drive.mp3",
+      theme : "../sound/theme.mp3",
     };
 
     imagesPreload(requiredImages, g_images, preloadDone);
@@ -181,6 +197,11 @@ function preloadDone() {
     //g_sprites.atom = spriteUtil.decomposeSheet(96, 96, 5, 3, 14, g_images.atom);
     g_sprites.arrows = new Sprite(g_images.pointer);
     g_sprites.bulletArrow = new Sprite(g_images.bulletArrow);
+    g_sprites.music = new Sprite(g_images.music);
+    g_sprites.sound = new Sprite(g_images.sound);
+    g_sprites.off = new Sprite(g_images.off);
+
+
     g_sprites.flags = [];
 
     for (var i = 0; i < 16; i++) {

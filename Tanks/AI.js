@@ -200,8 +200,7 @@ var ai = {
             this.getInitialValues(ship);
           }
 
-
-    //}
+    }
   }
 },
 

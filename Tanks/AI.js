@@ -6,16 +6,6 @@ var ai = {
 
   timer:  5000,
 
-  runAI: function(destX, startVelX, direction, path,){
-    //fær inn öll gildi frá ships sem þarf og kallar svo á hin föllinn með þeim
-    //þá þarf bara eitt kall í ships
-    //implementa seinast
-    //timer?
-    //óþarfi
-    AIupdate(destX, startVelX, direction, path, timer);
-
-  },
-
   getTargetX: function(ship){
 
     var targetx = ship.playerNr + 1;
@@ -129,6 +119,7 @@ var ai = {
       this.AIMovement(ship);
 
     }else{
+      console.log('SHIP.LEARN', ship.learn)
         if (Math.floor(destX) < targetx && targetx - ship.learn < Math.floor(destX) || Math.floor(destX) < targetx && targetx + ship.learn < Math.floor(destX)) {
           //&& targetx - this.cx > 50 || this.cx - targetx > 50
 
@@ -161,7 +152,7 @@ var ai = {
           } else {
 
             util.stopSound(g_audio.drive);
-
+            console.log('should fire');
             ship.maybeFireBullet();
             this.timer = 5000;
             if(ship.learn === 10){
@@ -325,10 +316,10 @@ var ai = {
     var min;
     var max;
     angle1 = util.clampMinMax(angle1, 0,180);
-    console.log('ANGLE1', angle1)
+    //console.log('ANGLE1', angle1)
 
     angle2 = util.clampMinMax(angle2, 0,180);
-    console.log('ANGLE2', angle2)
+    //console.log('ANGLE2', angle2)
 
 
     //cant calculate angle the use 0- 180
@@ -351,7 +342,6 @@ var ai = {
 
   getNextTankRotation: function(tank){
     var rot;
-    console.log(tank);
     if(tank.cy < g_canvas.height){
 
       var xIndex1 = Math.floor(tank.nextX - 2);
@@ -361,7 +351,6 @@ var ai = {
 
       rot = util.toDegrees(Math.atan2(entityManager._terrain[0].g_landscape[xIndex2] - tank.cy, (xIndex2 - tank.nextX)));
     } else { rot = 0}
-    console.log('ROT', rot)
 
     return rot - 90;
   },

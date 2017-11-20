@@ -563,8 +563,8 @@ Ship.prototype.render = function(ctx) {
   this.sprite.scale = origScale;
 
   ///Projectile path
-  if (this.weapon.name === "tracer" && this.lockedIn === true) {
+//  if (this.weapon.name === "tracer" && this.lockedIn === true) {
     util.projectilePath(this.predictCord);
-  }
+//  }
 
 };

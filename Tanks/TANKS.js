@@ -128,7 +128,7 @@ function requestPreloads() {
         tankDeath : "../myndir/tankexplode/tankDeath.png",
         pointer : "../myndir/arrow.png",
         atom : "../myndir/explosives/atomsheet.png",
-        bulletArrow: "../myndir/arrow.png"
+        bulletArrow: "../myndir/arrow.png",
     };
 
     requiredImages = spriteUtil.loadImgs(requiredImages, "../myndir/flags/", ".png");
@@ -137,7 +137,8 @@ function requestPreloads() {
     var requiredAudio = {
       fire : "../sound/fire.mp3",
       shotCollision : "../sound/shotcollision.mp3",
-      atom : "../sound/atom.mp3"
+      atom : "../sound/atom.mp3",
+      drive : "../sound/drive.mp3"
     };
 
     imagesPreload(requiredImages, g_images, preloadDone);

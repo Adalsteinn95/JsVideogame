@@ -228,11 +228,16 @@ sinAcos: function(ratio, radius) {
   // SOUNDstuff
   //=====================
   playSound : function(audio) {
-
+    if(audio === g_audio.drive) {
+      audio.volume = 0.2;
+    }
     if(!g_mute) {
       audio.play();
     }
 
+  },
+  stopSound : function (audio) {
+    audio.pause();
   },
 
   playSoundOverlap: function (sound) {

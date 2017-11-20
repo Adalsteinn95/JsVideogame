@@ -8,12 +8,18 @@
 
 //initial landscape values
 var g_landscape = [];
-var bound = 15;
-var xShift = 0;
-
+var bound = 20;
+var tilt = function(x, degree) {
+    return x * degree;
+}
 
 var terrain = {
 
+// landscape functions
+fun: [
+    function(x) { return 100 * Math.cos(x); },
+    function(x) { return ((x*x) * Math.sin(x)); }
+],
 
 rememberResets: function () {
     // Remember my reset positions
@@ -40,27 +46,47 @@ render: function(ctx, ls, frame) {
 },
 
 initlandScape: function(f, bound, xShift, frame) {
-
+    bound *= Math.random();
+    xShift *= Math.random() * bound;
+    var roughness = Math.random() * 2;
+    var t =  util.randRange(-30, 30);
     var ls = [];
-
     var x = -bound + xShift;
+    var whoopsLandscapeIsOutOfBoundsLetsTryAgain = false;
 
     for (var i = 0; i < frame.width; i++) {
-        var y = f(x);
+        var y = f(x) + tilt(x,t);
+        y *= roughness;
         y += frame.height/2;
-        ls.push(y);
 
+        if (y > frame.height || y < 0) {
+            console.log("out of bounds, restarting");
+            whoopsLandscapeIsOutOfBoundsLetsTryAgain = true;
+            break;
+        }
+        ls.push(y);
         x += ((2*bound)/frame.width);
     }
-
-    return ls;
+    if (whoopsLandscapeIsOutOfBoundsLetsTryAgain) {
+        return false;
+    } else {
+        return ls;
+    }
 },
 
-bombLandscape: function(x, radius, tankhit) {
-    var explosionRadius = radius;
-    if (tankhit) {
-        explosionRadius *= 2;
+bombLandscape: function(x, weapon) {
+    var radius = weapon.damage
+    if(weapon.name === "atom") {
+      util.playSoundOverlap(g_audio.atom);
     }
+    else {
+      util.playSoundOverlap(g_audio.shotCollision);
+
+    }
+    var explosionRadius = radius;
+    /*if (tankhit) {
+        explosionRadius *= 2;
+    }*/
 
     entityManager._explosions.push(new Explosion({
             cx : x,
@@ -70,22 +96,16 @@ bombLandscape: function(x, radius, tankhit) {
 
     x = Math.floor(x);
     radius = Math.floor(radius);
-
     var diff = x - radius;
-
     var ratio = -1, step = 1/radius;
 
     for (var i = diff; i < 2*radius + diff; i++) {
-
         //if the explosion radius goes outside of the map then ignore
-        if (i < 0 || i > g_canvas.length){
-          continue;
+        if (i >= 0 && i <= g_canvas.width){
+            g_landscape[i] += util.sinAcos(ratio, radius);
         }
-
-        g_landscape[util.clamp(i)] += util.sinAcos(ratio, radius);
         ratio += step;
     }
 }
-
 
 }

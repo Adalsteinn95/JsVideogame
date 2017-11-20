@@ -32,6 +32,7 @@ var ai = {
 
   AIMovement: function(ship){
     /*movement of the AI */
+    util.playSound(g_audio.drive);
     var thrust;
     console.log("ping");
     if(Math.floor(ship.cx) > ship.nextX){
@@ -166,6 +167,7 @@ var ai = {
             this.shipUpdate(destX, path, direction, ship);
             //change direction and run movement
           } else {
+            util.stopSound(g_audio.drive);
             ship.maybeFireBullet();
             this.timer = 1000;
           }

@@ -4,9 +4,11 @@ var toolbar = {
 
     setupReady : false,
     setupIndex : 0,
+    idSelected: false,
+    font: "Courier new",
 
-    KEY_PLUS : '8'.charCodeAt(0),
-    KEY_MINUS : '7'.charCodeAt(0),
+    KEY_PLUS : '39',
+    KEY_MINUS : '37',
     KEY_CONFIRM : '13', //'enter'-keycode
     KEY_BACK : '8', //'backspace'-keycode
     KEY_REROLL : 'R'.charCodeAt(0),
@@ -20,6 +22,15 @@ var toolbar = {
         playerIndex : 0,
         humanOrAI : true,
 
+        setupBox: {
+            cx: 50,
+            cy: 180,
+            w: 300,
+            h: 50,
+            minX: 50,
+            maxX: 370
+        },
+
         mapBox : {
             cx : 360,
             cy : 40,
@@ -27,37 +38,48 @@ var toolbar = {
             h : g_canvas.height/5
         },
 
+        flagSetup: {
+            cx: 370,
+            cy: 50,
+            w: 160,
+            h: 100,
+            index: 0
+        },
+
         windBox : {
-            tx : 50,
-            ty : 100,
-            cx : 50,
+            cx : 250,
             cy : 105,
-            w : 50,
-            h : 50
+            w : 100,
+            h : 40
         },
 
         powBox : {
-            cx : 300,
-            cy : 80,
+            cx : 250,
+            cy : 35,
             w : 150,
             h : 30
         },
+        lifeBox : {
+          cx : 600,
+          cy : 0,
+          w : 150,
+          h : 80,
+          h2: 20
+        },
 
         rotBox : {
-            tx : 500,
-            ty : 75,
             r : 50,
-            cx : 555,
-            cy : 140
+            cx : 495,
+            cy : 95
         }
 
     },
 
     playerIdSetup : [],
+    playerFlagSetup: [],
 
     init : function() {
-        //global landscape initiated here
-        g_landscape = terrain.initlandScape(util.fun[2], bound, xShift, g_canvas);
+        this.rerollMap();
         this.drawBackground(dash_ctx);
     },
 
@@ -82,6 +104,7 @@ var toolbar = {
                 break;
             case 1:
                 this.renderPlayerSetup(ctx);
+                this.renderFlagSetup(ctx);
                 break;
             case 2:
                 this.renderMapPreview(ctx);
@@ -91,9 +114,9 @@ var toolbar = {
     },
 
     renderNumPlayer : function(ctx) {
-        util.drawTextAt(ctx, 50, 75, "Courier", "20px", "black",
+        util.drawTextAt(ctx, 50, 75, this.font, "20px", "black",
                         "Number of players");
-        util.drawTextAt(ctx, 50, 100, "Courier", "20px", "black",
+        util.drawTextAt(ctx, 50, 100, this.font, "20px", "black",
                         this._.numPlayers);
 
         if (eatKey(this.KEY_PLUS) && this._.numPlayers < this._.maxPlayers) {
@@ -109,35 +132,74 @@ var toolbar = {
 
     renderPlayerSetup : function(ctx) {
 
-        var id = this._.humanOrAI ? "Human" : "AI";
+        var box = this._.setupBox;
+        var text = this.idSelected ? "Select team!" : "Select ID!";
 
-        util.drawTextAt(ctx, 50, 75, "Courier", "20px", "black",
-                        "Player " + (this._.playerIndex + 1) + " is:");
-        util.drawTextAt(ctx, 50, 100, "Courier", "20px", "black",
-                        id);
-
-        if (eatKey(this.KEY_PLUS) || eatKey(this.KEY_MINUS)) {
-            this._.humanOrAI = !this._.humanOrAI;
+        if (this.idSelected) {
+            if (box.cx < box.maxX) box.cx += 10;
+        } else {
+            if (box.cx > box.minX) box.cx -= 10;
         }
 
-        if (eatKey(this.KEY_CONFIRM)) {
-            if (this.playerIdSetup.length < this._.numPlayers) {
+        util.drawTextAt(ctx, box.cx, box.cy, this.font, "20px", "black", text);
 
-                this.playerIdSetup[this._.playerIndex] = id;
-                this._.playerIndex++;
+        var id = this._.humanOrAI ? "Human" : "AI";
+        util.drawTextAt(ctx, 50, 75, this.font, "20px", "black",
+                        "Player " + (this._.playerIndex + 1) + " is:");
+        util.drawTextAt(ctx, 50, 100, this.font, "20px", "black",
+                        id);
+
+        if (eatKey(this.KEY_PLUS)) {
+            if (this.idSelected) {
+                this._.flagSetup.index++;
+                this._.flagSetup.index %= 16;
+            } else {
+                this._.humanOrAI = !this._.humanOrAI;
             }
-            if (this.playerIdSetup.length === this._.numPlayers) {
-                this.pushPlayers(this.playerIdSetup);
-                this.setupIndex++;
+        }
+        if (eatKey(this.KEY_MINUS)) {
+            if (this.idSelected) {
+                this._.flagSetup.index--;
+                if (this._.flagSetup.index < 0) this._.flagSetup.index = 15;
+            } else {
+                this._.humanOrAI = !this._.humanOrAI;
+            }
+        }
+
+        var flagI = this._.flagSetup.index;
+
+        if (eatKey(this.KEY_CONFIRM)) {
+            if (this.idSelected) {
+                this.idSelected = false;
+                this.playerFlagSetup[this._.playerIndex] = flagI;
+                if (this.playerIdSetup.length === this._.numPlayers) {
+                    this.pushPlayers(this.playerIdSetup, this.playerFlagSetup);
+                    this.setupIndex++;
+                }
+                this._.playerIndex++;
+            } else {
+                if (this.playerIdSetup.length < this._.numPlayers) {
+                    this.playerIdSetup[this._.playerIndex] = id;
+                }
+                this.idSelected = true;
             }
         }
     },
 
-    pushPlayers(playerIds) {
+    renderFlagSetup: function(ctx) {
+        var box = this._.flagSetup;
+        var img = g_sprites.flags[box.index];
+        ctx.drawImage(img.image, box.cx, box.cy, box.w, box.h);
+    },
+
+    pushPlayers: function(playerIds, flagIds) {
         for (var i in playerIds) {
+            var flagI = flagIds[i];
+            var sprite = g_sprites.flags[flagI];
             gameplayManager.addPlayer({
                 nr : parseInt(i),
-                id : playerIds[i]
+                id : playerIds[i],
+                flagsprite: sprite
             });
         }
     },
@@ -145,7 +207,8 @@ var toolbar = {
     renderMapPreview : function(ctx) {
         var box = this._.mapBox;
 
-        util.drawTextAt(ctx, 50, 75, "Courier", "20px", "black", "Map preview:");
+        util.drawTextAt(ctx, 50, 75, this.font, "20px", "black", "Map preview:");
+        util.drawTextAt(ctx, 50, 150, this.font, "20px", "black", "\'R\' to reroll!");
 
         util.fillBox(ctx, box.cx, box.cy, box.w, box.h, "#ADD8E6");
 
@@ -169,8 +232,17 @@ var toolbar = {
     },
 
     rerollMap : function() {
-        var i =  util.randInt(0, util.fun.length);
-        g_landscape = terrain.initlandScape(util.fun[i], bound, xShift, g_canvas);
+        //Hann finnur map í svona 1.5 ítrunum að meðaltali
+        while (true) {
+            var f = util.randInt(0, terrain.fun.length);
+            var shift = (Math.floor(Math.random() * 2)) === 1 ? 1 : -1;
+            g_landscape = terrain.initlandScape(terrain.fun[f], bound, shift, g_canvas)
+            if (!g_landscape) {
+                continue;
+            } else {
+                break;
+            }
+        }
     },
 
     //////////////////////////
@@ -181,19 +253,85 @@ var toolbar = {
 
         var tank = entityManager._ships[gameplayManager.activePlayerIndex];
 
-        util.drawTextAt(ctx, 50, 30, "Courier", "25px", "black",
-        "Turn " + gameplayManager._.turn +
-        ": player " + parseInt(tank.playerNr+1));
-        this.renderWeapon(ctx);
+        util.drawTextAt(ctx, 30, 30, this.font, "25px", "black",
+        "Turn " + (gameplayManager._.turn + 1));
+
+        util.drawTextAt(ctx, 30, 55, this.font, "25px", "black",
+        "Player " + parseInt(tank.playerNr+1))
+        this.renderWeapon(ctx, tank);
         this.renderWind(ctx);
         this.renderPower(ctx, tank);
+        this.renderLifebars(ctx);
         this.renderRotation(ctx, tank);
+        this.renderTime(g_ctx);
     },
 
-    renderWeapon : function(ctx) {
+    renderWeapon : function(ctx, tank) {
+        util.drawTextAt(ctx, 30, 95, this.font, "20px", "black", "Ammo: " +
+                        tank.ammo);
+        util.drawTextAt(ctx, 30, 120, this.font, "20px", "black", "Weapon: " +
+                        tank.weapon.name);
+        util.drawTextAt(ctx, 30, 145, this.font, "20px", "black", "Cost: " +
+                        tank.weapon.cost);
+    },
 
-        util.drawTextAt(ctx, 50, 75, "Courier", "20px", "black", "Weapon: " + entityManager._ships[gameplayManager.activePlayerIndex].weapon.name);
+    renderLifebars : function(ctx) {
+      //þarf að breyta originalHealth af að healthi er breytt
+      var originalHealth = 200;
+      var red, green;
+      var box = this._.lifeBox;
+      var offsetX = 0;
+      var offsetY = 0;
+      var gradient = ctx.createLinearGradient(box.cx,box.cy,box.cx+box.w,box.h);
+      gradient.addColorStop(0,"#FF3030");
+      gradient.addColorStop(0.5, "#FFD700");
+      gradient.addColorStop(1, "#7CFC00");
+      for(var i = 0; i < entityManager._ships.length; i++ ){
+        if(i === 2) {
+          offsetY = box.h + box.h2;
+          offsetX = 0;
+        }
+        else if (i < 2){
+          offsetY = 0;
+        }
 
+        var sprite = entityManager._ships[i].flagsprite;
+        sprite.drawFixedAt(ctx, box.cx + offsetX, box.cy + offsetY, box.w, box.h);
+
+        if (gameplayManager.activePlayerIndex === i) {
+            ctx.lineWidth = 5;
+        }
+        util.strokeBox(ctx, box.cx + offsetX, box.cy + offsetY, box.w, box.h, "black")
+
+        util.fillBox(ctx, box.cx + offsetX, box.cy + offsetY + box.h, box.w, box.h2, "#B0E0E6");
+        var health = entityManager._ships[i].health
+
+        if (health < originalHealth / 2 ) {
+           red = 255;
+           green = (health/50) * 255;
+        }
+        else {
+          green = 255;
+          red = ((originalHealth - health) / 50) * 255
+        }
+
+        var color = 'rgb(' + Math.round(red) +  ',' + Math.round(green) + ',' + 0 + ')';
+
+        var x = (entityManager._ships[i].health / originalHealth) * box.w;
+        util.fillBox(ctx, box.cx + offsetX, box.cy + offsetY + box.h, x, box.h2, color);
+        util.strokeBox(ctx, box.cx + offsetX, box.cy + offsetY + box.h, box.w, box.h2, "black")
+
+        offsetX += box.w;
+        ctx.lineWidth = 2;
+      }
+    },
+
+    renderTime : function(ctx) {
+        ctx.textAlign = 'center';
+        var oneThird = (g_countdown.timeLeft < (g_countdown.duration / 3) ) 
+        var color = oneThird ? "red" : "black";
+        var fixedNum = oneThird ? 2 : 0;
+        util.drawTextAt(ctx, g_canvas.width/2, 30, "Comic Sans MS", "20px", color, (g_countdown.timeLeft / 60).toFixed(fixedNum));
     },
 
     renderWind : function(ctx) {
@@ -202,7 +340,7 @@ var toolbar = {
         var dir = (g_wind < 0) ? -1 : 1;
         wind = Math.abs(g_wind * 1000);
 
-        util.drawTextAt(ctx, box.tx, box.ty, "Courier", "20px", "black",
+        util.drawTextAt(ctx, box.cx, box.cy - 5, this.font, "20px", "black",
         "Wind " + wind.toFixed(2));
 
         util.fillBox(ctx, box.cx, box.cy, box.w, box.h, "#FFF");
@@ -223,15 +361,16 @@ var toolbar = {
     renderPower : function(ctx, tank) {
 
         var box = this._.powBox;
-        util.drawTextAt(ctx, box.cx, box.cy-5, "Courier", "25px", "black", "POWER");
+        util.drawTextAt(ctx, box.cx, box.cy-5, this.font, "25px", "black", "POWER");
         util.fillBox(ctx, box.cx, box.cy, box.w, box.h, "#B0E0E6");
 
         var gradient = ctx.createLinearGradient(box.cx,box.cy,box.cx+box.w,box.h);
         gradient.addColorStop(0,"#7CFC00");
         gradient.addColorStop(0.5, "#FFD700");
         gradient.addColorStop(1, "#FF3030");
-
-        var x = (tank.power / 6) * box.w;
+        var tankPower = tank.power
+        tankPower = (tankPower > 6 || tankPower < 0.3) ? Math.floor(tankPower) : tankPower;
+        var x = (tankPower / 6) * box.w;
         util.fillBox(ctx, box.cx, box.cy, x, box.h, gradient);
         ctx.lineWidth = 2;
         util.strokeBox(ctx, box.cx, box.cy, box.w, box.h, "black")
@@ -240,20 +379,20 @@ var toolbar = {
     renderRotation : function(ctx, tank) {
         ctx.save();
         var box = this._.rotBox;
-        util.drawTextAt(ctx, box.tx, box.ty, "Courier", "25px", "black", "Rotation");
+        util.drawTextAt(ctx, box.cx - 55, box.cy - 65, this.font, "25px", "black", "Rotation");
 
         ctx.fillStyle = "#FFF";
-        util.fillCircle(ctx, box.cx, box.cy, box.r, Math.PI, 0);
+        util.fillCircle(ctx, box.cx, box.cy, box.r, Math.PI*2, 0);
 
-        var rotText = (Math.abs(util.toDegrees(tank.gunrotation)- 180).toFixed(2) + "°");
+        var rotText = (Math.abs(util.toDegrees(tank.gunrotation) + tank.rotation - 180).toFixed(2) + "°");
         ctx.textAlign = "center";
-        util.drawTextAt(ctx, box.cx, box.cy-20, "Courier", "14px", "black", rotText);
+        util.drawTextAt(ctx, box.cx, box.cy-20, this.font, "14px", "black", rotText);
 
         ctx.save();
         ctx.strokeStyle = "#F00";
         ctx.lineWidth = 3;
         ctx.translate(box.cx, box.cy);
-        ctx.rotate(tank.gunrotation - Math.PI/2);
+        ctx.rotate(tank.gunrotation - Math.PI/2 + (tank.rotation * (Math.PI/180)));
         ctx.translate(-box.cx, -box.cy);
         ctx.beginPath();
         ctx.moveTo(box.cx,box.cy);
@@ -265,16 +404,17 @@ var toolbar = {
 
         ctx.strokeStyle = "#000";
         ctx.lineWidth = 2;
-        util.strokeCircle(ctx, box.cx, box.cy, box.r, Math.PI, 0);
+        util.strokeCircle(ctx, box.cx, box.cy, box.r, Math.PI*2, 0);
         ctx.fillStyle = "#000";
-        util.fillCircle(ctx, box.cx, box.cy, box.r/5, Math.PI,0);
+        util.fillCircle(ctx, box.cx, box.cy, box.r/5, Math.PI*2,0);
 
+        /*
         ctx.beginPath();
         ctx.moveTo(box.cx - box.r, box.cy+1);
         ctx.lineTo(box.cx + box.r, box.cy+1);
         ctx.stroke();
         ctx.closePath();
-
+        */
         ctx.restore();
     }
 

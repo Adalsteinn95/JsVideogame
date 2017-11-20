@@ -68,10 +68,9 @@ Bullet.prototype.update = function (du) {
     // Handle collisions for bullet against tank
     var hitEntity = this.findHitEntity();
     if (hitEntity) {
-      console.log("ping");
         var canTakeHit = hitEntity.takeBulletHit();
         if (canTakeHit) canTakeHit.call(hitEntity);
-        terrain.bombLandscape(this.cx, this.weapon.damage/2, true);
+        terrain.bombLandscape(this.cx, this.weapon);
         this.checkForVolcano();
         this.lifeSpan = 0;
         return;
@@ -94,7 +93,8 @@ Bullet.prototype.terrainHit = function(x, y){
             var canTakeHit = hitEntity.takeExplosionHit(this.cx, this.cy);
             if (canTakeHit) canTakeHit.call(hitEntity);
         };
-        terrain.bombLandscape(x, this.weapon.damage);
+        console.log("hey");
+        terrain.bombLandscape(x, this.weapon);
         this.lifeSpan = 0;
     }
 
@@ -126,17 +126,12 @@ Bullet.prototype.getRadius = function () {
     return 2;
 };
 
-Bullet.prototype.takeBulletHit = function () {
-    this.kill();
-
-    // Make a noise when I am zapped by another bullet
-    //this.zappedSound.play();
-};
 
 Bullet.prototype.render = function (ctx) {
     if(this.cy < 0) {
-      g_sprites.bulletArrow.drawIndicatorCentredAt(
-        ctx, this.cx, 0, 90, 0.025, (g_sprites.bulletArrow.height/2)*0.025,0
+      g_sprites.bulletArrow.scale = 0.025;
+      g_sprites.bulletArrow.drawCentredAt(
+        ctx, this.cx, 0 + (g_sprites.bulletArrow.height/2)*g_sprites.bulletArrow.scale, 90
 
       );
     }

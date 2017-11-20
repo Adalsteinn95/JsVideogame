@@ -66,6 +66,7 @@ randRange: function(min, max) {
     return (min + Math.random() * (max - min));
 },
 
+// returns integer in range: min to max-1
 randInt: function(min, max) {
     return Math.floor(this.randRange(min, max));
 },
@@ -156,8 +157,6 @@ drawTextAt : function(ctx, x, y, font, size, style, msg) {
     ctx.fillText(msg, x, y);
     ctx.restore();
 },
-
-
 //============================
 //  ANGLES
 // ==============================
@@ -169,6 +168,19 @@ drawTextAt : function(ctx, x, y, font, size, style, msg) {
     return Math.atan2((x2-x1), (y2-y1));
 
  },
+
+renderGameOver: function(ctx, id) {
+    var x = g_canvas.width/2;
+    var y = g_canvas.height/2;
+    var font = "Comic Sans MS";
+    var size = "40px";
+    var style = "black"
+    var msg = (id === "nobody") ? "Tied game" : "The winner is player " + id + "!!!";
+    ctx.textAlign = "center";
+    console.log(x, y, font, style,msg);
+    this.drawTextAt(ctx, x, y, font, size, style, msg);
+},
+
 //line1 and line 2 are array of start and end points of lines x1,y1,x2,y2
 //this is how we get the rotation from the slopes
  angleBetween2Lines: function (line1, line2){
@@ -188,12 +200,6 @@ toRadian: function (angle) {
 
 
 
-// landscape functions
-fun: [
-    function(x) { return 100 + (-x*x); },
-    function(x) { return 100 * Math.cos(x); },
-    function(x) { return (x*x) * Math.sin(x); }
-],
 
 // destruction function
 sinAcos: function(ratio, radius) {
@@ -398,5 +404,26 @@ sinAcos: function(ratio, radius) {
 
    */
 
+  //=====================
+  // SOUNDstuff
+  //=====================
+  playSound : function(audio) {
+    if(audio === g_audio.drive) {
+      audio.volume = 0.2;
+    }
+    if(!g_mute) {
+      audio.play();
+    }
+
+  },
+  stopSound : function (audio) {
+    audio.pause();
+  },
+
+
+  playSoundOverlap: function (sound) {
+    var click=sound.cloneNode();
+    this.playSound(click)
+  }
 
 };

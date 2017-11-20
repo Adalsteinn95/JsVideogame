@@ -13,8 +13,8 @@ var ai = {
     //AI will not aim at a dead player
     //will get fixed once we have a winner screen
     while(entityManager._ships[targetx]._isDeadNow){
-      targetx++
-      targetx = util.clampMinMax(targetx, 0, entityManager._ships.length);
+        targetx++
+        targetx = util.clampMinMax(targetx, 0, entityManager._ships.length);
     }
 
     return entityManager._ships[targetx].cx
@@ -237,8 +237,10 @@ var ai = {
   getTarget: function(index){
     var length = entityManager._ships.length;
     var a = util.randInt(0,length-1);
-    while(entityManager._ships[a]._isDeadNow || a === index ){
-      a = util.randInt(0,length);
+    if (gameplayManager.countAlive() > 1) {
+      while(entityManager._ships[a]._isDeadNow || a === index ){
+        a = util.randInt(0,length);
+      }
     }
     return a;
   },

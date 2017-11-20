@@ -308,26 +308,38 @@ var ai = {
 
     //the 2 posible angles
     var angle1 = util.toDegrees(util.getAngle1(vel,distance,NOMINAL_GRAVITY)) ;
-    console.log('ANGLE1pre', angle1)
+    //console.log('ANGLE1pre', angle1)
 
     var angle2 = util.toDegrees(util.getAngle2(vel,distance,NOMINAL_GRAVITY));
-    console.log('ANGLE2pre', angle2)
+    //console.log('ANGLE2pre', angle2)
 
+
+    angle1 = util.clampMinMax(angle1-90, 0,180);
+    //console.log('ANGLE1her', angle1)
+
+    angle2 = util.clampMinMax(angle2-90, 0,180);
+    //console.log('ANGLE2her', angle2)
     //angle1 = 45;
     //angle2 = 135;
     //lagfæring testX
-    //angle1 += util.clampMinMax(this.getNextTankRotation(tank),0,180);
-    console.log('THIS.GETNEXTTANKROTATION(TANK)', this.getNextTankRotation(tank))
-
-    //angle2 += util.clampMinMax(this.getNextTankRotation(tank),0,180);
+    var rot = this.getNextTankRotation(tank);
+    if( rot < 0 && angle1 < 90 && angle2 < 90){
+      console.log("ping1")
+      angle1 += rot;
+      angle2 += rot;
+    }else if ( rot > 0 && angle1 > 90 && angle2 > 90){
+      console.log("ping2")
+      angle1 -= rot;
+      angle2 -= rot;
+    }
 
     var min;
     var max;
-    angle1 = util.clampMinMax(angle1-90, 0,180);
-    console.log('ANGLE1', angle1)
+    angle1 = util.clampMinMax(angle1, 0,180);
+    //console.log('ANGLE1', angle1)
 
-    angle2 = util.clampMinMax(angle2-90, 0,180);
-    console.log('ANGLE2', angle2)
+    angle2 = util.clampMinMax(angle2, 0,180);
+    //console.log('ANGLE2', angle2)
 
 
     //cant calculate angle the use 0- 180
@@ -354,17 +366,21 @@ var ai = {
     var rot;
     if(tank.cy < g_canvas.height){
 
-      var xIndex1 = Math.floor(tank.nextX - 5);
-      var xIndex2 = Math.floor(tank.nextX + 5);
+      var xIndex1 = Math.floor(tank.nextX - 4);
+      var xIndex2 = Math.floor(tank.nextX + 4);
       xIndex1 = util.clamp(xIndex1);
       xIndex2 = util.clamp(xIndex2);
 
-      rot = util.toDegrees(Math.atan2(entityManager._terrain[0].g_landscape[xIndex2] - tank.cy, (xIndex2 - tank.nextX)));
+      rot = util.toDegrees(Math.atan2(entityManager._terrain[0].g_landscape[xIndex2] - entityManager._terrain[0].g_landscape[xIndex1], (xIndex2 - xIndex1)));
     } else { rot = 0}
     console.log('ROT', rot)
 
     return rot;
   },
+
+  needToUpdateRotation : function(){
+
+  }
 
 
      /*

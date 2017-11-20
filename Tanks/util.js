@@ -136,6 +136,18 @@ drawTextAt : function(ctx, x, y, font, size, style, msg) {
     ctx.restore();
 },
 
+renderGameOver: function(ctx, id) {
+    var x = g_canvas.width/2;
+    var y = g_canvas.height/2;
+    var font = "Comic Sans MS";
+    var size = "40px";
+    var style = "black"
+    var msg = (id === "nobody") ? "Tied game" : "The winner is player " + id + "!!!";
+    ctx.textAlign = "center";
+    console.log(x, y, font, style,msg);
+    this.drawTextAt(ctx, x, y, font, size, style, msg);
+},
+
 //line1 and line 2 are array of start and end points of lines x1,y1,x2,y2
 //this is how we get the rotation from the slopes
  angleBetween2Lines: function (line1, line2){

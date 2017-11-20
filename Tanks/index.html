@@ -4,28 +4,21 @@
   <head>
     <meta charset="UTF-8">
     <title>Tanks cool wow!</title>
+    <link rel="stylesheet" href="style.css">
   </head>
 
   <body>
-    <div>
-      <canvas id="myCanvas" width="900" height="600" style="border: 1px solid black;">
+    <div class="canvasContainer">
+      <canvas class="mainCanvas" id="myCanvas" width="900" height="600" style="border: 1px solid black;">
 	  Sorry, but your browser does not support the HTML5 canvas tag.
 	  </canvas>
     </div>
-    <div>
-      <canvas id="toolbar" width="900" height="200" style="border: 1px solid black;">
+    <div class="toolbarContainer">
+      <canvas class="toolbar" id="toolbar" width="900" height="200" style="border: 1px solid black;">
       Sorry, but your browser does not support the HTML5 canvas tag.
       </canvas>
     </div>
     <div id="output"></div>
-    <select id="weaponSelect">
-      <option selected value="normal">normal</option>
-      <option value="shower">shower</option>
-      <option value="atom">atom</option>
-      <option value="tracer">tracer</option>
-      <option value="volcano">volcano</option>
-    </select>
-    <button id="weaponbutton">Select</button>
 
     <script src="globals.js"></script>
     <script src="consts.js"></script>

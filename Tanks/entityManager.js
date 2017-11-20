@@ -88,7 +88,7 @@ KILL_ME_NOW : -1,
 // i.e. thing which need `this` to be defined.
 //
 deferredSetup : function () {
-    this._categories = [this._clouds, this._ships, this._explosions,  this._bullets ];
+    this._categories = [this._clouds, this._ships, this._explosions, this._bullets ];
 },
 
 init: function() {

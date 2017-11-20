@@ -119,7 +119,7 @@ var ai = {
     }else{
         if (Math.floor(destX) < targetx && targetx - ship.learn < Math.floor(destX) || Math.floor(destX) < targetx && targetx + ship.learn < Math.floor(destX)) {
 
-          if(Math.abs(targetx - ship.cx) < 50){
+          if(Math.abs(targetx - ship.cx) < 100){
             //move and rotate and change power instead
             destX += startVelX;
             destX = util.clamp(destX, ship);

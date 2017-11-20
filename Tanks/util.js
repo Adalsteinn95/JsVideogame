@@ -196,7 +196,7 @@ renderGameOver: function(ctx, id) {
     msg = "Press ENTER for a new game";
     this.drawTextAt(ctx, x, y + 50, font, size, style, msg);
     if (eatKey(restart)) {
-        location.reload();
+        gameReset();
     }
 },
 

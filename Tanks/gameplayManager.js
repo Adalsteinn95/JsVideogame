@@ -40,9 +40,8 @@ var gameplayManager = {
 
         if(entityManager._ships.length > 0) {
           entityManager._ships[0].myTurn = true;
-          
+
         }
-        entityManager._ships[0].myTurn = true;
         this.alivePlayers = this.players.length;
 
     },

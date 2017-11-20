@@ -385,10 +385,6 @@ Ship.prototype.calculatePath = function() {
   if(this._isDeadNow || entityManager._terrain.length === 0) {
     return;
   }
-  if(this.playerId === 'AI'){
-    /*random power test for AI*/
-    var x = Math.floor(Math.random() * 6) + 1
-    this.power = x;
 
 
   if (this.lockedIn === true || this.playerId === 'AI') {

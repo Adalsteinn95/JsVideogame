@@ -80,6 +80,7 @@ Ship.prototype.powerDir = "decrese";
 Ship.prototype.calcAngle;
 Ship.prototype.lowAngle;
 Ship.prototype.highAngle;
+Ship.prototype.learn = 100;
 
 
 //is it this players turn?
@@ -90,7 +91,7 @@ Ship.prototype.offsetX = 0;
 Ship.prototype.offsetY = 0;
 
 //hitpoints
-Ship.prototype.health = 200;
+Ship.prototype.health = 20000000;
 
 //becomes true when hit, so the explosion doesnt hit multiple times
 //færa í bullet ?
@@ -118,6 +119,9 @@ Ship.prototype.update = function(du) {
 
       //set starting guessed angle
       this.spriteGunRotation = util.toRadian(this.highAngle);
+
+      ai.pickWeapon(this);
+
 
       //calculations done
       this.preMoveCalc = true;
@@ -352,7 +356,7 @@ Ship.prototype.reset = function() {
 
 var NOMINAL_ROTATE_RATE = 0.01;
 
-Ship.prototype.updateRotation = function(du) {
+Ship.prototype.updateRotation = function() {
 
   if(this.cy < g_canvas.height){
 

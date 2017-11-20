@@ -4,7 +4,7 @@
 
 var ai = {
 
-  timer:  1000,
+  timer:  5000,
 
   runAI: function(destX, startVelX, direction, path,){
     //fær inn öll gildi frá ships sem þarf og kallar svo á hin föllinn með þeim
@@ -34,7 +34,7 @@ var ai = {
     /*movement of the AI */
     util.playSound(g_audio.drive);
     var thrust;
-    console.log("ping");
+
     if(Math.floor(ship.cx) > ship.nextX){
 
       ship.updateRotation();
@@ -126,18 +126,13 @@ var ai = {
     var ship = entityManager._ships[gameplayManager.activePlayerIndex];
 
     var targetx = this.getTargetX(ship);
-    // if 4 sec left then just end turn
-  //  if(g_countdown.duration < 4){
-  //    ship.nextTurn();
-  //  }
-    this.timer--;
+
     if(Math.floor(ship.cx) !== ship.nextX){
       //move to where it wants to go
       this.AIMovement(ship);
 
     }else{
-
-        if (Math.floor(destX) < targetx && targetx - 100 < Math.floor(destX) || Math.floor(destX) < targetx && targetx + 100 < Math.floor(destX)) {
+        if (Math.floor(destX) < targetx && targetx - ship.learn < Math.floor(destX) || Math.floor(destX) < targetx && targetx + ship.learn < Math.floor(destX)) {
           //&& targetx - this.cx > 50 || this.cx - targetx > 50
 
           //console.log(Math.abs(targetx - entityManager._ships[gameplayManager.activePlayerNr].cx));
@@ -167,9 +162,20 @@ var ai = {
             this.shipUpdate(destX, path, direction, ship);
             //change direction and run movement
           } else {
+
             util.stopSound(g_audio.drive);
-            ship.maybeFireBullet();
-            this.timer = 1000;
+
+            //ship.maybeFireBullet();
+            this.timer = 5000;
+            if(ship.learn === 10){
+              ship.learn += 10;
+            }
+            else if(40 >= ship.learn){
+              ship.learn -= 1;
+            } else {
+              ship.learn -= 20;
+            }
+
           }
 
         } else {
@@ -179,7 +185,20 @@ var ai = {
           direction = this.AIrotation(direction, ship);
           this.AIpower(ship);
           this.shipUpdate(destX, path, direction, ship, power);
+          this.timer--;
+          if(this.timer < 4800){
+            if ( ship.path === 'right'){
+              ship.nextX += 50
+            }else {
+              ship.nextX -=50;
+            }
+            util.clampMinMax(ship.nextX, 30, g_canvas.width - 40);
 
+            this.timer = 5000;
+
+            this.AIMovement(ship);
+            this.getInitialValues(ship);
+          }
 
     }
   }
@@ -238,8 +257,28 @@ var ai = {
     return a;
   },
 
+  pickWeapon: function(tank){
+    var int = util.randInt(1,101);
+
+    if ( int < 65){
+
+      tank.weapon = consts.weapons[0];
+
+    } else if (int < 80){
+      tank.weapon = consts.weapons[1];
+
+    } else if ( int < 95){
+      tank.weapon = consts.weapons[4]
+
+    } else {
+      tank.weapon = consts.weapons[2];
+
+    }
+  },
+
   //teh AI makes a calculated guess at first and uses that as a starting posistion
   getInitialValues: function(tank){
+
     //get a target that the AI wants to hit
     var targetIndex = this.getTarget(tank.playerNr);
 
@@ -278,11 +317,21 @@ var ai = {
     var angle1 = util.toDegrees(util.getAngle1(vel,distance,NOMINAL_GRAVITY)) + 90;
 
     var angle2 = util.toDegrees(util.getAngle2(vel,distance,NOMINAL_GRAVITY)) + 90;
+
+    //angle1 = 45;
+    //angle2 = 135;
+    //lagfæring testX
+    angle1 += this.getNextTankRotation(tank);
+
+    angle2 += this.getNextTankRotation(tank);
+
     var min;
     var max;
     angle1 = util.clampMinMax(angle1, 0,180);
+    console.log('ANGLE1', angle1)
 
     angle2 = util.clampMinMax(angle2, 0,180);
+    console.log('ANGLE2', angle2)
 
 
     //cant calculate angle the use 0- 180
@@ -301,7 +350,24 @@ var ai = {
     tank.lowAngle = min;
     tank.highAngle = max;
 
-  }
+  },
+
+  getNextTankRotation: function(tank){
+    var rot;
+    console.log(tank);
+    if(tank.cy < g_canvas.height){
+
+      var xIndex1 = Math.floor(tank.nextX - 2);
+      var xIndex2 = Math.floor(tank.nextX + 2);
+      xIndex1 = util.clamp(xIndex1);
+      xIndex2 = util.clamp(xIndex2);
+
+      rot = util.toDegrees(Math.atan2(g_landscape[xIndex2] - tank.cy, (xIndex2 - tank.nextX)));
+    } else { rot = 0}
+    console.log('ROT', rot)
+
+    return rot - 90;
+  },
 
 
 }

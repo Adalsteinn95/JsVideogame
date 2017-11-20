@@ -22,6 +22,15 @@ var toolbar = {
         playerIndex : 0,
         humanOrAI : true,
 
+        setupBox: {
+            cx: 50,
+            cy: 180,
+            w: 300,
+            h: 50,
+            minX: 50,
+            maxX: 370
+        },
+
         mapBox : {
             cx : 360,
             cy : 40,
@@ -70,8 +79,6 @@ var toolbar = {
     playerFlagSetup: [],
 
     init : function() {
-        //global landscape initiated here
-        //g_landscape = terrain.initlandScape(terrain.fun[1], bound, xShift, g_canvas);
         this.rerollMap();
         this.drawBackground(dash_ctx);
     },
@@ -125,8 +132,18 @@ var toolbar = {
 
     renderPlayerSetup : function(ctx) {
 
-        var id = this._.humanOrAI ? "Human" : "AI";
+        var box = this._.setupBox;
+        var text = this.idSelected ? "Select team!" : "Select ID!";
 
+        if (this.idSelected) {
+            if (box.cx < box.maxX) box.cx += 10;
+        } else {
+            if (box.cx > box.minX) box.cx -= 10;
+        }
+
+        util.drawTextAt(ctx, box.cx, box.cy, this.font, "20px", "black", text);
+
+        var id = this._.humanOrAI ? "Human" : "AI";
         util.drawTextAt(ctx, 50, 75, this.font, "20px", "black",
                         "Player " + (this._.playerIndex + 1) + " is:");
         util.drawTextAt(ctx, 50, 100, this.font, "20px", "black",
@@ -191,6 +208,7 @@ var toolbar = {
         var box = this._.mapBox;
 
         util.drawTextAt(ctx, 50, 75, this.font, "20px", "black", "Map preview:");
+        util.drawTextAt(ctx, 50, 150, this.font, "20px", "black", "\'R\' to reroll!");
 
         util.fillBox(ctx, box.cx, box.cy, box.w, box.h, "#ADD8E6");
 
@@ -259,7 +277,7 @@ var toolbar = {
 
     renderLifebars : function(ctx) {
       //þarf að breyta originalHealth af að healthi er breytt
-      var originalHealth = 100
+      var originalHealth = 200;
       var red, green;
       var box = this._.lifeBox;
       var offsetX = 0;
@@ -299,7 +317,7 @@ var toolbar = {
 
         var color = 'rgb(' + Math.round(red) +  ',' + Math.round(green) + ',' + 0 + ')';
 
-        var x = (entityManager._ships[i].health / 100) * box.w;
+        var x = (entityManager._ships[i].health / originalHealth) * box.w;
         util.fillBox(ctx, box.cx + offsetX, box.cy + offsetY + box.h, x, box.h2, color);
         util.strokeBox(ctx, box.cx + offsetX, box.cy + offsetY + box.h, box.w, box.h2, "black")
 

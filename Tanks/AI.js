@@ -6,16 +6,6 @@ var ai = {
 
   timer:  5000,
 
-  runAI: function(destX, startVelX, direction, path,){
-    //fær inn öll gildi frá ships sem þarf og kallar svo á hin föllinn með þeim
-    //þá þarf bara eitt kall í ships
-    //implementa seinast
-    //timer?
-    //óþarfi
-    AIupdate(destX, startVelX, direction, path, timer);
-
-  },
-
   getTargetX: function(ship){
 
     var targetx = ship.playerNr + 1;
@@ -129,6 +119,7 @@ var ai = {
       this.AIMovement(ship);
 
     }else{
+      /*console.log('SHIP.LEARN', ship.learn)
         if (Math.floor(destX) < targetx && targetx - ship.learn < Math.floor(destX) || Math.floor(destX) < targetx && targetx + ship.learn < Math.floor(destX)) {
           //&& targetx - this.cx > 50 || this.cx - targetx > 50
 
@@ -161,7 +152,7 @@ var ai = {
           } else {
 
             util.stopSound(g_audio.drive);
-
+            console.log('should fire');
             ship.maybeFireBullet();
             this.timer = 5000;
             if(ship.learn === 10){
@@ -175,7 +166,7 @@ var ai = {
 
           }
 
-        } else {
+        } else {*/
           destX += startVelX;
           destX = util.clamp(destX, ship);
           //path = this.AIMovement(path, ship);
@@ -184,6 +175,11 @@ var ai = {
           this.shipUpdate(destX, path, direction, ship, power);
           this.timer--;
           if(this.timer < 4800){
+            if (ship.nextX > g_canvas.width -100){
+              ship.path = 'left';
+            } else if ( ship.nextX < 100){
+              ship.path = 'right';
+            }
             if ( ship.path === 'right'){
               ship.nextX += 50
             }else {
@@ -197,7 +193,7 @@ var ai = {
             this.getInitialValues(ship);
           }
 
-    }
+  //  }
   }
 },
 
@@ -311,23 +307,26 @@ var ai = {
     var vel = util.initialVelocity(xVel, yVel);
 
     //the 2 posible angles
-    var angle1 = util.toDegrees(util.getAngle1(vel,distance,NOMINAL_GRAVITY)) + 90;
+    var angle1 = util.toDegrees(util.getAngle1(vel,distance,NOMINAL_GRAVITY)) ;
+    console.log('ANGLE1pre', angle1)
 
-    var angle2 = util.toDegrees(util.getAngle2(vel,distance,NOMINAL_GRAVITY)) + 90;
+    var angle2 = util.toDegrees(util.getAngle2(vel,distance,NOMINAL_GRAVITY));
+    console.log('ANGLE2pre', angle2)
 
     //angle1 = 45;
     //angle2 = 135;
     //lagfæring testX
-    angle1 += this.getNextTankRotation(tank);
+    //angle1 += util.clampMinMax(this.getNextTankRotation(tank),0,180);
+    console.log('THIS.GETNEXTTANKROTATION(TANK)', this.getNextTankRotation(tank))
 
-    angle2 += this.getNextTankRotation(tank);
+    //angle2 += util.clampMinMax(this.getNextTankRotation(tank),0,180);
 
     var min;
     var max;
-    angle1 = util.clampMinMax(angle1, 0,180);
+    angle1 = util.clampMinMax(angle1-90, 0,180);
     console.log('ANGLE1', angle1)
 
-    angle2 = util.clampMinMax(angle2, 0,180);
+    angle2 = util.clampMinMax(angle2-90, 0,180);
     console.log('ANGLE2', angle2)
 
 
@@ -345,17 +344,18 @@ var ai = {
 
     //sets the angle that the ai will search in.
     tank.lowAngle = min;
+    console.log('MIN', min)
     tank.highAngle = max;
+    console.log('MAX', max)
 
   },
 
   getNextTankRotation: function(tank){
     var rot;
-    console.log(tank);
     if(tank.cy < g_canvas.height){
 
-      var xIndex1 = Math.floor(tank.nextX - 2);
-      var xIndex2 = Math.floor(tank.nextX + 2);
+      var xIndex1 = Math.floor(tank.nextX - 5);
+      var xIndex2 = Math.floor(tank.nextX + 5);
       xIndex1 = util.clamp(xIndex1);
       xIndex2 = util.clamp(xIndex2);
 
@@ -363,7 +363,7 @@ var ai = {
     } else { rot = 0}
     console.log('ROT', rot)
 
-    return rot - 90;
+    return rot;
   },
 
 

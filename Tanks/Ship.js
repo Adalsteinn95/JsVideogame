@@ -398,7 +398,7 @@ Ship.prototype.updateGunRotation = function() {
 
 Ship.prototype.calculatePath = function() {
 
-  if (this.lockedIn === true) {
+  if (this.lockedIn === true || this.playerId === 'AI') {
     /*bullet trail prediction */
     this.predictCord = [];
     var dX = +Math.sin(util.toRadian(this.spriteGunRotation));

@@ -201,6 +201,7 @@ function gameReset() {
   entityManager.reset();
   toolbar.reset();
   gameplayManager.reset();
+  spatialManager.reset();
 }
 
 // Kick it off

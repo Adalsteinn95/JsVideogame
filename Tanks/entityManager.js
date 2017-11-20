@@ -104,8 +104,8 @@ reset : function() {
   this._explosions = [];
   this._clouds = [],
   this._terrain = [],
-
   this.init();
+  entityManager.deferredSetup();
 
 },
 
@@ -153,10 +153,6 @@ yoinkNearestShip : function(xPos, yPos) {
     if (theShip) {
         theShip.setPos(xPos, yPos);
     }
-},
-
-resetShips: function() {
-    this._forEachOf(this._ships, Ship.prototype.reset);
 },
 
 haltShips: function() {

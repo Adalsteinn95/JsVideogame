@@ -19,7 +19,7 @@ Arrow.prototype.render = function(ctx) {
 
 };
 Arrow.prototype.update = function() {
-  console.log(gameplayManager.activePlayerIndex)
+
   if(entityManager._ships[gameplayManager.activePlayerIndex]){
       this.cx = entityManager._ships[gameplayManager.activePlayerIndex].cx;
       this.cy = entityManager._ships[gameplayManager.activePlayerIndex].cy + this.index - 40;

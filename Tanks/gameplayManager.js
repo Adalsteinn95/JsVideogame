@@ -37,6 +37,7 @@ var gameplayManager = {
         entityManager._generateArrow();
         if(entityManager._ships.length > 0) {
           entityManager._ships[0].myTurn = true;
+          entityManager._generateArrow();
         }
     },
     reset : function() {

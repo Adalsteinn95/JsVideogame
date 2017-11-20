@@ -64,6 +64,7 @@ findEntityInRange: function(posX, posY, radius) {
     for(var i = 1; i<this._entities.length; i++){
       //collison check
       var thing = spatialManager._entities[i];
+
       if(thing === false){
         continue;
       }

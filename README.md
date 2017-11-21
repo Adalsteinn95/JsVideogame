@@ -1,7 +1,8 @@
 # JsVideogame
 
-Video game project done in javscript for the course 
-Video Game Development(TÖL308G) under the guidance of Patrick Kerr.
+##Video game project done in javscript for the course 
+##Video Game Development(TÖL308G) under the guidance of Patrick Kerr.
+
 
 Aðalsteinn I. Pálsson
 Daníel Guðnason

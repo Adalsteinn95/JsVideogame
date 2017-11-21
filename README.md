@@ -5,7 +5,7 @@ Video Game Development(TÖL308G) under the guidance of Patrick Kerr.
 
 
 ## Contributors
-### Aðalsteinn I. Pálsson
-### Daníel Guðnason
-### Fannar G. Guðmundsson
-### Geir Garðarsson
+#### Aðalsteinn I. Pálsson
+#### Daníel Guðnason
+#### Fannar G. Guðmundsson
+#### Geir Garðarsson
